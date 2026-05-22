@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %}JZC{% endblock %}
+{% block content %}
+
+<div class="hero-banner">
+  <div class="hero-content">
+    <h1>JZC 的岛屿</h1>
+    <p class="subtitle">写点技术笔记，记些生活碎片，留一份随手的心情</p>
+    <div class="flex-row gap-12" style="justify-content:center; margin-top:18px;">
+      <a href="/editor" class="btn btn-primary">开始写文章</a>
+      <a href="/notes" class="btn">逛逛便签墙</a>
+    </div>
+  </div>
+  <div class="hero-decor">
+    <span style="font-size:48px;">🌿</span>
+    <span style="font-size:36px;">🐾</span>
+    <span style="font-size:42px;">🌲</span>
+  </div>
+</div>
+
+<div class="divider divider-teal"></div>
+
+<div class="section-strip" style="background: rgba(138, 198, 106, 0.08); border-radius: 28px; padding: 28px; margin-bottom: 20px;">
+  <div class="main-layout">
+    <div class="posts-area">
+      <div class="section-title">最新文章</div>
+
+      {% if all_tags %}
+        <div class="tag-filter">
+          <a href="/" class="tag-filter-btn {% if not current_tag %}active{% endif %}">全部</a>
+          {% for t in all_tags %}
+            <a href="/?tag={{ t }}" class="tag-filter-btn {% if current_tag == t %}active{% endif %}">#{{ t }}</a>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if posts %}
+        {% for post in posts %}
+          <a href="/post/{{ post.slug }}" class="post-card" style="border-left: 5px solid var(--{{ color_for(post.tag) }});">
+            <div class="post-tag">#{{ post.tag }}</div>
+            <div class="post-title">{{ post.title }}</div>
+            {% if post.excerpt %}
+              <div class="post-excerpt">{{ post.excerpt }}</div>
+            {% endif %}
+            <div class="post-meta">
+              <span>{{ post.date }}</span>
+              <span>{{ post.read_time }} 分钟阅读</span>
+            </div>
+          </a>
+        {% endfor %}
+      {% else %}
+        <div class="card text-center" style="padding:48px;">
+          <p class="text-muted">还没有文章，去<a href="/editor">写一篇</a>吧。</p>
+        </div>
+      {% endif %}
+    </div>
+
+    <aside class="notes-sidebar">
+      <div class="section-title">随手记</div>
+      {% if notes %}
+        {% for note in notes %}
+          <div class="note-card" style="background:var(--{{ color_for(note.tag) }});">
+            {{ note.content[:100] }}
+            <div class="note-date">{{ note.date }}</div>
+          </div>
+        {% endfor %}
+        <a href="/notes" style="font-size:13px;font-weight:700;color:var(--accent);">查看全部便签</a>
+      {% else %}
+        <div class="note-card" style="background:var(--app-yellow);">
+          还没有便签，<a href="/editor/note">记一条</a>
+        </div>
+      {% endif %}
+    </aside>
+  </div>
+</div>
+
+{% endblock %}

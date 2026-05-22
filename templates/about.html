@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}关于 — JZC{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>关于 JZC 的岛屿</h1>
+  <p class="subtitle">一个安静写东西的地方</p>
+</div>
+
+<div class="divider divider-teal"></div>
+
+<div class="card" style="max-width:700px;margin:0 auto;">
+  <div class="avatar-circle">
+    <!-- 换成你自己的照片：<img src="/uploads/avatar.jpg" alt="JZC"> -->
+    <span>🐾</span>
+  </div>
+
+  <h2 style="text-align:center;">你好，我是 JZC</h2>
+
+  <p style="margin-top:16px;">
+    这个博客是我的个人岛屿——在这里记录技术学习、生活碎片，以及一些零散的思考。
+  </p>
+
+  <p>
+    视觉风格参考了任天堂《集合啦！动物森友会》的游戏界面，感谢
+    <a href="https://github.com/guokaigdg/animal-island-ui" target="_blank">animal-island-ui</a>
+    提供的设计灵感。
+  </p>
+
+  <p>
+    博客本身用 <b>Flask + Markdown + 纯 CSS</b> 搭建，没有数据库，没有登录系统。
+    文章以 Markdown 文件存储，写就完了。
+  </p>
+
+  <div class="divider divider-brown" style="margin:20px 0;"></div>
+
+  <h3>联系方式</h3>
+  <p style="font-size:13px;color:var(--text-secondary);">
+    （在这里放你的 GitHub / 邮箱 / 社交链接）
+  </p>
+
+  <div style="margin-top:24px;text-align:center;">
+    <a href="/rss.xml" class="btn btn-sm" style="margin-right:8px;">RSS 订阅</a>
+    <a href="/" class="btn btn-sm">返回首页</a>
+  </div>
+</div>
+
+{% endblock %}

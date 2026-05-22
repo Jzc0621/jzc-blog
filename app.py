@@ -1,0 +1,233 @@
+import os, re, math
+from datetime import datetime
+from pathlib import Path
+from xml.etree.ElementTree import Element, SubElement, tostring
+from xml.dom import minidom
+
+import frontmatter
+import markdown
+from flask import Flask, render_template, request, redirect, url_for, send_from_directory, Response
+from markdown.extensions.toc import TocExtension
+from pygments.formatters import HtmlFormatter
+
+app = Flask(__name__)
+POSTS_DIR = Path(__file__).parent / "posts"
+NOTES_DIR = Path(__file__).parent / "notes"
+POSTS_DIR.mkdir(exist_ok=True)
+NOTES_DIR.mkdir(exist_ok=True)
+
+# ---------- markdown 渲染 (with Pygments + TOC) ----------
+toc_ext = TocExtension(permalink=False)
+md = markdown.Markdown(extensions=["fenced_code", "codehilite", "tables", toc_ext])
+
+# Pygments style for code blocks
+PYGMENTS_CSS = HtmlFormatter(style="monokai").get_style_defs(".codehilite")
+
+
+def _parse_file(path: Path) -> dict | None:
+    """Parse a markdown file with YAML frontmatter, return post dict."""
+    try:
+        post = frontmatter.load(path)
+    except Exception:
+        return None
+    slug = path.stem
+    html = md.convert(post.content)
+    toc_html = getattr(md, "toc", "") or ""
+    # reset toc for next parse
+    md.reset()
+    word_count = len(post.content)
+    read_time = max(1, math.ceil(word_count / 400))
+    return {
+        "slug": slug,
+        "title": post.get("title", slug),
+        "date": post.get("date", ""),
+        "tag": post.get("tag", "未分类"),
+        "excerpt": post.get("excerpt", ""),
+        "content": post.content,
+        "html": html,
+        "toc": toc_html,
+        "word_count": word_count,
+        "read_time": read_time,
+    }
+
+
+def get_posts(tag: str | None = None) -> list[dict]:
+    """Get all posts, optionally filtered by tag, sorted by date desc."""
+    items = []
+    for f in sorted(POSTS_DIR.glob("*.md"), reverse=True):
+        p = _parse_file(f)
+        if p:
+            if tag and p["tag"] != tag:
+                continue
+            items.append(p)
+    items.sort(key=lambda x: x["date"], reverse=True)
+    return items
+
+
+def get_all_tags() -> list[str]:
+    """Get unique tags from all posts."""
+    tags = set()
+    for p in get_posts():
+        tags.add(p["tag"])
+    return sorted(tags)
+
+
+def get_notes() -> list[dict]:
+    """Get all quick notes, sorted by date desc."""
+    items = []
+    for f in sorted(NOTES_DIR.glob("*.md"), reverse=True):
+        p = _parse_file(f)
+        if p:
+            items.append(p)
+    items.sort(key=lambda x: x["date"], reverse=True)
+    return items
+
+
+# ---------- card color helper ----------
+COLORS = [
+    "app-blue", "app-green", "app-orange", "app-pink", "purple",
+    "app-teal", "brown", "lime-green", "yellow-green", "app-yellow",
+    "warm-peach-pink", "app-red",
+]
+
+def color_for(tag: str | None) -> str:
+    """Pick a stable color based on tag name."""
+    if not tag:
+        return "app-blue"
+    idx = hash(tag) % len(COLORS)
+    return COLORS[idx]
+
+
+app.jinja_env.globals["color_for"] = color_for
+app.jinja_env.globals["pygments_css"] = PYGMENTS_CSS
+
+
+# ---------- routes ----------
+@app.route("/")
+def home():
+    tag = request.args.get("tag", "")
+    posts = get_posts(tag if tag else None)
+    notes = get_notes()[:5]
+    all_tags = get_all_tags()
+    return render_template("home.html", posts=posts, notes=notes, all_tags=all_tags, current_tag=tag)
+
+
+@app.route("/post/<slug>")
+def post_detail(slug: str):
+    path = POSTS_DIR / f"{slug}.md"
+    if not path.exists():
+        return "Post not found", 404
+    p = _parse_file(path)
+    if not p:
+        return "Post parse error", 500
+    posts = get_posts()
+    idx = next((i for i, x in enumerate(posts) if x["slug"] == slug), -1)
+    prev_post = posts[idx + 1] if idx + 1 < len(posts) else None
+    next_post = posts[idx - 1] if idx > 0 else None
+    return render_template("post.html", post=p, prev_post=prev_post, next_post=next_post)
+
+
+@app.route("/notes")
+def notes_page():
+    notes = get_notes()
+    return render_template("notes.html", notes=notes)
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/editor")
+def editor():
+    return render_template("editor.html", mode="post")
+
+
+@app.route("/editor/note")
+def editor_note():
+    return render_template("editor.html", mode="note")
+
+
+@app.route("/editor/save", methods=["POST"])
+def editor_save():
+    mode = request.form.get("mode", "post")
+    title = request.form.get("title", "").strip()
+    tag = request.form.get("tag", "未分类").strip()
+    content = request.form.get("content", "").strip()
+    excerpt = content[:120].replace("\n", " ") if content else ""
+
+    if not title:
+        return "Title is required", 400
+
+    slug = re.sub(r"[^\w\-]", "", title.lower().replace(" ", "-"))
+    date_str = datetime.now().strftime("%Y-%m-%d")
+
+    frontmatter_text = f"""---
+title: {title}
+date: {date_str}
+tag: {tag}
+excerpt: {excerpt}
+---
+
+{content}
+"""
+    target_dir = POSTS_DIR if mode == "post" else NOTES_DIR
+    (target_dir / f"{slug}.md").write_text(frontmatter_text, encoding="utf-8")
+
+    return redirect(url_for("post_detail", slug=slug) if mode == "post" else url_for("notes_page"))
+
+
+# ---------- RSS ----------
+@app.route("/rss.xml")
+def rss_feed():
+    site_url = request.url_root.rstrip("/")
+    feed = Element("rss", version="2.0")
+    channel = SubElement(feed, "channel")
+    SubElement(channel, "title").text = "JZC's Island"
+    SubElement(channel, "link").text = site_url
+    SubElement(channel, "description").text = "技术、生活，和随手笔记"
+    SubElement(channel, "language").text = "zh-CN"
+
+    for p in get_posts()[:20]:
+        item = SubElement(channel, "item")
+        SubElement(item, "title").text = p["title"]
+        SubElement(item, "link").text = f"{site_url}/post/{p['slug']}"
+        SubElement(item, "description").text = p["excerpt"]
+        SubElement(item, "pubDate").text = str(p["date"])
+
+    xml_str = minidom.parseString(tostring(feed, "utf-8")).toprettyxml(encoding="UTF-8")
+    return Response(xml_str, mimetype="application/rss+xml")
+
+
+# ---------- Random Post ----------
+@app.route("/random")
+def random_post():
+    import random
+    posts = get_posts()
+    if not posts:
+        return {"url": "/"}
+    p = random.choice(posts)
+    return {"url": f"/post/{p['slug']}"}
+
+
+# ---------- Search API ----------
+@app.route("/search")
+def search():
+    q = request.args.get("q", "").strip().lower()
+    if not q:
+        return {"results": []}
+    results = []
+    for p in get_posts():
+        if q in p["title"].lower() or q in p["content"].lower():
+            results.append({
+                "slug": p["slug"],
+                "title": p["title"],
+                "tag": p["tag"],
+                "date": p["date"],
+                "excerpt": p["excerpt"],
+            })
+    return {"results": results}
+
+
+if __name__ == "__main__":
+    app.run(debug=True, port=5000)

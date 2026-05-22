@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}便签墙 — JZC{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>便签墙</h1>
+  <p class="subtitle">随手记下的碎片，零散的日常</p>
+</div>
+
+<div class="divider divider-yellow"></div>
+
+<div style="max-width:800px;margin:0 auto;">
+  {% if notes %}
+    {% for note in notes %}
+      <div class="note-card" style="background:var(--{{ color_for(note.tag) }}); padding:20px;">
+        <div style="white-space:pre-wrap;">{{ note.content }}</div>
+        <div class="note-date" style="margin-top:10px;">{{ note.date }}</div>
+      </div>
+    {% endfor %}
+  {% else %}
+    <div class="card text-center" style="padding:48px;">
+      <p class="text-muted">还没有便签，<a href="/editor/note">记第一条</a>。</p>
+    </div>
+  {% endif %}
+</div>
+
+{% endblock %}

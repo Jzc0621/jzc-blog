@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% block title %}{% if mode == "note" %}写便签{% else %}写文章{% endif %} — JZC{% endblock %}
+{% block content %}
+
+<div class="page-header">
+  <h1>{% if mode == "note" %}写便签{% else %}写文章{% endif %}</h1>
+  <p class="subtitle">用 Markdown 书写，直接保存到博客</p>
+</div>
+
+<div class="card" style="max-width:760px;margin:0 auto;">
+  <form action="/editor/save" method="POST">
+    <input type="hidden" name="mode" value="{{ mode }}">
+
+    {% if mode == "post" %}
+    <div class="mb-16">
+      <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">标题</label>
+      <input class="input input-lg" name="title" placeholder="文章标题" required>
+    </div>
+
+    <div class="mb-16">
+      <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">分类</label>
+      <select class="select" name="tag">
+        <option value="技术">#技术</option>
+        <option value="生活">#生活</option>
+        <option value="随笔">#随笔</option>
+        <option value="设计">#设计</option>
+        <option value="其他">#其他</option>
+      </select>
+    </div>
+    {% else %}
+    <div class="mb-16">
+      <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">标题（可选）</label>
+      <input class="input input-lg" name="title" placeholder="便签标题，留空则自动生成">
+    </div>
+    <input type="hidden" name="tag" value="便签">
+    {% endif %}
+
+    <div class="mb-16">
+      <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">正文 (Markdown)</label>
+      <textarea class="textarea" name="content" placeholder="在这里写内容...&#10;&#10;## 二级标题&#10;&#10;正文...&#10;&#10;```python&#10;print('hello')&#10;```" required></textarea>
+    </div>
+
+    <div class="flex-row gap-12">
+      <button type="submit" class="btn btn-primary btn-lg">{% if mode == "note" %}保存便签{% else %}发布文章{% endif %}</button>
+      <a href="/" class="btn">取消</a>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

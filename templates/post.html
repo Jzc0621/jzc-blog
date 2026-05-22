@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} — JZC{% endblock %}
+{% block content %}
+
+<div class="mt-20">
+  <a href="/" class="btn btn-sm">← 返回</a>
+</div>
+
+<div class="post-layout mt-20">
+  <article class="article-body">
+    <div class="tag mb-12">#{{ post.tag }}</div>
+    <h1>{{ post.title }}</h1>
+    <div class="post-meta mb-24" style="font-size:11px;color:var(--text-disabled);">
+      <span>{{ post.date }}</span>
+      <span>{{ post.read_time }} 分钟阅读</span>
+      <span>{{ post.word_count }} 字</span>
+    </div>
+
+    <div class="divider divider-brown" style="margin:0 0 20px;"></div>
+
+    {{ post.html | safe }}
+  </article>
+
+  {% if post.toc %}
+  <aside class="toc-sidebar">
+    <div class="toc-sticky">
+      <div class="section-title">目录</div>
+      <div class="toc-content">{{ post.toc | safe }}</div>
+    </div>
+  </aside>
+  {% endif %}
+</div>
+
+<div class="flex-between mt-32 mb-24" style="max-width:960px;margin-left:auto;margin-right:auto;">
+  {% if prev_post %}
+    <a href="/post/{{ prev_post.slug }}" class="btn">← {{ prev_post.title }}</a>
+  {% else %}
+    <span></span>
+  {% endif %}
+  {% if next_post %}
+    <a href="/post/{{ next_post.slug }}" class="btn btn-primary">{{ next_post.title }} →</a>
+  {% else %}
+    <span></span>
+  {% endif %}
+</div>
+
+{% endblock %}
