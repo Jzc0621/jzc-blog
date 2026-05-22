@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+	<channel>
+		<title>JZC's Island</title>
+		<link>http://localhost</link>
+		<description>技术、生活，和随手笔记</description>
+		<language>zh-CN</language>
+		<item>
+			<title>jzc</title>
+			<link>http://localhost/post/jzc</link>
+			<description>嗨，这是我的第一篇博客</description>
+			<pubDate>2026-05-22</pubDate>
+		</item>
+		<item>
+			<title>欢迎来到 JZC 的岛屿</title>
+			<link>http://localhost/post/hello-world</link>
+			<description>第一篇博客，记录为什么要建这个博客，以及计划写些什么。</description>
+			<pubDate>2026-05-22</pubDate>
+		</item>
+		<item>
+			<title>Python 异步编程入门：从回调到 async/await</title>
+			<link>http://localhost/post/python-async-intro</link>
+			<description>用厨房做早餐的场景解释协程、事件循环和 Future 的关系。</description>
+			<pubDate>2026-05-20</pubDate>
+		</item>
+	</channel>
+</rss>

@@ -3,24 +3,108 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}JZC{% endblock %}</title>
+  <title>JZC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap" media="print" onload="this.media='all';this.onload=null">
-  <link rel="stylesheet" href="/static/css/animal.css">
-  <link rel="alternate" type="application/rss+xml" title="JZC's Island RSS" href="/rss.xml">
-  <style>{{ pygments_css | safe }}</style>
+  <link rel="stylesheet" href="/jzc-blog/jzc-blog/static/css/animal.css">
+  <link rel="alternate" type="application/rss+xml" title="JZC's Island RSS" href="/jzc-blog/rss.xml">
+  <style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #49483e }
+.codehilite { background: #272822; color: #F8F8F2 }
+.codehilite .c { color: #959077 } /* Comment */
+.codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+.codehilite .esc { color: #F8F8F2 } /* Escape */
+.codehilite .g { color: #F8F8F2 } /* Generic */
+.codehilite .k { color: #66D9EF } /* Keyword */
+.codehilite .l { color: #AE81FF } /* Literal */
+.codehilite .n { color: #F8F8F2 } /* Name */
+.codehilite .o { color: #FF4689 } /* Operator */
+.codehilite .x { color: #F8F8F2 } /* Other */
+.codehilite .p { color: #F8F8F2 } /* Punctuation */
+.codehilite .ch { color: #959077 } /* Comment.Hashbang */
+.codehilite .cm { color: #959077 } /* Comment.Multiline */
+.codehilite .cp { color: #959077 } /* Comment.Preproc */
+.codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #959077 } /* Comment.Single */
+.codehilite .cs { color: #959077 } /* Comment.Special */
+.codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+.codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #F8F8F2 } /* Generic.Error */
+.codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+.codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+.codehilite .go { color: #66D9EF } /* Generic.Output */
+.codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #959077 } /* Generic.Subheading */
+.codehilite .gt { color: #F8F8F2 } /* Generic.Traceback */
+.codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+.codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+.codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+.codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+.codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+.codehilite .kt { color: #66D9EF } /* Keyword.Type */
+.codehilite .ld { color: #E6DB74 } /* Literal.Date */
+.codehilite .m { color: #AE81FF } /* Literal.Number */
+.codehilite .s { color: #E6DB74 } /* Literal.String */
+.codehilite .na { color: #A6E22E } /* Name.Attribute */
+.codehilite .nb { color: #F8F8F2 } /* Name.Builtin */
+.codehilite .nc { color: #A6E22E } /* Name.Class */
+.codehilite .no { color: #66D9EF } /* Name.Constant */
+.codehilite .nd { color: #A6E22E } /* Name.Decorator */
+.codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+.codehilite .ne { color: #A6E22E } /* Name.Exception */
+.codehilite .nf { color: #A6E22E } /* Name.Function */
+.codehilite .nl { color: #F8F8F2 } /* Name.Label */
+.codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+.codehilite .nx { color: #A6E22E } /* Name.Other */
+.codehilite .py { color: #F8F8F2 } /* Name.Property */
+.codehilite .nt { color: #FF4689 } /* Name.Tag */
+.codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+.codehilite .ow { color: #FF4689 } /* Operator.Word */
+.codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+.codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+.codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+.codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+.codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+.codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+.codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+.codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+.codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+.codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+.codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+.codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+.codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+.codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+.codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+.codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+.codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+.codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+.codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+.codehilite .bp { color: #F8F8F2 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+.codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+.codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+.codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+.codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+.codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */</style>
 </head>
 <body>
 
 <div class="progress-bar" id="progressBar"></div>
 
 <nav class="nav-bar">
-  <a href="/" class="nav-brand">JZC</a>
+  <a href="/jzc-blog/" class="nav-brand">JZC</a>
   <div class="nav-links">
-    <a href="/">文章</a>
-    <a href="/notes">便签墙</a>
-    <a href="/editor">写文章</a>
-    <a href="/about">关于</a>
+    <a href="/jzc-blog/">文章</a>
+    <a href="/jzc-blog/notes">便签墙</a>
+    <a href="/jzc-blog/editor">写文章</a>
+    <a href="/jzc-blog/about">关于</a>
     <button class="theme-toggle" onclick="toggleTheme()" title="切换暗色模式">🌙</button>
     <span class="nav-dice" onclick="randomPost()" title="随机一篇文章">🎲</span>
     <span class="search-trigger" onclick="openSearch()" title="搜索">🔍</span>
@@ -28,13 +112,120 @@
 </nav>
 
 <main class="container">
-{% block content %}{% endblock %}
+
+
+<div class="hero-banner">
+  <div class="hero-content">
+    <h1>JZC 的岛屿</h1>
+    <p class="subtitle">写点技术笔记，记些生活碎片，留一份随手的心情</p>
+    <div class="flex-row gap-12" style="justify-content:center; margin-top:18px;">
+      <a href="/jzc-blog/editor" class="btn btn-primary">开始写文章</a>
+      <a href="/jzc-blog/notes" class="btn">逛逛便签墙</a>
+    </div>
+  </div>
+  <div class="hero-decor">
+    <span style="font-size:48px;">🌿</span>
+    <span style="font-size:36px;">🐾</span>
+    <span style="font-size:42px;">🌲</span>
+  </div>
+</div>
+
+<div class="divider divider-teal"></div>
+
+<div class="section-strip" style="background: rgba(138, 198, 106, 0.08); border-radius: 28px; padding: 28px; margin-bottom: 20px;">
+  <div class="main-layout">
+    <div class="posts-area">
+      <div class="section-title">最新文章</div>
+
+      
+        <div class="tag-filter">
+          <a href="/jzc-blog/" class="tag-filter-btn active">全部</a>
+          
+            <a href="/jzc-blog/?tag=技术" class="tag-filter-btn ">#技术</a>
+          
+            <a href="/jzc-blog/?tag=生活" class="tag-filter-btn ">#生活</a>
+          
+        </div>
+      
+
+      
+        
+          <a href="/jzc-blog/post/jzc" class="post-card" style="border-left: 5px solid var(--app-green);">
+            <div class="post-tag">#技术</div>
+            <div class="post-title">jzc</div>
+            
+              <div class="post-excerpt">嗨，这是我的第一篇博客</div>
+            
+            <div class="post-meta">
+              <span>2026-05-22</span>
+              <span>1 分钟阅读</span>
+            </div>
+          </a>
+        
+          <a href="/jzc-blog/post/hello-world" class="post-card" style="border-left: 5px solid var(--app-orange);">
+            <div class="post-tag">#生活</div>
+            <div class="post-title">欢迎来到 JZC 的岛屿</div>
+            
+              <div class="post-excerpt">第一篇博客，记录为什么要建这个博客，以及计划写些什么。</div>
+            
+            <div class="post-meta">
+              <span>2026-05-22</span>
+              <span>2 分钟阅读</span>
+            </div>
+          </a>
+        
+          <a href="/jzc-blog/post/python-async-intro" class="post-card" style="border-left: 5px solid var(--app-green);">
+            <div class="post-tag">#技术</div>
+            <div class="post-title">Python 异步编程入门：从回调到 async/await</div>
+            
+              <div class="post-excerpt">用厨房做早餐的场景解释协程、事件循环和 Future 的关系。</div>
+            
+            <div class="post-meta">
+              <span>2026-05-20</span>
+              <span>5 分钟阅读</span>
+            </div>
+          </a>
+        
+      
+    </div>
+
+    <aside class="notes-sidebar">
+      <div class="section-title">随手记</div>
+      
+        
+          <div class="note-card" style="background:var(--warm-peach-pink);">
+            咖啡喝太多手在抖，下午改喝抹茶吧 🍵 ​​三杯浓缩也许太多了
+            <div class="note-date">2026-05-21</div>
+          </div>
+        
+          <div class="note-card" style="background:var(--warm-peach-pink);">
+            楼下那只橘猫又胖了。今天看到它卡在栅栏缝里，进退两难。我帮它推了一把，它不高兴地叫了一声走了。
+
+动物森友会现实版。
+            <div class="note-date">2026-05-20</div>
+          </div>
+        
+          <div class="note-card" style="background:var(--warm-peach-pink);">
+            REST API 设计三要点：
+
+1. 统一错误格式：`{&#34;error&#34;: {&#34;code&#34;: &#34;...&#34;, &#34;message&#34;: &#34;...&#34;}}`
+2. 分页规范：`?page=1&amp;size=20`，
+            <div class="note-date">2026-05-19</div>
+          </div>
+        
+        <a href="/jzc-blog/notes" style="font-size:13px;font-weight:700;color:var(--accent);">查看全部便签</a>
+      
+    </aside>
+  </div>
+</div>
+
+
 </main>
 
 <footer>
   <div class="footer-wave">JZC's Island · 建于 2026 · 慢下来，写点东西</div>
   <div class="footer">
-    <a href="/rss.xml">RSS 订阅</a> · Animal Crossing inspired · Flask + Markdown
+    <a href="/jzc-blog/rss.xml">RSS 订阅</a> · Animal Crossing inspired · Flask + Markdown
   </div>
 </footer>
 
@@ -109,7 +300,7 @@ function randomPost() {
   var dice = document.querySelector('.nav-dice');
   if (dice) dice.classList.add('spinning');
   setTimeout(function() { if (dice) dice.classList.remove('spinning'); }, 600);
-  fetch('/random')
+  fetch('/jzc-blog/random')
     .then(r => r.json())
     .then(data => { if (data.url) window.location.href = data.url; });
 }
@@ -201,7 +392,7 @@ function doSearch() {
     var q = document.getElementById('searchInput').value.trim();
     var container = document.getElementById('searchResults');
     if (!q) { container.innerHTML = ''; return; }
-    fetch('/search?q=' + encodeURIComponent(q))
+    fetch('/jzc-blog/search?q=' + encodeURIComponent(q))
       .then(r => r.json())
       .then(data => {
         if (!data.results.length) {
@@ -209,7 +400,7 @@ function doSearch() {
           return;
         }
         container.innerHTML = data.results.map(function(p) {
-          return '<a href="/post/' + p.slug + '" class="search-result-item">' +
+          return '<a href="/jzc-blog/post/' + p.slug + '" class="search-result-item">' +
             '<span class="tag">#' + p.tag + '</span> ' +
             '<strong>' + p.title + '</strong> ' +
             '<span class="text-muted" style="font-size:11px;">' + p.date + '</span>' +
