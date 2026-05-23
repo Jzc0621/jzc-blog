@@ -98,15 +98,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <div class="progress-bar" id="progressBar"></div>
 
-<!-- Background decorations -->
-<div class="bg-particles" id="bgParticles"></div>
-<div class="corner-vine top-left">
-  <svg viewBox="0 0 160 160"><path d="M0,0 Q30,20 20,60 Q10,100 50,140 Q80,160 120,150 Q150,130 140,90 Q130,50 100,30 Q60,0 0,0Z" fill="#6da843"/><path d="M0,0 Q40,30 30,80 Q20,130 70,160" fill="none" stroke="#5a8f36" stroke-width="3"/><circle cx="110" cy="40" r="12" fill="#8cc55e"/><circle cx="130" cy="70" r="10" fill="#7ab34e"/><circle cx="100" cy="110" r="8" fill="#92c962"/></svg>
-</div>
-<div class="corner-vine top-right">
-  <svg viewBox="0 0 160 160"><path d="M0,0 Q30,20 20,60 Q10,100 50,140 Q80,160 120,150 Q150,130 140,90 Q130,50 100,30 Q60,0 0,0Z" fill="#6da843"/><path d="M0,0 Q40,30 30,80 Q20,130 70,160" fill="none" stroke="#5a8f36" stroke-width="3"/><circle cx="110" cy="40" r="12" fill="#8cc55e"/><circle cx="130" cy="70" r="10" fill="#7ab34e"/><circle cx="100" cy="110" r="8" fill="#92c962"/></svg>
-</div>
-
 <nav class="nav-bar">
   <a href="/" class="nav-brand">JZC</a>
   <div class="nav-links">
@@ -133,19 +124,19 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <div style="max-width:800px;margin:0 auto;">
   
     
-      <div class="note-card" style="background:var(--app-red); padding:20px;">
+      <div class="note-card" style="background:var(--app-orange); padding:20px;">
         <div style="white-space:pre-wrap;">咖啡喝太多手在抖，下午改喝抹茶吧 🍵 ​​三杯浓缩也许太多了</div>
         <div class="note-date" style="margin-top:10px;">2026-05-21</div>
       </div>
     
-      <div class="note-card" style="background:var(--app-red); padding:20px;">
+      <div class="note-card" style="background:var(--app-orange); padding:20px;">
         <div style="white-space:pre-wrap;">楼下那只橘猫又胖了。今天看到它卡在栅栏缝里，进退两难。我帮它推了一把，它不高兴地叫了一声走了。
 
 动物森友会现实版。</div>
         <div class="note-date" style="margin-top:10px;">2026-05-20</div>
       </div>
     
-      <div class="note-card" style="background:var(--app-red); padding:20px;">
+      <div class="note-card" style="background:var(--app-orange); padding:20px;">
         <div style="white-space:pre-wrap;">REST API 设计三要点：
 
 1. 统一错误格式：`{&#34;error&#34;: {&#34;code&#34;: &#34;...&#34;, &#34;message&#34;: &#34;...&#34;}}`
@@ -168,8 +159,6 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <a href="/rss.xml">RSS 订阅</a> · Animal Crossing inspired · Flask + Markdown
   </div>
 </footer>
-
-<div class="grass-border"></div>
 
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
 
@@ -464,29 +453,6 @@ function observeReveal() {
     revealObserver.observe(el);
   });
 }
-
-// ═══════════════════════════════════════════
-// Floating background particles
-// ═══════════════════════════════════════════
-(function() {
-  var container = document.getElementById('bgParticles');
-  if (!container) return;
-  var icons = ['🌿', '🍃', '🌱', '🍀', '🌸', '✨'];
-  function spawn() {
-    var p = document.createElement('span');
-    p.className = 'particle';
-    p.textContent = icons[Math.floor(Math.random() * icons.length)];
-    p.style.left = Math.random() * 100 + '%';
-    p.style.animationDuration = (12 + Math.random() * 20) + 's';
-    p.style.animationDelay = '0s';
-    p.style.fontSize = (12 + Math.random() * 18) + 'px';
-    container.appendChild(p);
-    setTimeout(function() { p.remove(); }, 35000);
-  }
-  // Spawn a few immediately, then periodically
-  for (var i = 0; i < 6; i++) { setTimeout(spawn, i * 2000); }
-  setInterval(spawn, 4000);
-})();
 
 // Init reveal on load and after any DOM changes
 document.addEventListener('DOMContentLoaded', function() {
