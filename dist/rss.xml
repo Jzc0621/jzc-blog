@@ -6,6 +6,18 @@
 		<description>技术、生活，和随手笔记</description>
 		<language>zh-CN</language>
 		<item>
+			<title>用纯 CSS 复刻动物森友会 UI 风格</title>
+			<link>http://localhost/post/css-animal-crossing</link>
+			<description>从一个 React 组件库的设计规范翻译成纯 CSS，记录设计 Token 迁移过程。</description>
+			<pubDate>2026-05-25</pubDate>
+		</item>
+		<item>
+			<title>五月的学习笔记碎片</title>
+			<link>http://localhost/post/learning-notes-may</link>
+			<description>零零散散学到的东西，不成篇但值得记下来。</description>
+			<pubDate>2026-05-23</pubDate>
+		</item>
+		<item>
 			<title>jzc</title>
 			<link>http://localhost/post/jzc</link>
 			<description>嗨，这是我的第一篇博客</description>
@@ -22,6 +34,30 @@
 			<link>http://localhost/post/python-async-intro</link>
 			<description>用厨房做早餐的场景解释协程、事件循环和 Future 的关系。</description>
 			<pubDate>2026-05-20</pubDate>
+		</item>
+		<item>
+			<title>从零搭建一个零数据库博客</title>
+			<link>http://localhost/post/flask-blog-building</link>
+			<description>不用 WordPress、不用数据库，用 Flask + Markdown 搭一个完全属于自己的博客。</description>
+			<pubDate>2026-05-18</pubDate>
+		</item>
+		<item>
+			<title>5 个我每天都在用的 Git 技巧</title>
+			<link>http://localhost/post/git-tips-2026</link>
+			<description>不是 rebase 教程，是真正每天都会敲的命令。</description>
+			<pubDate>2026-05-12</pubDate>
+		</item>
+		<item>
+			<title>深夜编程的仪式感</title>
+			<link>http://localhost/post/night-coding-routine</link>
+			<description>深夜写代码有一套固定的流程，像泡茶一样。</description>
+			<pubDate>2026-05-08</pubDate>
+		</item>
+		<item>
+			<title>城市边缘的萤火虫</title>
+			<link>http://localhost/post/nature-walk-0426</link>
+			<description>没想到离小区三公里的湿地公园，晚上八点后全是萤火虫。</description>
+			<pubDate>2026-04-26</pubDate>
 		</item>
 	</channel>
 </rss>

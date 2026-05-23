@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>JZC</title>
+  <title>从零搭建一个零数据库博客 — JZC</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏝️</text></svg>">
-  <meta property="og:title" content="JZC 的岛屿">
-  <meta property="og:description" content="技术、生活，和随手笔记">
+  <meta property="og:title" content="从零搭建一个零数据库博客">
+  <meta property="og:description" content="不用 WordPress、不用数据库，用 Flask + Markdown 搭一个完全属于自己的博客。">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="JZC's Island">
   <meta name="twitter:card" content="summary">
@@ -120,216 +120,102 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <main class="container">
 
 
-<div class="hero-banner">
-  <div class="hero-content">
-    <h1>JZC 的岛屿</h1>
-    <p class="subtitle">写点技术笔记，记些生活碎片，留一份随手的心情</p>
-    <div class="flex-row gap-12" style="justify-content:center; margin-top:18px;">
-      <a href="/editor" class="btn btn-primary">开始写文章</a>
-      <a href="/notes" class="btn">逛逛便签墙</a>
-    </div>
-  </div>
-  <div class="hero-decor">
-    <span style="font-size:48px;">🌿</span>
-    <span style="font-size:36px;">🐾</span>
-    <span style="font-size:42px;">🌲</span>
-  </div>
+<div class="mt-20">
+  <a href="/" class="btn btn-sm">← 返回</a>
 </div>
 
-<div class="divider divider-teal"></div>
-
-<div class="section-strip" style="background: rgba(138, 198, 106, 0.08); border-radius: 28px; padding: 28px; margin-bottom: 20px;">
-  <div class="main-layout">
-    <div class="posts-area">
-      <div class="section-title">最新文章</div>
-
-      
-        <div class="tag-filter">
-          <a href="#" class="tag-filter-btn active" onclick="filterPosts('all');return false;">全部</a>
-          
-            <a href="#" class="tag-filter-btn" onclick="filterPosts('技术');return false;">#技术</a>
-          
-            <a href="#" class="tag-filter-btn" onclick="filterPosts('生活');return false;">#生活</a>
-          
-            <a href="#" class="tag-filter-btn" onclick="filterPosts('设计');return false;">#设计</a>
-          
-            <a href="#" class="tag-filter-btn" onclick="filterPosts('随笔');return false;">#随笔</a>
-          
-        </div>
-      
-
-      
-        
-          <a href="/post/css-animal-crossing" class="post-card" data-tag="设计" style="border-left: 5px solid var(--app-orange);">
-            <div class="post-tag">#设计</div>
-            <div class="post-title">用纯 CSS 复刻动物森友会 UI 风格</div>
-            
-              <div class="post-excerpt">从一个 React 组件库的设计规范翻译成纯 CSS，记录设计 Token 迁移过程。</div>
-            
-            <div class="post-meta">
-              <span>2026-05-25</span>
-              <span>3 分钟阅读</span>
-            </div>
-          </a>
-        
-          <a href="/post/learning-notes-may" class="post-card" data-tag="随笔" style="border-left: 5px solid var(--app-teal);">
-            <div class="post-tag">#随笔</div>
-            <div class="post-title">五月的学习笔记碎片</div>
-            
-              <div class="post-excerpt">零零散散学到的东西，不成篇但值得记下来。</div>
-            
-            <div class="post-meta">
-              <span>2026-05-23</span>
-              <span>2 分钟阅读</span>
-            </div>
-          </a>
-        
-          <a href="/post/jzc" class="post-card" data-tag="技术" style="border-left: 5px solid var(--brown);">
-            <div class="post-tag">#技术</div>
-            <div class="post-title">jzc</div>
-            
-              <div class="post-excerpt">嗨，这是我的第一篇博客</div>
-            
-            <div class="post-meta">
-              <span>2026-05-22</span>
-              <span>1 分钟阅读</span>
-            </div>
-          </a>
-        
-          <a href="/post/hello-world" class="post-card" data-tag="生活" style="border-left: 5px solid var(--app-green);">
-            <div class="post-tag">#生活</div>
-            <div class="post-title">欢迎来到 JZC 的岛屿</div>
-            
-              <div class="post-excerpt">第一篇博客，记录为什么要建这个博客，以及计划写些什么。</div>
-            
-            <div class="post-meta">
-              <span>2026-05-22</span>
-              <span>2 分钟阅读</span>
-            </div>
-          </a>
-        
-          <a href="/post/python-async-intro" class="post-card" data-tag="技术" style="border-left: 5px solid var(--brown);">
-            <div class="post-tag">#技术</div>
-            <div class="post-title">Python 异步编程入门：从回调到 async/await</div>
-            
-              <div class="post-excerpt">用厨房做早餐的场景解释协程、事件循环和 Future 的关系。</div>
-            
-            <div class="post-meta">
-              <span>2026-05-20</span>
-              <span>5 分钟阅读</span>
-            </div>
-          </a>
-        
-          <a href="/post/flask-blog-building" class="post-card" data-tag="技术" style="border-left: 5px solid var(--brown);">
-            <div class="post-tag">#技术</div>
-            <div class="post-title">从零搭建一个零数据库博客</div>
-            
-              <div class="post-excerpt">不用 WordPress、不用数据库，用 Flask + Markdown 搭一个完全属于自己的博客。</div>
-            
-            <div class="post-meta">
-              <span>2026-05-18</span>
-              <span>3 分钟阅读</span>
-            </div>
-          </a>
-        
-          <a href="/post/git-tips-2026" class="post-card" data-tag="技术" style="border-left: 5px solid var(--brown);">
-            <div class="post-tag">#技术</div>
-            <div class="post-title">5 个我每天都在用的 Git 技巧</div>
-            
-              <div class="post-excerpt">不是 rebase 教程，是真正每天都会敲的命令。</div>
-            
-            <div class="post-meta">
-              <span>2026-05-12</span>
-              <span>3 分钟阅读</span>
-            </div>
-          </a>
-        
-          <a href="/post/night-coding-routine" class="post-card" data-tag="生活" style="border-left: 5px solid var(--app-green);">
-            <div class="post-tag">#生活</div>
-            <div class="post-title">深夜编程的仪式感</div>
-            
-              <div class="post-excerpt">深夜写代码有一套固定的流程，像泡茶一样。</div>
-            
-            <div class="post-meta">
-              <span>2026-05-08</span>
-              <span>2 分钟阅读</span>
-            </div>
-          </a>
-        
-          <a href="/post/nature-walk-0426" class="post-card" data-tag="生活" style="border-left: 5px solid var(--app-green);">
-            <div class="post-tag">#生活</div>
-            <div class="post-title">城市边缘的萤火虫</div>
-            
-              <div class="post-excerpt">没想到离小区三公里的湿地公园，晚上八点后全是萤火虫。</div>
-            
-            <div class="post-meta">
-              <span>2026-04-26</span>
-              <span>2 分钟阅读</span>
-            </div>
-          </a>
-        
-      
+<div class="post-layout mt-20">
+  <article class="article-body">
+    <div class="tag mb-12">#技术</div>
+    <h1>从零搭建一个零数据库博客</h1>
+    <div class="post-meta mb-24" style="font-size:11px;color:var(--text-disabled);">
+      <span>2026-05-18</span>
+      <span>3 分钟阅读</span>
+      <span>912 字</span>
     </div>
 
-    <aside class="notes-sidebar">
-      <div class="section-title">随手记</div>
-      
-        
-          <div class="note-card" style="background:var(--warm-peach-pink);">
-            Ctrl+Shift+P 打开命令面板，输入 &#34;toggle minimap&#34; 可以关掉小地图，省屏幕空间。
+    <div class="divider divider-brown" style="margin:0 0 20px;"></div>
 
-另外 `Ctrl+K Z` 进入禅模式，全屏编辑，适合写文章。
-            <div class="note-date">2026-05-22</div>
-          </div>
-        
-          <div class="note-card" style="background:var(--warm-peach-pink);">
-            咖啡喝太多手在抖，下午改喝抹茶吧 🍵 ​​三杯浓缩也许太多了
-            <div class="note-date">2026-05-21</div>
-          </div>
-        
-          <div class="note-card" style="background:var(--warm-peach-pink);">
-            楼下那只橘猫又胖了。今天看到它卡在栅栏缝里，进退两难。我帮它推了一把，它不高兴地叫了一声走了。
+    <h2 id="wordpress">为什么不用 WordPress</h2>
+<p>WordPress 很强大，但对我来说太重了。我需要的是：</p>
+<ul>
+<li>用 Markdown 写文章，而不是富文本编辑器</li>
+<li>不需要数据库备份</li>
+<li>版本管理用 Git</li>
+<li>页面加载快，不依赖几十个插件</li>
+</ul>
+<p>Flask + Markdown 完美满足这四点。</p>
+<h2 id="_1">核心思路</h2>
+<p>整个博客只有三个核心文件：</p>
+<div class="codehilite"><pre><span></span><code><span class="c1"># app.py — 不到 100 行</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">flask</span><span class="w"> </span><span class="kn">import</span> <span class="n">Flask</span><span class="p">,</span> <span class="n">render_template</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">markdown</span><span class="o">,</span><span class="w"> </span><span class="nn">frontmatter</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 
-动物森友会现实版。
-            <div class="note-date">2026-05-20</div>
-          </div>
-        
-          <div class="note-card" style="background:var(--warm-peach-pink);">
-            REST API 设计三要点：
+<span class="n">app</span> <span class="o">=</span> <span class="n">Flask</span><span class="p">(</span><span class="vm">__name__</span><span class="p">)</span>
 
-1. 统一错误格式：`{&#34;error&#34;: {&#34;code&#34;: &#34;...&#34;, &#34;message&#34;: &#34;...&#34;}}`
-2. 分页规范：`?page=1&amp;size=20`，
-            <div class="note-date">2026-05-19</div>
-          </div>
-        
-          <div class="note-card" style="background:var(--warm-peach-pink);">
-            Python 3.13 的免费线程（free-threaded）模式值得关注。GIL 终于可选了，但生态支持还需要时间。别急着在生产环境升级。
-            <div class="note-date">2026-05-15</div>
-          </div>
-        
-        <a href="/notes" style="font-size:13px;font-weight:700;color:var(--accent);">查看全部便签</a>
-      
-    </aside>
-  </div>
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">home</span><span class="p">():</span>
+    <span class="n">posts</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># 从 posts/ 目录读取 .md 文件</span>
+    <span class="k">return</span> <span class="n">render_template</span><span class="p">(</span><span class="s2">&quot;home.html&quot;</span><span class="p">,</span> <span class="n">posts</span><span class="o">=</span><span class="n">posts</span><span class="p">)</span>
+
+<span class="nd">@app</span><span class="o">.</span><span class="n">route</span><span class="p">(</span><span class="s2">&quot;/post/&lt;slug&gt;&quot;</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">post</span><span class="p">(</span><span class="n">slug</span><span class="p">):</span>
+    <span class="c1"># 读取对应 .md，转 HTML，渲染模板</span>
+    <span class="o">...</span>
+</code></pre></div>
+
+<h2 id="markdown">Markdown 文件即文章</h2>
+<p>每篇文章就是一个 <code>.md</code> 文件，放在 <code>posts/</code> 目录：</p>
+<div class="codehilite"><pre><span></span><code>---
+title: 文章标题
+date: 2026-05-18
+<span class="gu">tag: 技术</span>
+<span class="gu">---</span>
+
+正文内容...
+</code></pre></div>
+
+<p>YAML 头部存元数据，正文就是 Markdown。</p>
+<h2 id="github-pages">部署到 GitHub Pages</h2>
+<p>用我写的 <code>build.py</code> 一键把 Flask 渲染成静态 HTML，推送到 <code>gh-pages</code> 分支，GitHub Pages 自动托管。</p>
+<p>整个过程：
+1. 写完 <code>.md</code> 文件
+2. <code>python build.py</code>
+3. <code>git push</code>
+4. 网站更新</p>
+<h2 id="_2">总结</h2>
+<p>零数据库博客的优点：快、简单、可 Git 追踪、部署免费。缺点：没有评论系统（但可以加 Giscus）。</p>
+<p>适合想完全掌控自己内容的人。</p>
+  </article>
+
+  
+  <aside class="toc-sidebar">
+    <div class="toc-sticky">
+      <div class="section-title">目录</div>
+      <div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#wordpress">为什么不用 WordPress</a></li>
+<li><a href="#_1">核心思路</a></li>
+<li><a href="#markdown">Markdown 文件即文章</a></li>
+<li><a href="#github-pages">部署到 GitHub Pages</a></li>
+<li><a href="#_2">总结</a></li>
+</ul>
+</div>
+</div>
+    </div>
+  </aside>
+  
 </div>
 
-<script>
-function filterPosts(tag) {
-  document.querySelectorAll('.tag-filter-btn').forEach(function(btn) {
-    btn.classList.remove('active');
-    if ((tag === 'all' && btn.textContent === '全部') || btn.textContent === '#' + tag) {
-      btn.classList.add('active');
-    }
-  });
-  document.querySelectorAll('.post-card').forEach(function(card) {
-    if (tag === 'all' || card.getAttribute('data-tag') === tag) {
-      card.style.display = '';
-    } else {
-      card.style.display = 'none';
-    }
-  });
-}
-</script>
+<div class="flex-between mt-32 mb-24" style="max-width:960px;margin-left:auto;margin-right:auto;">
+  
+    <a href="/post/git-tips-2026" class="btn">← 5 个我每天都在用的 Git 技巧</a>
+  
+  
+    <a href="/post/python-async-intro" class="btn btn-primary">Python 异步编程入门：从回调到 async/await →</a>
+  
+</div>
 
 
 </main>
