@@ -105,13 +105,31 @@ window.addEventListener('scroll', function() {
 // ═══════════════════════════════════════════
 // Random post
 // ═══════════════════════════════════════════
+var _postSlugs = [];
 function randomPost() {
   var dice = document.querySelector('.nav-dice');
   if (dice) dice.classList.add('spinning');
   setTimeout(function() { if (dice) dice.classList.remove('spinning'); }, 600);
-  fetch('/random')
-    .then(r => r.json())
-    .then(data => { if (data.url) window.location.href = data.url; });
+
+  // Collect slugs from links on the page
+  if (!_postSlugs.length) {
+    document.querySelectorAll('a[href*="/post/"]').forEach(function(a) {
+      var m = a.href.match(/\/post\/([^/]+)/);
+      if (m && _postSlugs.indexOf(m[1]) < 0) _postSlugs.push(m[1]);
+    });
+  }
+  // Fallback: fetch from static list
+  if (_postSlugs.length) {
+    var slug = _postSlugs[Math.floor(Math.random() * _postSlugs.length)];
+    window.location.href = '/post/' + slug;
+    return;
+  }
+  fetch('/search-index.json').then(r => r.json()).then(function(data) {
+    if (data.length) {
+      var idx = Math.floor(Math.random() * data.length);
+      window.location.href = '/post/' + data[idx].slug;
+    }
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -194,17 +212,48 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'k' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); openSearch(); }
 });
 
-let searchTimer;
+// Load search index on page load (static fallback)
+(function() {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', '/search-index.json', true);
+  xhr.onload = function() {
+    if (xhr.status === 200) {
+      try { window._searchIndex = JSON.parse(xhr.responseText); } catch(e) {}
+    }
+  };
+  xhr.send();
+})();
+
+var searchTimer;
 function doSearch() {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(function() {
-    var q = document.getElementById('searchInput').value.trim();
+    var q = document.getElementById('searchInput').value.trim().toLowerCase();
     var container = document.getElementById('searchResults');
     if (!q) { container.innerHTML = ''; return; }
+
+    if (window._searchIndex) {
+      var results = window._searchIndex.filter(function(p) {
+        return p.title.toLowerCase().indexOf(q) >= 0 || p.content.toLowerCase().indexOf(q) >= 0;
+      });
+      if (!results.length) {
+        container.innerHTML = '<p class="text-muted">没找到匹配的文章</p>';
+        return;
+      }
+      container.innerHTML = results.map(function(p) {
+        return '<a href="/post/' + p.slug + '" class="search-result-item">' +
+          '<span class="tag">#' + p.tag + '</span> ' +
+          '<strong>' + p.title + '</strong> ' +
+          '<span class="text-muted" style="font-size:11px;">' + p.date + '</span>' +
+          '</a>';
+      }).join('');
+      return;
+    }
+
     fetch('/search?q=' + encodeURIComponent(q))
-      .then(r => r.json())
-      .then(data => {
-        if (!data.results.length) {
+      .then(function(r) { return r.json(); })
+      .then(function(data) {
+        if (!data.results || !data.results.length) {
           container.innerHTML = '<p class="text-muted">没找到匹配的文章</p>';
           return;
         }
