@@ -47,6 +47,7 @@ def main():
         shutil.copy(f, css_dst / f.name)
 
     (DIST / ".nojekyll").touch()
+    (DIST / "CNAME").write_text("jiazhichao.xyz")
 
     posts = get_posts()
 
