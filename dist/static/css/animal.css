@@ -1033,6 +1033,29 @@ body.dark .island-clock {
 }
 body.dark .island-clock .clock-time { color: #c8d8c8; }
 
+/* ---------- Code Copy Button ---------- */
+.code-block-wrap {
+  position: relative;
+}
+.code-copy-btn {
+  position: absolute;
+  top: 10px;
+  right: 12px;
+  padding: 4px 12px;
+  font-family: var(--font);
+  font-size: 11px;
+  font-weight: 600;
+  color: #c8d8c8;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.15);
+  border-radius: 20px;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.code-block-wrap:hover .code-copy-btn { opacity: 1; }
+.code-copy-btn.copied { background: var(--accent); border-color: var(--accent); color: #fff; }
+
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .main-layout, .post-layout { flex-direction: column; }

@@ -199,6 +199,12 @@ def rss_feed():
     return Response(xml_str, mimetype="application/rss+xml")
 
 
+# ---------- 404 ----------
+@app.route("/404")
+def not_found():
+    return render_template("404.html")
+
+
 # ---------- Random Post ----------
 @app.route("/random")
 def random_post():

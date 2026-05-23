@@ -79,6 +79,10 @@ def main():
     (DIST / "editor" / "note").mkdir(parents=True, exist_ok=True)
     (DIST / "editor" / "note" / "index.html").write_text(freeze("/editor/note"), encoding="utf-8")
 
+    # 404 page
+    (DIST / "404.html").write_text(freeze("/404"), encoding="utf-8")
+    print("  OK /404.html")
+
     # rss
     (DIST / "rss.xml").write_text(freeze("/rss.xml"), encoding="utf-8")
 
