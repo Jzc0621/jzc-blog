@@ -1055,7 +1055,7 @@ body.dark .island-clock .clock-time { color: #c8d8c8; }
 /* ---------- Grass Bottom Border ---------- */
 .grass-border {
   position: relative; z-index: 2;
-  height: 40px;
+  height: 24px;
   background:
     radial-gradient(ellipse 30px 20px at 15px 0, #7ab34e 70%, transparent 70%),
     radial-gradient(ellipse 28px 18px at 55px 0, #8cc55e 70%, transparent 70%),
@@ -1069,13 +1069,13 @@ body.dark .island-clock .clock-time { color: #c8d8c8; }
     radial-gradient(ellipse 28px 18px at 385px 0, #8cc55e 70%, transparent 70%),
     linear-gradient(to bottom, #7ab34e 50%, #5a8f36 100%);
   background-repeat: repeat-x;
-  background-size: 410px 40px;
+  background-size: 410px 24px;
 }
 .grass-border::after {
   content: '';
   position: absolute;
   bottom: 100%; left: 0; right: 0;
-  height: 20px;
+  height: 14px;
   background:
     radial-gradient(circle 6px, #f8d86b 70%, transparent 70%) 30px 5px,
     radial-gradient(circle 5px, #fff 70%, transparent 70%) 80px 8px,
@@ -1084,7 +1084,7 @@ body.dark .island-clock .clock-time { color: #c8d8c8; }
     radial-gradient(circle 5px, #fff 70%, transparent 70%) 280px 4px,
     radial-gradient(circle 6px, #f5a0b6 70%, transparent 70%) 350px 6px;
   background-repeat: repeat-x;
-  background-size: 410px 20px;
+  background-size: 410px 14px;
 }
 
 /* ---------- Corner Vines ---------- */
@@ -1096,9 +1096,13 @@ body.dark .island-clock .clock-time { color: #c8d8c8; }
 .corner-vine.top-right    { top: -20px; right: -20px; transform: scaleX(-1); }
 .corner-vine.bottom-left  { bottom: -20px; left: -20px; transform: scaleY(-1); }
 .corner-vine.bottom-right { bottom: -20px; right: -20px; transform: scale(-1, -1); }
-.corner-vine svg { width: 160px; height: 160px; }
+.corner-vine svg { width: 100px; height: 100px; }
 
 body.dark .corner-vine { opacity: 0.06; }
+
+@media (max-width: 768px) {
+  .corner-vine svg { width: 60px; height: 60px; }
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
