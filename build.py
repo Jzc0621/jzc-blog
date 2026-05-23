@@ -10,6 +10,8 @@ BASE = ""
 def freeze(url: str) -> str:
     """Render a Flask route and return the HTML with fixed paths."""
     with app.test_client() as client:
+        # Hide editor on static site
+        app.jinja_env.globals["hide_editor"] = True
         resp = client.get(url)
         assert resp.status_code == 200, f"{url} returned {resp.status_code}"
         html = resp.data.decode("utf-8")
