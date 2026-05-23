@@ -27,16 +27,16 @@
 
       {% if all_tags %}
         <div class="tag-filter">
-          <a href="/" class="tag-filter-btn {% if not current_tag %}active{% endif %}">全部</a>
+          <a href="#" class="tag-filter-btn active" onclick="filterPosts('all');return false;">全部</a>
           {% for t in all_tags %}
-            <a href="/?tag={{ t }}" class="tag-filter-btn {% if current_tag == t %}active{% endif %}">#{{ t }}</a>
+            <a href="#" class="tag-filter-btn" onclick="filterPosts('{{ t }}');return false;">#{{ t }}</a>
           {% endfor %}
         </div>
       {% endif %}
 
       {% if posts %}
         {% for post in posts %}
-          <a href="/post/{{ post.slug }}" class="post-card" style="border-left: 5px solid var(--{{ color_for(post.tag) }});">
+          <a href="/post/{{ post.slug }}" class="post-card" data-tag="{{ post.tag }}" style="border-left: 5px solid var(--{{ color_for(post.tag) }});">
             <div class="post-tag">#{{ post.tag }}</div>
             <div class="post-title">{{ post.title }}</div>
             {% if post.excerpt %}
@@ -50,7 +50,7 @@
         {% endfor %}
       {% else %}
         <div class="card text-center" style="padding:48px;">
-          <p class="text-muted">还没有文章，去<a href="/editor">写一篇</a>吧。</p>
+          <p class="text-muted">还没有文章{% if not hide_editor %}，去<a href="/editor">写一篇</a>{% endif %}吧。</p>
         </div>
       {% endif %}
     </div>
@@ -67,11 +67,29 @@
         <a href="/notes" style="font-size:13px;font-weight:700;color:var(--accent);">查看全部便签</a>
       {% else %}
         <div class="note-card" style="background:var(--app-yellow);">
-          还没有便签，<a href="/editor/note">记一条</a>
+          还没有便签{% if not hide_editor %}<a href="/editor/note">记一条</a>{% endif %}
         </div>
       {% endif %}
     </aside>
   </div>
 </div>
+
+<script>
+function filterPosts(tag) {
+  document.querySelectorAll('.tag-filter-btn').forEach(function(btn) {
+    btn.classList.remove('active');
+    if ((tag === 'all' && btn.textContent === '全部') || btn.textContent === '#' + tag) {
+      btn.classList.add('active');
+    }
+  });
+  document.querySelectorAll('.post-card').forEach(function(card) {
+    if (tag === 'all' || card.getAttribute('data-tag') === tag) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  });
+}
+</script>
 
 {% endblock %}
