@@ -19,7 +19,6 @@ def freeze(url: str) -> str:
         html = html.replace('src="/', f'src="{BASE}/')
         html = html.replace("src='/", f"src='{BASE}/")
         html = html.replace('action="/', f'action="{BASE}/')
-        html = html.replace("/static/css/animal.css", f"{BASE}/static/css/animal.css")
         # Fix JS paths
         html = html.replace('fetch("/', f'fetch("{BASE}/')
         html = html.replace("fetch('/", f"fetch('{BASE}/")
