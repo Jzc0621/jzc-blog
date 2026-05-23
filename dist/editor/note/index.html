@@ -6,8 +6,8 @@
   <title>写便签 — JZC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap" media="print" onload="this.media='all';this.onload=null">
-  <link rel="stylesheet" href="/jzc-blog/static/css/animal.css">
-  <link rel="alternate" type="application/rss+xml" title="JZC's Island RSS" href="/jzc-blog/rss.xml">
+  <link rel="stylesheet" href="/static/css/animal.css">
+  <link rel="alternate" type="application/rss+xml" title="JZC's Island RSS" href="/rss.xml">
   <style>pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
 span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -99,12 +99,12 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <div class="progress-bar" id="progressBar"></div>
 
 <nav class="nav-bar">
-  <a href="/jzc-blog/" class="nav-brand">JZC</a>
+  <a href="/" class="nav-brand">JZC</a>
   <div class="nav-links">
-    <a href="/jzc-blog/">文章</a>
-    <a href="/jzc-blog/notes">便签墙</a>
-    <a href="/jzc-blog/editor">写文章</a>
-    <a href="/jzc-blog/about">关于</a>
+    <a href="/">文章</a>
+    <a href="/notes">便签墙</a>
+    <a href="/editor">写文章</a>
+    <a href="/about">关于</a>
     <button class="theme-toggle" onclick="toggleTheme()" title="切换暗色模式">🌙</button>
     <span class="nav-dice" onclick="randomPost()" title="随机一篇文章">🎲</span>
     <span class="search-trigger" onclick="openSearch()" title="搜索">🔍</span>
@@ -120,7 +120,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 </div>
 
 <div class="card" style="max-width:760px;margin:0 auto;">
-  <form action="/jzc-blog/editor/save" method="POST">
+  <form action="/editor/save" method="POST">
     <input type="hidden" name="mode" value="note">
 
     
@@ -138,7 +138,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
     <div class="flex-row gap-12">
       <button type="submit" class="btn btn-primary btn-lg">保存便签</button>
-      <a href="/jzc-blog/" class="btn">取消</a>
+      <a href="/" class="btn">取消</a>
     </div>
   </form>
 </div>
@@ -149,7 +149,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 <footer>
   <div class="footer-wave">JZC's Island · 建于 2026 · 慢下来，写点东西</div>
   <div class="footer">
-    <a href="/jzc-blog/rss.xml">RSS 订阅</a> · Animal Crossing inspired · Flask + Markdown
+    <a href="/rss.xml">RSS 订阅</a> · Animal Crossing inspired · Flask + Markdown
   </div>
 </footer>
 
@@ -224,7 +224,7 @@ function randomPost() {
   var dice = document.querySelector('.nav-dice');
   if (dice) dice.classList.add('spinning');
   setTimeout(function() { if (dice) dice.classList.remove('spinning'); }, 600);
-  fetch('/jzc-blog/random')
+  fetch('/random')
     .then(r => r.json())
     .then(data => { if (data.url) window.location.href = data.url; });
 }
@@ -316,7 +316,7 @@ function doSearch() {
     var q = document.getElementById('searchInput').value.trim();
     var container = document.getElementById('searchResults');
     if (!q) { container.innerHTML = ''; return; }
-    fetch('/jzc-blog/search?q=' + encodeURIComponent(q))
+    fetch('/search?q=' + encodeURIComponent(q))
       .then(r => r.json())
       .then(data => {
         if (!data.results.length) {
@@ -324,7 +324,7 @@ function doSearch() {
           return;
         }
         container.innerHTML = data.results.map(function(p) {
-          return '<a href="/jzc-blog/post/' + p.slug + '" class="search-result-item">' +
+          return '<a href="/post/' + p.slug + '" class="search-result-item">' +
             '<span class="tag">#' + p.tag + '</span> ' +
             '<strong>' + p.title + '</strong> ' +
             '<span class="text-muted" style="font-size:11px;">' + p.date + '</span>' +

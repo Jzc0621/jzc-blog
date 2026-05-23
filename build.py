@@ -4,7 +4,7 @@ from pathlib import Path
 from app import app, get_posts, get_notes, POSTS_DIR, NOTES_DIR
 
 DIST = Path(__file__).parent / "dist"
-BASE = "/jzc-blog"
+BASE = ""
 
 
 def freeze(url: str) -> str:
