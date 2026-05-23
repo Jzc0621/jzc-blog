@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>写文章 — JZC</title>
+  <title>编辑 — JZC</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap" media="print" onload="this.media='all';this.onload=null">
   <link rel="stylesheet" href="/static/css/animal.css">
@@ -116,42 +116,75 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <div class="page-header">
   <h1>写文章</h1>
-  <p class="subtitle">用 Markdown 书写，直接保存到博客</p>
+  <p class="subtitle">岛主专属</p>
 </div>
 
-<div class="card" style="max-width:760px;margin:0 auto;">
-  <form action="/editor/save" method="POST">
-    <input type="hidden" name="mode" value="post">
+<div class="card" style="max-width:480px;margin:0 auto;">
 
-    
-    <div class="mb-16">
-      <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">标题</label>
-      <input class="input input-lg" name="title" placeholder="文章标题" required>
+  <!-- Password gate -->
+  <div id="loginGate">
+    <div style="text-align:center;font-size:40px;margin-bottom:16px;">🏝️</div>
+    <p style="text-align:center;color:var(--text-secondary);margin-bottom:20px;">请输入岛主密码</p>
+    <input class="input input-lg" id="pwdInput" type="password" placeholder="密码" onkeydown="if(event.key==='Enter')checkPwd()">
+    <div class="flex-row gap-12" style="margin-top:12px;justify-content:center;">
+      <button class="btn btn-primary" onclick="checkPwd()">进入岛屿</button>
+      <a href="/" class="btn">返回</a>
     </div>
+    <p id="pwdError" style="text-align:center;color:var(--error);font-size:12px;margin-top:10px;display:none;">密码不对哦</p>
+  </div>
 
-    <div class="mb-16">
-      <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">分类</label>
-      <select class="select" name="tag">
-        <option value="技术">#技术</option>
-        <option value="生活">#生活</option>
-        <option value="随笔">#随笔</option>
-        <option value="设计">#设计</option>
-        <option value="其他">#其他</option>
-      </select>
-    </div>
-    
+  <!-- Editor form (hidden initially) -->
+  <div id="editorForm" style="display:none;">
+    <form action="/editor/save" method="POST">
+      <input type="hidden" name="mode" value="post">
 
-    <div class="mb-16">
-      <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">正文 (Markdown)</label>
-      <textarea class="textarea" name="content" placeholder="在这里写内容...&#10;&#10;## 二级标题&#10;&#10;正文...&#10;&#10;```python&#10;print('hello')&#10;```" required></textarea>
-    </div>
+      
+      <div class="mb-16">
+        <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">标题</label>
+        <input class="input input-lg" name="title" placeholder="文章标题" required>
+      </div>
 
-    <div class="flex-row gap-12">
-      <button type="submit" class="btn btn-primary btn-lg">发布文章</button>
-      <a href="/" class="btn">取消</a>
-    </div>
-  </form>
+      <div class="mb-16">
+        <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">分类</label>
+        <select class="select" name="tag">
+          <option value="技术">#技术</option>
+          <option value="生活">#生活</option>
+          <option value="随笔">#随笔</option>
+          <option value="设计">#设计</option>
+          <option value="其他">#其他</option>
+        </select>
+      </div>
+      
+
+      <div class="mb-16">
+        <label style="font-size:12px;font-weight:700;color:var(--text-muted);display:block;margin-bottom:4px;">正文 (Markdown)</label>
+        <textarea class="textarea" name="content" placeholder="在这里写内容...&#10;&#10;## 二级标题&#10;&#10;正文...&#10;&#10;```python&#10;print('hello')&#10;```" required></textarea>
+      </div>
+
+      <div class="flex-row gap-12">
+        <button type="submit" class="btn btn-primary btn-lg">发布文章</button>
+        <a href="/" class="btn">取消</a>
+      </div>
+    </form>
+  </div>
+
 </div>
+
+<script>
+// Password check - edit PASSWORD_HASH to change password
+// To generate: btoa('yourpassword')
+var PASSWORD_HASH = 'anpjMjAyNDEwMDd6aA==';
+
+function checkPwd() {
+  var input = document.getElementById('pwdInput').value;
+  if (btoa(input) === PASSWORD_HASH) {
+    document.getElementById('loginGate').style.display = 'none';
+    document.getElementById('editorForm').style.display = '';
+  } else {
+    document.getElementById('pwdError').style.display = '';
+  }
+}
+</script>
 
 
 </main>
