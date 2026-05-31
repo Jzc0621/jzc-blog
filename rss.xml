@@ -6,6 +6,12 @@
 		<description>技术、生活，和随手笔记</description>
 		<language>zh-CN</language>
 		<item>
+			<title>基于 RA6M5 与 TinyML 的智能脉搏监测系统</title>
+			<link>http://localhost/post/ra6m5-pulse-monitor</link>
+			<description>以瑞萨 RA6M5 为核心，PPG 传感器采集脉搏波，在 MCU 端运行 1D-CNN 进行心律分类，TFT + PC 双屏可视化。</description>
+			<pubDate>2026-05-31</pubDate>
+		</item>
+		<item>
 			<title>用纯 CSS 复刻动物森友会 UI 风格</title>
 			<link>http://localhost/post/css-animal-crossing</link>
 			<description>从一个 React 组件库的设计规范翻译成纯 CSS，记录设计 Token 迁移过程。</description>

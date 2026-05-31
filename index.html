@@ -147,6 +147,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <div class="tag-filter">
           <a href="#" class="tag-filter-btn active" onclick="filterPosts('all');return false;">全部</a>
           
+            <a href="#" class="tag-filter-btn" onclick="filterPosts('嵌入式');return false;">#嵌入式</a>
+          
             <a href="#" class="tag-filter-btn" onclick="filterPosts('技术');return false;">#技术</a>
           
             <a href="#" class="tag-filter-btn" onclick="filterPosts('生活');return false;">#生活</a>
@@ -160,7 +162,19 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
       
         
-          <a href="/post/css-animal-crossing" class="post-card" data-tag="设计" style="border-left: 5px solid var(--purple);">
+          <a href="/post/ra6m5-pulse-monitor" class="post-card" data-tag="嵌入式" style="border-left: 5px solid var(--lime-green);">
+            <div class="post-tag">#嵌入式</div>
+            <div class="post-title">基于 RA6M5 与 TinyML 的智能脉搏监测系统</div>
+            
+              <div class="post-excerpt">以瑞萨 RA6M5 为核心，PPG 传感器采集脉搏波，在 MCU 端运行 1D-CNN 进行心律分类，TFT + PC 双屏可视化。</div>
+            
+            <div class="post-meta">
+              <span>2026-05-31</span>
+              <span>15 分钟阅读</span>
+            </div>
+          </a>
+        
+          <a href="/post/css-animal-crossing" class="post-card" data-tag="设计" style="border-left: 5px solid var(--lime-green);">
             <div class="post-tag">#设计</div>
             <div class="post-title">用纯 CSS 复刻动物森友会 UI 风格</div>
             
@@ -172,7 +186,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             </div>
           </a>
         
-          <a href="/post/learning-notes-may" class="post-card" data-tag="随笔" style="border-left: 5px solid var(--app-yellow);">
+          <a href="/post/learning-notes-may" class="post-card" data-tag="随笔" style="border-left: 5px solid var(--app-red);">
             <div class="post-tag">#随笔</div>
             <div class="post-title">五月的学习笔记碎片</div>
             
@@ -184,7 +198,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             </div>
           </a>
         
-          <a href="/post/jzc" class="post-card" data-tag="技术" style="border-left: 5px solid var(--app-pink);">
+          <a href="/post/jzc" class="post-card" data-tag="技术" style="border-left: 5px solid var(--warm-peach-pink);">
             <div class="post-tag">#技术</div>
             <div class="post-title">jzc</div>
             
@@ -196,7 +210,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             </div>
           </a>
         
-          <a href="/post/hello-world" class="post-card" data-tag="生活" style="border-left: 5px solid var(--app-pink);">
+          <a href="/post/hello-world" class="post-card" data-tag="生活" style="border-left: 5px solid var(--brown);">
             <div class="post-tag">#生活</div>
             <div class="post-title">欢迎来到 JZC 的岛屿</div>
             
@@ -208,7 +222,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             </div>
           </a>
         
-          <a href="/post/python-async-intro" class="post-card" data-tag="技术" style="border-left: 5px solid var(--app-pink);">
+          <a href="/post/python-async-intro" class="post-card" data-tag="技术" style="border-left: 5px solid var(--warm-peach-pink);">
             <div class="post-tag">#技术</div>
             <div class="post-title">Python 异步编程入门：从回调到 async/await</div>
             
@@ -220,7 +234,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             </div>
           </a>
         
-          <a href="/post/flask-blog-building" class="post-card" data-tag="技术" style="border-left: 5px solid var(--app-pink);">
+          <a href="/post/flask-blog-building" class="post-card" data-tag="技术" style="border-left: 5px solid var(--warm-peach-pink);">
             <div class="post-tag">#技术</div>
             <div class="post-title">从零搭建一个零数据库博客</div>
             
@@ -232,7 +246,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             </div>
           </a>
         
-          <a href="/post/git-tips-2026" class="post-card" data-tag="技术" style="border-left: 5px solid var(--app-pink);">
+          <a href="/post/git-tips-2026" class="post-card" data-tag="技术" style="border-left: 5px solid var(--warm-peach-pink);">
             <div class="post-tag">#技术</div>
             <div class="post-title">5 个我每天都在用的 Git 技巧</div>
             
@@ -244,7 +258,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             </div>
           </a>
         
-          <a href="/post/night-coding-routine" class="post-card" data-tag="生活" style="border-left: 5px solid var(--app-pink);">
+          <a href="/post/night-coding-routine" class="post-card" data-tag="生活" style="border-left: 5px solid var(--brown);">
             <div class="post-tag">#生活</div>
             <div class="post-title">深夜编程的仪式感</div>
             
@@ -256,7 +270,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             </div>
           </a>
         
-          <a href="/post/nature-walk-0426" class="post-card" data-tag="生活" style="border-left: 5px solid var(--app-pink);">
+          <a href="/post/nature-walk-0426" class="post-card" data-tag="生活" style="border-left: 5px solid var(--brown);">
             <div class="post-tag">#生活</div>
             <div class="post-title">城市边缘的萤火虫</div>
             
@@ -275,26 +289,26 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       <div class="section-title">随手记</div>
       
         
-          <div class="note-card" style="background:var(--app-yellow);">
+          <div class="note-card" style="background:var(--app-blue);">
             Ctrl+Shift+P 打开命令面板，输入 &#34;toggle minimap&#34; 可以关掉小地图，省屏幕空间。
 
 另外 `Ctrl+K Z` 进入禅模式，全屏编辑，适合写文章。
             <div class="note-date">2026-05-22</div>
           </div>
         
-          <div class="note-card" style="background:var(--app-yellow);">
+          <div class="note-card" style="background:var(--app-blue);">
             咖啡喝太多手在抖，下午改喝抹茶吧 🍵 ​​三杯浓缩也许太多了
             <div class="note-date">2026-05-21</div>
           </div>
         
-          <div class="note-card" style="background:var(--app-yellow);">
+          <div class="note-card" style="background:var(--app-blue);">
             楼下那只橘猫又胖了。今天看到它卡在栅栏缝里，进退两难。我帮它推了一把，它不高兴地叫了一声走了。
 
 动物森友会现实版。
             <div class="note-date">2026-05-20</div>
           </div>
         
-          <div class="note-card" style="background:var(--app-yellow);">
+          <div class="note-card" style="background:var(--app-blue);">
             REST API 设计三要点：
 
 1. 统一错误格式：`{&#34;error&#34;: {&#34;code&#34;: &#34;...&#34;, &#34;message&#34;: &#34;...&#34;}}`
@@ -302,7 +316,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <div class="note-date">2026-05-19</div>
           </div>
         
-          <div class="note-card" style="background:var(--app-yellow);">
+          <div class="note-card" style="background:var(--app-blue);">
             Python 3.13 的免费线程（free-threaded）模式值得关注。GIL 终于可选了，但生态支持还需要时间。别急着在生产环境升级。
             <div class="note-date">2026-05-15</div>
           </div>
