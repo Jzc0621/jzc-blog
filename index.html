@@ -5,13 +5,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>JZC</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏝️</text></svg>">
+  <meta name="description" content="技术、生活，和随手笔记">
   <meta property="og:title" content="JZC 的岛屿">
   <meta property="og:description" content="技术、生活，和随手笔记">
   <meta property="og:type" content="website">
+  <link rel="canonical" href="https://jiazhichao.xyz/">
+  <meta property="og:image" content="https://jiazhichao.xyz/static/images/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="JZC's Island">
-  <meta name="twitter:card" content="summary">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap" media="print" onload="this.media='all';this.onload=null">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap"></noscript>
+  <script>var f=document.createElement('link');f.rel='stylesheet';f.href='https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap';document.head.appendChild(f);setTimeout(function(){if(!document.fonts||document.fonts.status!=='loaded')document.documentElement.classList.add('fonts-failed')},3000)</script>
+  <script>var s=localStorage.getItem('jzc-theme');if(s==='dark')document.documentElement.className='dark';</script>
   <link rel="stylesheet" href="/static/css/animal.css">
   <link rel="alternate" type="application/rss+xml" title="JZC's Island RSS" href="/rss.xml">
   <style>pre { line-height: 125%; }
@@ -106,7 +114,8 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <nav class="nav-bar">
   <a href="/" class="nav-brand">JZC</a>
-  <div class="nav-links">
+  <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="菜单">☰</button>
+  <div class="nav-links" id="navLinks">
     <a href="/">文章</a>
     <a href="/notes">便签墙</a>
     <a href="/editor">写文章</a>
@@ -162,7 +171,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
       
         
-          <a href="/post/ra6m5-pulse-monitor" class="post-card" data-tag="嵌入式" style="border-left: 5px solid var(--lime-green);">
+          <a href="/post/ra6m5-pulse-monitor" class="post-card" data-tag="嵌入式" style="border-left: 5px solid var(--app-green);">
             <div class="post-tag">#嵌入式</div>
             <div class="post-title">基于 RA6M5 与 TinyML 的智能脉搏监测系统</div>
             
@@ -170,11 +179,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
             <div class="post-meta">
               <span>2026-05-31</span>
-              <span>15 分钟阅读</span>
+              <span>4 分钟阅读</span>
             </div>
           </a>
         
-          <a href="/post/css-animal-crossing" class="post-card" data-tag="设计" style="border-left: 5px solid var(--lime-green);">
+          <a href="/post/css-animal-crossing" class="post-card" data-tag="设计" style="border-left: 5px solid var(--yellow-green);">
             <div class="post-tag">#设计</div>
             <div class="post-title">用纯 CSS 复刻动物森友会 UI 风格</div>
             
@@ -182,11 +191,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
             <div class="post-meta">
               <span>2026-05-25</span>
-              <span>3 分钟阅读</span>
+              <span>1 分钟阅读</span>
             </div>
           </a>
         
-          <a href="/post/learning-notes-may" class="post-card" data-tag="随笔" style="border-left: 5px solid var(--app-red);">
+          <a href="/post/learning-notes-may" class="post-card" data-tag="随笔" style="border-left: 5px solid var(--lime-green);">
             <div class="post-tag">#随笔</div>
             <div class="post-title">五月的学习笔记碎片</div>
             
@@ -194,11 +203,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
             <div class="post-meta">
               <span>2026-05-23</span>
-              <span>2 分钟阅读</span>
+              <span>1 分钟阅读</span>
             </div>
           </a>
         
-          <a href="/post/jzc" class="post-card" data-tag="技术" style="border-left: 5px solid var(--warm-peach-pink);">
+          <a href="/post/jzc" class="post-card" data-tag="技术" style="border-left: 5px solid var(--app-pink);">
             <div class="post-tag">#技术</div>
             <div class="post-title">jzc</div>
             
@@ -210,7 +219,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             </div>
           </a>
         
-          <a href="/post/hello-world" class="post-card" data-tag="生活" style="border-left: 5px solid var(--brown);">
+          <a href="/post/hello-world" class="post-card" data-tag="生活" style="border-left: 5px solid var(--app-blue);">
             <div class="post-tag">#生活</div>
             <div class="post-title">欢迎来到 JZC 的岛屿</div>
             
@@ -218,11 +227,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
             <div class="post-meta">
               <span>2026-05-22</span>
-              <span>2 分钟阅读</span>
+              <span>1 分钟阅读</span>
             </div>
           </a>
         
-          <a href="/post/python-async-intro" class="post-card" data-tag="技术" style="border-left: 5px solid var(--warm-peach-pink);">
+          <a href="/post/python-async-intro" class="post-card" data-tag="技术" style="border-left: 5px solid var(--app-pink);">
             <div class="post-tag">#技术</div>
             <div class="post-title">Python 异步编程入门：从回调到 async/await</div>
             
@@ -230,11 +239,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
             <div class="post-meta">
               <span>2026-05-20</span>
-              <span>5 分钟阅读</span>
+              <span>2 分钟阅读</span>
             </div>
           </a>
         
-          <a href="/post/flask-blog-building" class="post-card" data-tag="技术" style="border-left: 5px solid var(--warm-peach-pink);">
+          <a href="/post/flask-blog-building" class="post-card" data-tag="技术" style="border-left: 5px solid var(--app-pink);">
             <div class="post-tag">#技术</div>
             <div class="post-title">从零搭建一个零数据库博客</div>
             
@@ -242,11 +251,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
             <div class="post-meta">
               <span>2026-05-18</span>
-              <span>3 分钟阅读</span>
+              <span>1 分钟阅读</span>
             </div>
           </a>
         
-          <a href="/post/git-tips-2026" class="post-card" data-tag="技术" style="border-left: 5px solid var(--warm-peach-pink);">
+          <a href="/post/git-tips-2026" class="post-card" data-tag="技术" style="border-left: 5px solid var(--app-pink);">
             <div class="post-tag">#技术</div>
             <div class="post-title">5 个我每天都在用的 Git 技巧</div>
             
@@ -254,11 +263,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
             <div class="post-meta">
               <span>2026-05-12</span>
-              <span>3 分钟阅读</span>
+              <span>1 分钟阅读</span>
             </div>
           </a>
         
-          <a href="/post/night-coding-routine" class="post-card" data-tag="生活" style="border-left: 5px solid var(--brown);">
+          <a href="/post/night-coding-routine" class="post-card" data-tag="生活" style="border-left: 5px solid var(--app-blue);">
             <div class="post-tag">#生活</div>
             <div class="post-title">深夜编程的仪式感</div>
             
@@ -266,11 +275,11 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
             <div class="post-meta">
               <span>2026-05-08</span>
-              <span>2 分钟阅读</span>
+              <span>1 分钟阅读</span>
             </div>
           </a>
         
-          <a href="/post/nature-walk-0426" class="post-card" data-tag="生活" style="border-left: 5px solid var(--brown);">
+          <a href="/post/nature-walk-0426" class="post-card" data-tag="生活" style="border-left: 5px solid var(--app-blue);">
             <div class="post-tag">#生活</div>
             <div class="post-title">城市边缘的萤火虫</div>
             
@@ -278,7 +287,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             
             <div class="post-meta">
               <span>2026-04-26</span>
-              <span>2 分钟阅读</span>
+              <span>1 分钟阅读</span>
             </div>
           </a>
         
@@ -289,26 +298,26 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       <div class="section-title">随手记</div>
       
         
-          <div class="note-card" style="background:var(--app-blue);">
+          <div class="note-card" style="background:var(--app-teal);">
             Ctrl+Shift+P 打开命令面板，输入 &#34;toggle minimap&#34; 可以关掉小地图，省屏幕空间。
 
 另外 `Ctrl+K Z` 进入禅模式，全屏编辑，适合写文章。
             <div class="note-date">2026-05-22</div>
           </div>
         
-          <div class="note-card" style="background:var(--app-blue);">
+          <div class="note-card" style="background:var(--app-teal);">
             咖啡喝太多手在抖，下午改喝抹茶吧 🍵 ​​三杯浓缩也许太多了
             <div class="note-date">2026-05-21</div>
           </div>
         
-          <div class="note-card" style="background:var(--app-blue);">
+          <div class="note-card" style="background:var(--app-teal);">
             楼下那只橘猫又胖了。今天看到它卡在栅栏缝里，进退两难。我帮它推了一把，它不高兴地叫了一声走了。
 
 动物森友会现实版。
             <div class="note-date">2026-05-20</div>
           </div>
         
-          <div class="note-card" style="background:var(--app-blue);">
+          <div class="note-card" style="background:var(--app-teal);">
             REST API 设计三要点：
 
 1. 统一错误格式：`{&#34;error&#34;: {&#34;code&#34;: &#34;...&#34;, &#34;message&#34;: &#34;...&#34;}}`
@@ -316,7 +325,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
             <div class="note-date">2026-05-19</div>
           </div>
         
-          <div class="note-card" style="background:var(--app-blue);">
+          <div class="note-card" style="background:var(--app-teal);">
             Python 3.13 的免费线程（free-threaded）模式值得关注。GIL 终于可选了，但生态支持还需要时间。别急着在生产环境升级。
             <div class="note-date">2026-05-15</div>
           </div>
@@ -381,360 +390,7 @@ function filterPosts(tag) {
   </div>
 </div>
 
-<script>
-// ═══════════════════════════════════════════
-// Dark mode toggle
-// ═══════════════════════════════════════════
-(function() {
-  const saved = localStorage.getItem('jzc-theme');
-  if (saved === 'dark') document.body.classList.add('dark');
-  updateToggleIcon();
-})();
-
-function toggleTheme() {
-  document.body.classList.toggle('dark');
-  localStorage.setItem('jzc-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-  updateToggleIcon();
-}
-
-function updateToggleIcon() {
-  const btn = document.querySelector('.theme-toggle');
-  if (btn) btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-}
-
-// ═══════════════════════════════════════════
-// Back to top
-// ═══════════════════════════════════════════
-window.addEventListener('scroll', function() {
-  var btn = document.getElementById('backToTop');
-  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
-
-  // Reading progress bar
-  var bar = document.getElementById('progressBar');
-  if (bar) {
-    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    var pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-    bar.style.width = pct + '%';
-  }
-});
-
-// ═══════════════════════════════════════════
-// Random post
-// ═══════════════════════════════════════════
-var _postSlugs = [];
-function randomPost() {
-  var dice = document.querySelector('.nav-dice');
-  if (dice) dice.classList.add('spinning');
-  setTimeout(function() { if (dice) dice.classList.remove('spinning'); }, 600);
-
-  // Collect slugs from links on the page
-  if (!_postSlugs.length) {
-    document.querySelectorAll('a[href*="/post/"]').forEach(function(a) {
-      var m = a.href.match(/\/post\/([^/]+)/);
-      if (m && _postSlugs.indexOf(m[1]) < 0) _postSlugs.push(m[1]);
-    });
-  }
-  // Fallback: fetch from static list
-  if (_postSlugs.length) {
-    var slug = _postSlugs[Math.floor(Math.random() * _postSlugs.length)];
-    window.location.href = '/post/' + slug;
-    return;
-  }
-  fetch('/search-index.json').then(r => r.json()).then(function(data) {
-    if (data.length) {
-      var idx = Math.floor(Math.random() * data.length);
-      window.location.href = '/post/' + data[idx].slug;
-    }
-  });
-}
-
-// ═══════════════════════════════════════════
-// Island Clock
-// ═══════════════════════════════════════════
-function updateClock() {
-  var now = new Date();
-  var days = ['日', '一', '二', '三', '四', '五', '六'];
-  document.getElementById('clockDate').textContent = '星期' + days[now.getDay()];
-  document.getElementById('clockTime').textContent =
-    String(now.getHours()).padStart(2, '0') + ':' +
-    String(now.getMinutes()).padStart(2, '0');
-}
-updateClock();
-setInterval(updateClock, 30000);
-
-// ═══════════════════════════════════════════
-// Daily Fortune
-// ═══════════════════════════════════════════
-var fortunes = [
-  { icon: '🍀', text: '今天适合重构代码，删掉的比写的多才是进步' },
-  { icon: '☕', text: '咖啡要趁热喝，bug 要趁早修' },
-  { icon: '🌟', text: '今天可能会遇到一个让你豁然开朗的答案' },
-  { icon: '🌸', text: '好心情是最好的 debug 工具' },
-  { icon: '🐢', text: '慢就是快，今天不要 rush' },
-  { icon: '🎣', text: '像钓鱼一样对待灵感：耐心等待，它会上钩的' },
-  { icon: '🌈', text: '今天写的代码明天可能删掉，但那是有意义的' },
-  { icon: '🦉', text: '深夜写代码容易出 bug，早点休息吧' },
-  { icon: '🌿', text: '偶尔休息一下不是偷懒，是给自己的缓存清理' },
-  { icon: '🦊', text: '聪明的狐狸说：console.log 是最好的朋友' },
-  { icon: '🍂', text: '秋风吹走了 bug，春天又长出新 feature' },
-  { icon: '⭐', text: '今天的你会解决一个难了三天的问题' },
-  { icon: '🎵', text: '戴上耳机，好音乐让代码自己写出来' },
-  { icon: '🐚', text: '小贝壳说：模块化是通往幸福的路' },
-  { icon: '🪐', text: '抬头看看远方，bug 没有那么重要' },
-];
-
-function drawFortune() {
-  var btn = document.getElementById('fortuneBtn');
-  if (btn) btn.classList.add('shaking');
-  setTimeout(function() { if (btn) btn.classList.remove('shaking'); }, 500);
-
-  // Remove any existing popup
-  var old = document.querySelector('.fortune-popup');
-  if (old) { old.remove(); return; }
-
-  // Get today's seed
-  var today = new Date().toISOString().slice(0, 10);
-  var seed = 0;
-  for (var i = 0; i < today.length; i++) seed += today.charCodeAt(i);
-  var f = fortunes[seed % fortunes.length];
-
-  var popup = document.createElement('div');
-  popup.className = 'fortune-popup';
-  popup.innerHTML =
-    '<div class="fortune-icon">' + f.icon + '</div>' +
-    '<div class="fortune-text">' + f.text + '</div>' +
-    '<div class="fortune-date">' + today + '</div>' +
-    '<div style="margin-top:8px;font-size:10px;color:var(--text-disabled);">点击摇签筒关闭 · 每日一签</div>';
-  document.body.appendChild(popup);
-
-  // Auto-close after 10 seconds
-  setTimeout(function() { if (popup.parentNode) popup.remove(); }, 10000);
-}
-
-// ═══════════════════════════════════════════
-// Search
-// ═══════════════════════════════════════════
-function openSearch() {
-  document.getElementById('searchOverlay').classList.add('open');
-  document.getElementById('searchInput').focus();
-}
-function closeSearch() {
-  document.getElementById('searchOverlay').classList.remove('open');
-  document.getElementById('searchInput').value = '';
-  document.getElementById('searchResults').innerHTML = '';
-}
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeSearch();
-  if (e.key === 'k' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); openSearch(); }
-});
-
-// Load search index on page load (static fallback)
-(function() {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/search-index.json', true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      try { window._searchIndex = JSON.parse(xhr.responseText); } catch(e) {}
-    }
-  };
-  xhr.send();
-})();
-
-var searchTimer;
-function doSearch() {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(function() {
-    var q = document.getElementById('searchInput').value.trim().toLowerCase();
-    var container = document.getElementById('searchResults');
-    if (!q) { container.innerHTML = ''; return; }
-
-    if (window._searchIndex) {
-      var results = window._searchIndex.filter(function(p) {
-        return p.title.toLowerCase().indexOf(q) >= 0 || p.content.toLowerCase().indexOf(q) >= 0;
-      });
-      if (!results.length) {
-        container.innerHTML = '<p class="text-muted">没找到匹配的文章</p>';
-        return;
-      }
-      container.innerHTML = results.map(function(p) {
-        return '<a href="/post/' + p.slug + '" class="search-result-item">' +
-          '<span class="tag">#' + p.tag + '</span> ' +
-          '<strong>' + p.title + '</strong> ' +
-          '<span class="text-muted" style="font-size:11px;">' + p.date + '</span>' +
-          '</a>';
-      }).join('');
-      return;
-    }
-
-    fetch('/search?q=' + encodeURIComponent(q))
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (!data.results || !data.results.length) {
-          container.innerHTML = '<p class="text-muted">没找到匹配的文章</p>';
-          return;
-        }
-        container.innerHTML = data.results.map(function(p) {
-          return '<a href="/post/' + p.slug + '" class="search-result-item">' +
-            '<span class="tag">#' + p.tag + '</span> ' +
-            '<strong>' + p.title + '</strong> ' +
-            '<span class="text-muted" style="font-size:11px;">' + p.date + '</span>' +
-            '</a>';
-        }).join('');
-      });
-  }, 200);
-}
-
-// ═══════════════════════════════════════════
-// 1. Welcome Modal (first visit)
-// ═══════════════════════════════════════════
-(function() {
-  if (localStorage.getItem('jzc-welcome-seen')) return;
-  localStorage.setItem('jzc-welcome-seen', '1');
-
-  var overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = '<div class="modal-box">' +
-    '<div class="modal-icon">🏝️</div>' +
-    '<h3>欢迎来到 JZC 的岛屿！</h3>' +
-    '<p id="welcomeText"></p>' +
-    '<div style="margin-top:20px;">' +
-    '<button class="btn btn-primary" onclick="this.closest(\'.modal-overlay\').remove()">开始探索</button>' +
-    '</div></div>';
-  document.body.appendChild(overlay);
-
-  // Typewriter effect
-  var msg = '这里是一个安静的小岛，写点技术笔记，记些生活碎片，偶尔有小动物来访。慢慢逛，不着急。';
-  var el = document.getElementById('welcomeText');
-  var i = 0;
-  function type() {
-    if (i < msg.length) { el.textContent += msg[i]; i++; setTimeout(type, 50 + Math.random() * 30); }
-  }
-  type();
-
-  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
-})();
-
-// ═══════════════════════════════════════════
-// 2. Click Leaf Effect
-// ═══════════════════════════════════════════
-var leaves = ['🌿', '🍃', '🌱', '🍀', '✨', '🌸', '🍂', '🌾'];
-document.addEventListener('click', function(e) {
-  var leaf = document.createElement('span');
-  leaf.className = 'click-leaf';
-  leaf.textContent = leaves[Math.floor(Math.random() * leaves.length)];
-  leaf.style.left = e.clientX + 'px';
-  leaf.style.top = e.clientY + 'px';
-  leaf.style.setProperty('--dx', (Math.random() * 80 - 40) + 'px');
-  leaf.style.setProperty('--dy', -(Math.random() * 60 + 40) + 'px');
-  leaf.style.setProperty('--rot', (Math.random() * 180 - 90) + 'deg');
-  document.body.appendChild(leaf);
-  setTimeout(function() { leaf.remove(); }, 1000);
-});
-
-// ═══════════════════════════════════════════
-// 3. Random Visitor
-// ═══════════════════════════════════════════
-var visitors = ['🦊', '🐿️', '🦉', '🐰', '🦌', '🐻', '🐸', '🦔'];
-var speeches = [
-  '今天天气不错呢！', '有好文章吗？', '咖啡真香~', '路过看看...',
-  '代码写得不错！', '喵？不对，我是狐狸', '这地方真舒服', '加油写博客！'
-];
-
-function spawnVisitor() {
-  var side = Math.random() > 0.5 ? 'left' : 'right';
-  var v = document.createElement('div');
-  v.className = 'visitor';
-  v.textContent = visitors[Math.floor(Math.random() * visitors.length)];
-  v.style[side] = Math.random() * 100 + 20 + 'px';
-  v.style.bottom = '-60px';
-  document.body.appendChild(v);
-
-  // Click to talk
-  v.addEventListener('click', function(e) {
-    e.stopPropagation();
-    var bubble = document.createElement('div');
-    bubble.className = 'visitor-speech';
-    bubble.textContent = speeches[Math.floor(Math.random() * speeches.length)];
-    bubble.style.left = Math.min(e.clientX - 60, window.innerWidth - 160) + 'px';
-    bubble.style.top = (e.clientY - 50) + 'px';
-    document.body.appendChild(bubble);
-    setTimeout(function() { bubble.remove(); }, 2500);
-  });
-
-  // Leave after a while
-  setTimeout(function() {
-    v.classList.add('visitor-leaving');
-    setTimeout(function() { v.remove(); }, 500);
-  }, 8000 + Math.random() * 8000);
-
-  // Schedule next visitor
-  setTimeout(spawnVisitor, 15000 + Math.random() * 30000);
-}
-
-setTimeout(spawnVisitor, 10000 + Math.random() * 20000);
-
-// ═══════════════════════════════════════════
-// 4. Scroll Reveal
-// ═══════════════════════════════════════════
-function initReveal() {
-  document.querySelectorAll('.post-card, .note-card, .card').forEach(function(el) {
-    if (!el.classList.contains('reveal')) el.classList.add('reveal');
-  });
-}
-
-var revealObserver = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-
-function observeReveal() {
-  document.querySelectorAll('.reveal').forEach(function(el) {
-    revealObserver.observe(el);
-  });
-}
-
-// ═══════════════════════════════════════════
-// Code copy buttons
-// ═══════════════════════════════════════════
-function addCopyButtons() {
-  document.querySelectorAll('.codehilite, .code-block, pre').forEach(function(block) {
-    if (block.querySelector('.code-copy-btn')) return;
-    if (block.closest('.code-block-wrap')) return;
-    var wrap = document.createElement('div');
-    wrap.className = 'code-block-wrap';
-    block.parentNode.insertBefore(wrap, block);
-    wrap.appendChild(block);
-    var btn = document.createElement('button');
-    btn.className = 'code-copy-btn';
-    btn.textContent = '复制';
-    btn.onclick = function() {
-      var code = block.textContent;
-      navigator.clipboard.writeText(code).then(function() {
-        btn.textContent = '已复制!';
-        btn.classList.add('copied');
-        setTimeout(function() { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2000);
-      });
-    };
-    wrap.appendChild(btn);
-  });
-}
-document.addEventListener('DOMContentLoaded', addCopyButtons);
-addCopyButtons();
-
-// Init reveal on load and after any DOM changes
-document.addEventListener('DOMContentLoaded', function() {
-  initReveal();
-  observeReveal();
-});
-// Also run immediately for server-rendered content
-initReveal();
-observeReveal();
-</script>
+<script src="/static/js/main.js" defer></script>
 
 </body>
 </html>
