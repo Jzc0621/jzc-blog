@@ -1,23 +1,34 @@
+// ═══════════════════════════════════════════
+// Dark mode toggle
+// ═══════════════════════════════════════════
 (function() {
   var saved = localStorage.getItem('jzc-theme');
   if (saved === 'dark') document.body.classList.add('dark');
   updateToggleIcon();
 })();
+
 function toggleMobileNav() {
   document.getElementById('navLinks').classList.toggle('open');
 }
+
 function toggleTheme() {
   document.body.classList.toggle('dark');
   localStorage.setItem('jzc-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
   updateToggleIcon();
 }
+
 function updateToggleIcon() {
   var btn = document.querySelector('.theme-toggle');
   if (btn) btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
 }
+
+// ═══════════════════════════════════════════
+// Back to top + reading progress
+// ═══════════════════════════════════════════
 window.addEventListener('scroll', function() {
   var btn = document.getElementById('backToTop');
   if (btn) btn.classList.toggle('visible', window.scrollY > 400);
+
   var bar = document.getElementById('progressBar');
   if (bar) {
     var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
@@ -26,11 +37,16 @@ window.addEventListener('scroll', function() {
     bar.style.width = pct + '%';
   }
 });
+
+// ═══════════════════════════════════════════
+// Random post
+// ═══════════════════════════════════════════
 var _postSlugs = [];
 function randomPost() {
   var dice = document.querySelector('.nav-dice');
   if (dice) dice.classList.add('spinning');
   setTimeout(function() { if (dice) dice.classList.remove('spinning'); }, 600);
+
   if (!_postSlugs.length) {
     document.querySelectorAll('a[href*="/post/"]').forEach(function(a) {
       var m = a.href.match(/\/post\/([^/]+)/);
@@ -49,6 +65,10 @@ function randomPost() {
     }
   });
 }
+
+// ═══════════════════════════════════════════
+// Island Clock
+// ═══════════════════════════════════════════
 function updateClock() {
   var now = new Date();
   var days = ['日', '一', '二', '三', '四', '五', '六'];
@@ -61,6 +81,10 @@ function updateClock() {
 }
 updateClock();
 setInterval(updateClock, 30000);
+
+// ═══════════════════════════════════════════
+// Daily Fortune
+// ═══════════════════════════════════════════
 var fortunes = [
   { icon: '🍀', text: '今天适合重构代码，删掉的比写的多才是进步' },
   { icon: '☕', text: '咖啡要趁热喝，bug 要趁早修' },
@@ -78,16 +102,20 @@ var fortunes = [
   { icon: '🐚', text: '小贝壳说：模块化是通往幸福的路' },
   { icon: '🪐', text: '抬头看看远方，bug 没有那么重要' },
 ];
+
 function drawFortune() {
   var btn = document.getElementById('fortuneBtn');
   if (btn) btn.classList.add('shaking');
   setTimeout(function() { if (btn) btn.classList.remove('shaking'); }, 500);
+
   var old = document.querySelector('.fortune-popup');
   if (old) { old.remove(); return; }
+
   var today = new Date().toISOString().slice(0, 10);
   var seed = 0;
   for (var i = 0; i < today.length; i++) seed += today.charCodeAt(i);
   var f = fortunes[seed % fortunes.length];
+
   var popup = document.createElement('div');
   popup.className = 'fortune-popup';
   popup.innerHTML =
@@ -96,8 +124,13 @@ function drawFortune() {
     '<div class="fortune-date">' + today + '</div>' +
     '<div style="margin-top:8px;font-size:10px;color:var(--text-disabled);">点击摇签筒关闭 · 每日一签</div>';
   document.body.appendChild(popup);
+
   setTimeout(function() { if (popup.parentNode) popup.remove(); }, 10000);
 }
+
+// ═══════════════════════════════════════════
+// Search
+// ═══════════════════════════════════════════
 function openSearch() {
   document.getElementById('searchOverlay').classList.add('open');
   document.body.classList.add('search-open');
@@ -113,6 +146,7 @@ document.addEventListener('keydown', function(e) {
   if (e.key === 'Escape') closeSearch();
   if (e.key === 'k' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); openSearch(); }
 });
+
 (function() {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', '/search-index.json', true);
@@ -123,6 +157,7 @@ document.addEventListener('keydown', function(e) {
   };
   xhr.send();
 })();
+
 var searchTimer;
 function doSearch() {
   clearTimeout(searchTimer);
@@ -130,6 +165,7 @@ function doSearch() {
     var q = document.getElementById('searchInput').value.trim().toLowerCase();
     var container = document.getElementById('searchResults');
     if (!q) { container.innerHTML = ''; return; }
+
     if (window._searchIndex) {
       var results = window._searchIndex.filter(function(p) {
         return p.title.toLowerCase().indexOf(q) >= 0 || p.content.toLowerCase().indexOf(q) >= 0;
@@ -147,6 +183,7 @@ function doSearch() {
       }).join('');
       return;
     }
+
     fetch('/search?q=' + encodeURIComponent(q))
       .then(function(r) { return r.json(); })
       .then(function(data) {
@@ -164,9 +201,14 @@ function doSearch() {
       });
   }, 200);
 }
+
+// ═══════════════════════════════════════════
+// Welcome Modal (first visit)
+// ═══════════════════════════════════════════
 (function() {
   if (localStorage.getItem('jzc-welcome-seen')) return;
   localStorage.setItem('jzc-welcome-seen', '1');
+
   var overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
   overlay.innerHTML = '<div class="modal-box">' +
@@ -177,6 +219,7 @@ function doSearch() {
     '<button class="btn btn-primary" onclick="this.closest(\'.modal-overlay\').remove()">开始探索</button>' +
     '</div></div>';
   document.body.appendChild(overlay);
+
   var msg = '这里是一个安静的小岛，写点技术笔记，记些生活碎片，偶尔有小动物来访。慢慢逛，不着急。';
   var el = document.getElementById('welcomeText');
   var i = 0;
@@ -184,8 +227,13 @@ function doSearch() {
     if (i < msg.length) { el.textContent += msg[i]; i++; setTimeout(type, 50 + Math.random() * 30); }
   }
   type();
+
   overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
 })();
+
+// ═══════════════════════════════════════════
+// Click Leaf Effect
+// ═══════════════════════════════════════════
 var leaves = ['🌿', '🍃', '🌱', '🍀', '✨', '🌸', '🍂', '🌾'];
 document.addEventListener('click', function(e) {
   var leaf = document.createElement('span');
@@ -199,11 +247,16 @@ document.addEventListener('click', function(e) {
   document.body.appendChild(leaf);
   setTimeout(function() { leaf.remove(); }, 1000);
 });
+
+// ═══════════════════════════════════════════
+// Random Visitor
+// ═══════════════════════════════════════════
 var visitors = ['🦊', '🐿️', '🦉', '🐰', '🦌', '🐻', '🐸', '🦔'];
 var speeches = [
   '今天天气不错呢！', '有好文章吗？', '咖啡真香~', '路过看看...',
   '代码写得不错！', '喵？不对，我是狐狸', '这地方真舒服', '加油写博客！'
 ];
+
 function spawnVisitor() {
   var side = Math.random() > 0.5 ? 'left' : 'right';
   var v = document.createElement('div');
@@ -212,6 +265,7 @@ function spawnVisitor() {
   v.style[side] = Math.random() * 100 + 20 + 'px';
   v.style.bottom = '-60px';
   document.body.appendChild(v);
+
   v.addEventListener('click', function(e) {
     e.stopPropagation();
     var bubble = document.createElement('div');
@@ -222,18 +276,26 @@ function spawnVisitor() {
     document.body.appendChild(bubble);
     setTimeout(function() { bubble.remove(); }, 2500);
   });
+
   setTimeout(function() {
     v.classList.add('visitor-leaving');
     setTimeout(function() { v.remove(); }, 500);
   }, 8000 + Math.random() * 8000);
+
   setTimeout(spawnVisitor, 15000 + Math.random() * 30000);
 }
+
 setTimeout(spawnVisitor, 10000 + Math.random() * 20000);
+
+// ═══════════════════════════════════════════
+// Scroll Reveal
+// ═══════════════════════════════════════════
 function initReveal() {
   document.querySelectorAll('.post-card, .note-card, .card').forEach(function(el) {
     if (!el.classList.contains('reveal')) el.classList.add('reveal');
   });
 }
+
 var revealObserver = new IntersectionObserver(function(entries) {
   entries.forEach(function(entry) {
     if (entry.isIntersecting) {
@@ -242,19 +304,27 @@ var revealObserver = new IntersectionObserver(function(entries) {
     }
   });
 }, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
+
 function observeReveal() {
   document.querySelectorAll('.reveal').forEach(function(el) {
     revealObserver.observe(el);
   });
 }
+
+// ═══════════════════════════════════════════
+// Code block enhancement: line numbers + language label + copy
+// ═══════════════════════════════════════════
 function enhanceCodeBlocks() {
   document.querySelectorAll('.codehilite, .code-block, pre').forEach(function(block) {
     if (block.closest('.code-block-wrap')) return;
+
     var isCodehilite = block.classList.contains('codehilite');
     var wrap = document.createElement('div');
     wrap.className = 'code-block-wrap';
     block.parentNode.insertBefore(wrap, block);
     wrap.appendChild(block);
+
+    // Language label
     if (isCodehilite) {
       var lang = null;
       block.classList.forEach(function(cls) {
@@ -267,6 +337,8 @@ function enhanceCodeBlocks() {
         wrap.appendChild(label);
       }
     }
+
+    // Copy button
     var btn = document.createElement('button');
     btn.className = 'code-copy-btn';
     btn.textContent = '复制';
@@ -279,10 +351,13 @@ function enhanceCodeBlocks() {
       });
     };
     wrap.appendChild(btn);
+
+    // Line numbers
     var pre = block.tagName === 'PRE' ? block : block.querySelector('pre');
     if (!pre) return;
     var code = pre.querySelector('code') || pre;
     var lines = code.textContent.split('\n');
+    // Remove trailing empty line from split
     if (lines.length > 1 && lines[lines.length - 1] === '') lines.pop();
     var gutter = document.createElement('div');
     gutter.className = 'code-line-numbers';
@@ -295,6 +370,10 @@ function enhanceCodeBlocks() {
     pre.classList.add('code-with-lines');
   });
 }
+
+// ═══════════════════════════════════════════
+// Image lightbox
+// ═══════════════════════════════════════════
 function initLightbox() {
   document.querySelectorAll('.article-body img').forEach(function(img) {
     img.style.cursor = 'zoom-in';
@@ -304,9 +383,11 @@ function initLightbox() {
       overlay.innerHTML = '<img src="' + img.src + '" alt="' + (img.alt || '') + '">';
       overlay.addEventListener('click', function() { overlay.remove(); });
       document.body.appendChild(overlay);
+      // Animate in
       requestAnimationFrame(function() { overlay.classList.add('open'); });
     });
   });
+
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') {
       var lb = document.querySelector('.lightbox-overlay');
@@ -314,6 +395,7 @@ function initLightbox() {
     }
   });
 }
+
 document.addEventListener('DOMContentLoaded', function() {
   enhanceCodeBlocks();
   initLightbox();
@@ -324,6 +406,7 @@ enhanceCodeBlocks();
 initLightbox();
 initReveal();
 observeReveal();
+
 document.addEventListener('DOMContentLoaded', function() {
   initReveal();
   observeReveal();
