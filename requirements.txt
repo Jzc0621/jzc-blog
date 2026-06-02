@@ -2,3 +2,4 @@ flask==3.1.0
 markdown==3.8
 pygments==2.19.1
 python-frontmatter==1.1.0
+pillow==11.3.0
