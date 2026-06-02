@@ -65,18 +65,29 @@
 </div>
 
 <script>
-// Password check - edit PASSWORD_HASH to change password
-// To generate: btoa('yourpassword')
-var PASSWORD_HASH = 'anpjMjAyNDEwMDd6aA==';
+// SHA-256 password verification
+// To change password, generate a new hash:
+//   python -c "import hashlib; print(hashlib.sha256('newpassword'.encode()).hexdigest())"
+var PASSWORD_HASH = '0e7a5ad21c4ff6640d10f20362381f026788b60c4c15b3186457c7c122d804aa';
+
+function sha256(message) {
+  var msgBuffer = new TextEncoder().encode(message);
+  return crypto.subtle.digest('SHA-256', msgBuffer).then(function(hashBuffer) {
+    var hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+  });
+}
 
 function checkPwd() {
   var input = document.getElementById('pwdInput').value;
-  if (btoa(input) === PASSWORD_HASH) {
-    document.getElementById('loginGate').style.display = 'none';
-    document.getElementById('editorForm').style.display = '';
-  } else {
-    document.getElementById('pwdError').style.display = '';
-  }
+  sha256(input).then(function(hash) {
+    if (hash === PASSWORD_HASH) {
+      document.getElementById('loginGate').style.display = 'none';
+      document.getElementById('editorForm').style.display = '';
+    } else {
+      document.getElementById('pwdError').style.display = '';
+    }
+  });
 }
 </script>
 

@@ -37,7 +37,7 @@
   --radius-input: 50px;
   --radius-code: 20px;
   --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
-  --font: Nunito, 'Noto Sans SC', 'Zen Maru Gothic', -apple-system, 'PingFang SC', sans-serif;
+  --font: Nunito, 'Noto Sans SC', 'Zen Maru Gothic', -apple-system, 'PingFang SC', 'Microsoft YaHei', 'Hiragino Sans GB', 'WenQuanYi Micro Hei', 'Noto Sans CJK SC', sans-serif;
 
   /* ---- NookPhone card palette ---- */
   --card-default: rgb(247, 243, 223);
@@ -149,6 +149,28 @@ h4 { font-size: 15px; }
   transition: color var(--transition);
 }
 .nav-links a:hover { color: var(--accent); }
+
+/* Hamburger (mobile) */
+.nav-hamburger {
+  display: none;
+  background: none;
+  border: 2px solid var(--border-input);
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 10px;
+  color: var(--text-muted);
+  font-family: var(--font);
+  line-height: 1;
+  transition: all var(--transition);
+}
+.nav-hamburger:hover { color: var(--accent); border-color: var(--accent); }
+
+@media (max-width: 480px) {
+  .nav-hamburger { display: inline-flex; }
+  .nav-links { display: none; width: 100%; }
+  .nav-links.open { display: flex; flex-direction: column; align-items: center; gap: 8px; padding-top: 8px; }
+}
 
 /* ---------- Container ---------- */
 .container { max-width: 960px; margin: 0 auto; padding: 0 20px; }
@@ -1056,11 +1078,120 @@ body.dark .island-clock .clock-time { color: #c8d8c8; }
 .code-block-wrap:hover .code-copy-btn { opacity: 1; }
 .code-copy-btn.copied { background: var(--accent); border-color: var(--accent); color: #fff; }
 
+/* ---------- Print ---------- */
+@media print {
+  .nav-bar, .footer-wave, .footer, .back-to-top, .fortune-widget,
+  .island-clock, .search-overlay, .toc-sidebar, .progress-bar,
+  .hero-banner, .divider, .tag-filter, .notes-sidebar { display: none !important; }
+  body { background: #fff !important; color: #000 !important; font-size: 14px; }
+  .article-body { box-shadow: none; padding: 0; }
+  a { color: #000; text-decoration: underline; }
+}
+
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .main-layout, .post-layout { flex-direction: column; }
   .notes-sidebar, .toc-sidebar { width: 100%; }
-  .nav-bar { flex-direction: column; gap: 8px; border-radius: 24px; }
-  .nav-links { justify-content: center; }
-  .container { padding: 0 12px; }
+  .container { padding: 0 16px; }
+
+  /* Nav: compact row with wrapping */
+  .nav-bar { padding: 10px 16px; border-radius: 24px; gap: 6px; }
+  .nav-brand { font-size: 16px; }
+  .nav-links { gap: 10px; flex-wrap: wrap; justify-content: center; }
+  .nav-links a { font-size: 12px; }
+
+  /* Hero: smaller padding + shrink pixel title */
+  .hero-banner { padding: 36px 20px 28px; border-radius: 24px; margin-top: 4px; }
+  .hero-content h1 { font-size: 18px; letter-spacing: 0.04em; }
+  .hero-content .subtitle { font-size: 13px; }
+  .hero-decor span { font-size: 32px !important; }
+  .hero-decor { gap: 8px; margin-top: 10px; }
+
+  /* Cards */
+  .post-card { padding: 16px 18px; }
+  .post-card .post-title { font-size: 15px; }
+  .post-card .post-excerpt { font-size: 12px; }
+  .section-strip { padding: 20px !important; border-radius: 20px !important; }
+
+  /* Article body */
+  .article-body { padding: 20px; font-size: 14px; line-height: 1.8; }
+  .article-body h1 { font-size: 20px; }
+  .article-body h2 { font-size: 17px; }
+  .article-body h3 { font-size: 15px; }
+  .code-block { padding: 14px 16px; font-size: 12px; }
+  .code-block-wrap:hover .code-copy-btn { opacity: 1; }
+
+  /* Page header */
+  .page-header { padding: 20px 0 6px; }
+  .page-header h1 { font-size: 20px; }
+
+  /* Tag filter */
+  .tag-filter { gap: 6px; }
+  .tag-filter-btn { padding: 5px 14px; font-size: 11px; }
+
+  /* Fixed elements: shrink & reposition */
+  .island-clock { bottom: 16px; left: 12px; padding: 8px 16px; border-radius: 14px; }
+  .island-clock .clock-time { font-size: 22px; }
+  .island-clock .clock-date { font-size: 9px; }
+  .island-clock .clock-label { font-size: 8px; }
+
+  .fortune-widget { bottom: 80px; right: 12px; }
+  .fortune-btn { width: 44px; height: 44px; font-size: 20px; }
+
+  .back-to-top { bottom: 20px; right: 16px; width: 40px; height: 40px; font-size: 16px; }
+
+  .fortune-popup { bottom: 140px; right: 8px; max-width: 220px; padding: 16px 18px; }
+  .fortune-popup .fortune-icon { font-size: 24px; }
+
+  /* Footer */
+  .footer-wave { height: 60px; font-size: 12px; border-radius: 16px; margin-top: 32px; }
+
+  /* Welcome modal */
+  .modal-box { padding: 28px 20px 24px; border-radius: 30px; }
+  .modal-box h3 { font-size: 17px; }
+
+  /* Search modal */
+  .search-modal { padding: 20px; }
+
+  /* Hero CTA buttons */
+  .hero-content .flex-row { flex-direction: column; align-items: center; }
+  .hero-content .btn { width: 100%; max-width: 200px; }
+
+  /* Divider */
+  .divider { height: 8px; margin: 16px auto; }
+}
+
+/* Phone breakpoint */
+@media (max-width: 480px) {
+  .hero-content h1 { font-size: 15px; }
+  .hero-banner { padding: 28px 14px 20px; }
+  .hero-content .subtitle { font-size: 12px; }
+  .hero-decor { display: none; }
+
+  .nav-bar { padding: 8px 12px; }
+  .nav-brand { font-size: 15px; }
+  .nav-links { gap: 4px; }
+  .nav-links a { font-size: 11px; }
+  .theme-toggle { font-size: 10px; padding: 2px 6px; }
+
+  .article-body { padding: 16px; border-radius: 16px; }
+  .post-card { padding: 14px; }
+  .note-card { padding: 12px 14px; }
+
+  .island-clock { bottom: 10px; left: 6px; padding: 6px 12px; border-radius: 10px; }
+  .island-clock .clock-time { font-size: 18px; }
+  .island-clock .clock-date { font-size: 8px; letter-spacing: 1px; }
+  .island-clock .clock-label { display: none; }
+
+  .fortune-widget { bottom: 70px; right: 6px; }
+  .fortune-btn { width: 38px; height: 38px; font-size: 18px; }
+  .fortune-popup { bottom: 120px; right: 4px; max-width: 180px; }
+  .fortune-popup .fortune-text { font-size: 11px; }
+
+  .back-to-top { bottom: 14px; right: 8px; width: 36px; height: 36px; font-size: 14px; }
+
+  .footer-wave { height: 48px; font-size: 11px; border-radius: 12px; }
+  .footer { font-size: 10px; }
+
+  .container { padding: 0 10px; }
 }

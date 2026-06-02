@@ -1,5 +1,6 @@
 import os, re, math
 from datetime import datetime
+from email.utils import format_datetime
 from pathlib import Path
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
@@ -35,7 +36,11 @@ def _parse_file(path: Path) -> dict | None:
     toc_html = getattr(md, "toc", "") or ""
     # reset toc for next parse
     md.reset()
-    word_count = len(post.content)
+    # Count Chinese chars + English words
+    text = post.content
+    chinese_chars = len(re.findall(r'[一-鿿]', text))
+    english_words = len(re.findall(r'[a-zA-Z]+', text))
+    word_count = chinese_chars + english_words
     read_time = max(1, math.ceil(word_count / 400))
     return {
         "slug": slug,
@@ -100,6 +105,18 @@ def color_for(tag: str | None) -> str:
 
 app.jinja_env.globals["color_for"] = color_for
 app.jinja_env.globals["pygments_css"] = PYGMENTS_CSS
+app.jinja_env.globals["site_url"] = "https://jiazhichao.xyz"
+
+
+def _to_rfc2822(date_str: str) -> str:
+    """Convert a date string like '2026-05-23' to RFC 2822 format."""
+    for fmt in ("%Y-%m-%d", "%Y-%m-%d %H:%M"):
+        try:
+            dt = datetime.strptime(str(date_str), fmt)
+            return format_datetime(dt)
+        except ValueError:
+            continue
+    return str(date_str)
 
 
 # ---------- routes ----------
@@ -116,10 +133,10 @@ def home():
 def post_detail(slug: str):
     path = POSTS_DIR / f"{slug}.md"
     if not path.exists():
-        return "Post not found", 404
+        return render_template("404.html"), 404
     p = _parse_file(path)
     if not p:
-        return "Post parse error", 500
+        return render_template("404.html"), 500
     posts = get_posts()
     idx = next((i for i, x in enumerate(posts) if x["slug"] == slug), -1)
     prev_post = posts[idx + 1] if idx + 1 < len(posts) else None
@@ -189,11 +206,13 @@ def rss_feed():
     SubElement(channel, "language").text = "zh-CN"
 
     for p in get_posts()[:20]:
+        item_url = f"{site_url}/post/{p['slug']}"
         item = SubElement(channel, "item")
         SubElement(item, "title").text = p["title"]
-        SubElement(item, "link").text = f"{site_url}/post/{p['slug']}"
+        SubElement(item, "link").text = item_url
+        SubElement(item, "guid", isPermaLink="true").text = item_url
         SubElement(item, "description").text = p["excerpt"]
-        SubElement(item, "pubDate").text = str(p["date"])
+        SubElement(item, "pubDate").text = _to_rfc2822(p["date"])
 
     xml_str = minidom.parseString(tostring(feed, "utf-8")).toprettyxml(encoding="UTF-8")
     return Response(xml_str, mimetype="application/rss+xml")
