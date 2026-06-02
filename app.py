@@ -62,10 +62,15 @@ def get_posts(tag: str | None = None) -> list[dict]:
     for f in sorted(POSTS_DIR.glob("*.md"), reverse=True):
         p = _parse_file(f)
         if p:
-            if tag and p["tag"] != tag:
-                continue
             items.append(p)
     items.sort(key=lambda x: x["date"], reverse=True)
+
+    # Apply internal links (second pass)
+    for p in items:
+        p["html"] = _add_internal_links(p["html"], p["slug"], items)
+
+    if tag:
+        items = [p for p in items if p["tag"] == tag]
     return items
 
 
@@ -75,6 +80,30 @@ def get_all_tags() -> list[str]:
     for p in get_posts():
         tags.add(p["tag"])
     return sorted(tags)
+
+
+def _add_internal_links(html: str, current_slug: str, all_posts: list[dict]) -> str:
+    """Replace mentions of other post titles with internal links."""
+    candidates = [(p["title"], p["slug"]) for p in all_posts
+                  if p["slug"] != current_slug and len(p["title"]) >= 4]
+    # Longest first to avoid partial matches
+    candidates.sort(key=lambda x: -len(x[0]))
+
+    for title, slug in candidates:
+        parts = re.split(r"(<[^>]*>)", html)
+        for i in range(len(parts)):
+            if parts[i].startswith("<"):
+                continue
+            if title in parts[i]:
+                parts[i] = parts[i].replace(
+                    title,
+                    f'<a href="/post/{slug}" class="internal-link">{title}</a>',
+                    1,
+                )
+                break
+        html = "".join(parts)
+
+    return html
 
 
 def get_notes() -> list[dict]:
@@ -134,11 +163,11 @@ def post_detail(slug: str):
     path = POSTS_DIR / f"{slug}.md"
     if not path.exists():
         return render_template("404.html"), 404
-    p = _parse_file(path)
+    posts = get_posts()
+    p = next((x for x in posts if x["slug"] == slug), None)
     if not p:
         return render_template("404.html"), 500
-    posts = get_posts()
-    idx = next((i for i, x in enumerate(posts) if x["slug"] == slug), -1)
+    idx = posts.index(p)
     prev_post = posts[idx + 1] if idx + 1 < len(posts) else None
     next_post = posts[idx - 1] if idx > 0 else None
     return render_template("post.html", post=p, prev_post=prev_post, next_post=next_post)

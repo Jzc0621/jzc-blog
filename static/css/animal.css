@@ -110,6 +110,19 @@ body::after {
 a { color: var(--accent); text-decoration: none; font-weight: 600; }
 a:hover { color: var(--accent-hover); }
 
+/* Internal article links */
+a.internal-link {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-style: dotted;
+  text-decoration-color: var(--accent);
+  text-underline-offset: 2px;
+}
+a.internal-link:hover {
+  color: var(--accent);
+  text-decoration-style: solid;
+}
+
 /* ---------- Typography ---------- */
 h1, h2, h3, h4, h5, h6 {
   color: var(--text-heading);
