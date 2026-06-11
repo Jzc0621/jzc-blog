@@ -197,7 +197,8 @@ def main():
         shutil.rmtree(DIST)
     DIST.mkdir()
 
-    posts = get_posts()
+    with app.app_context():
+        posts = get_posts()
 
     # static files (minified)
     css_dst = DIST / "static" / "css"
