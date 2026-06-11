@@ -4,6 +4,11 @@ from datetime import datetime
 from pathlib import Path
 from app import app, get_posts, get_notes, POSTS_DIR, NOTES_DIR
 from PIL import Image, ImageDraw, ImageFont
+from extensions import db
+
+# Create tables if they don't exist (needed for freeze to query DB)
+with app.app_context():
+    db.create_all()
 
 DIST = Path(__file__).parent / "dist"
 BASE = ""

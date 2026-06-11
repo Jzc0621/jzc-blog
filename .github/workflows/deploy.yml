@@ -15,9 +15,11 @@ jobs:
           python-version: '3.12'
 
       - name: Install dependencies
-        run: pip install flask markdown pygments python-frontmatter pillow
+        run: pip install flask markdown pygments python-frontmatter pillow flask-sqlalchemy psycopg2-binary
 
       - name: Build static site
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
         run: python build.py
 
       - name: Deploy to gh-pages

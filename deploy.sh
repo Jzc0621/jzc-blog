@@ -2,10 +2,13 @@
 set -e
 cd "$(dirname "$0")"
 
-echo "=== 1. 构建静态页面 ==="
+echo "=== 1. 安装依赖 ==="
+pip install flask markdown pygments python-frontmatter pillow flask-sqlalchemy psycopg2-binary
+
+echo "=== 2. 构建静态页面 ==="
 python build.py
 
-echo "=== 2. 推送到 GitHub Pages ==="
+echo "=== 3. 推送到 GitHub Pages ==="
 cp -r dist /tmp/jzc-dist
 
 git checkout --orphan gh-pages 2>/dev/null
