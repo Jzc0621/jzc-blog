@@ -5,7 +5,6 @@ from pathlib import Path
 from xml.etree.ElementTree import Element, SubElement, tostring
 from xml.dom import minidom
 
-import frontmatter
 import markdown
 from flask import Flask, render_template, request, redirect, url_for, send_from_directory, Response
 from markdown.extensions.toc import TocExtension
@@ -279,10 +278,16 @@ def search():
     return {"results": results}
 
 
+_tables_created = False
+
+
 @app.before_request
 def _ensure_tables():
     """Create tables on first request if they don't exist."""
-    db.create_all()
+    global _tables_created
+    if not _tables_created:
+        db.create_all()
+        _tables_created = True
 
 
 if __name__ == "__main__":
