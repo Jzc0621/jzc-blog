@@ -1,5 +1,5 @@
 """Database models: Post, Comment, PageView."""
-from datetime import datetime
+from datetime import datetime, timezone
 from extensions import db
 
 
@@ -14,8 +14,8 @@ class Post(db.Model):
     tag = db.Column(db.String(50), default="未分类")
     is_post = db.Column(db.Boolean, default=True)  # True=文章, False=笔记
     status = db.Column(db.String(20), default="published")  # published / draft
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
-    updated_at = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
 
     comments = db.relationship("Comment", backref="post", lazy="dynamic",
                                 cascade="all, delete-orphan")
@@ -28,7 +28,7 @@ class Comment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey("posts.id"), nullable=False, index=True)
     author_name = db.Column(db.String(50), nullable=False)
     content = db.Column(db.Text, nullable=False)
-    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc))
 
 
 class PageView(db.Model):
@@ -37,4 +37,4 @@ class PageView(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     post_slug = db.Column(db.String(200), unique=True, nullable=False, index=True)
     count = db.Column(db.Integer, default=0)
-    last_updated = db.Column(db.DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+    last_updated = db.Column(db.DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
