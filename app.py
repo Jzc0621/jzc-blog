@@ -272,12 +272,6 @@ def not_found():
     return render_template("404.html")
 
 
-# ---------- Debug (remove after verifying) ----------
-@app.route("/ping")
-def ping():
-    return "pong"
-
-
 # ---------- Random Post ----------
 @app.route("/random")
 def random_post():
