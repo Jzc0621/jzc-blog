@@ -262,6 +262,16 @@ def not_found():
     return render_template("404.html")
 
 
+# ---------- Debug (remove after verifying) ----------
+@app.route("/health")
+def health():
+    return {
+        "has_db": _HAS_DB,
+        "post": str(type(Post)) if Post else "None",
+        "routes": len([r for r in app.url_map.iter_rules()]),
+    }
+
+
 # ---------- Random Post ----------
 @app.route("/random")
 def random_post():
