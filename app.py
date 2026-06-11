@@ -229,8 +229,11 @@ def editor_save():
     excerpt = content[:120].replace("\n", " ") if content else ""
     is_post = mode != "note"
 
-    existing = Post.query.filter_by(slug=slug).first()
+    original_slug = request.form.get("original_slug", "").strip()
+    lookup_slug = original_slug or slug
+    existing = Post.query.filter_by(slug=lookup_slug).first()
     if existing:
+        existing.slug = slug  # Update slug if title changed
         existing.title = title
         existing.content = content
         existing.excerpt = excerpt
@@ -246,7 +249,7 @@ def editor_save():
     return redirect(url_for("post_detail", slug=slug) if is_post else url_for("notes_page"))
 
 
-# ---------- Editor: list + delete ----------
+# ---------- Editor: list + edit + delete ----------
 @app.route("/editor/list")
 def editor_list():
     """Return all posts as JSON for the editor panel."""
@@ -259,6 +262,23 @@ def editor_list():
              "status": p.status, "date": str(p.created_at.date()) if p.created_at else ""}
             for p in posts
         ]
+    }
+
+
+@app.route("/editor/get/<slug>")
+def editor_get(slug: str):
+    """Return a single post's content for editing."""
+    if not _HAS_DB:
+        return {"error": "Database not available"}, 503
+    post = Post.query.filter_by(slug=slug, is_post=True).first()
+    if not post:
+        return {"error": "post not found"}, 404
+    return {
+        "slug": post.slug,
+        "title": post.title,
+        "content": post.content,
+        "tag": post.tag,
+        "status": post.status,
     }
 
 
