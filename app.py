@@ -246,6 +246,38 @@ def editor_save():
     return redirect(url_for("post_detail", slug=slug) if is_post else url_for("notes_page"))
 
 
+# ---------- Editor: list + delete ----------
+@app.route("/editor/list")
+def editor_list():
+    """Return all posts as JSON for the editor panel."""
+    if not _HAS_DB:
+        return {"posts": []}
+    posts = Post.query.filter_by(is_post=True).order_by(Post.created_at.desc()).all()
+    return {
+        "posts": [
+            {"slug": p.slug, "title": p.title, "tag": p.tag,
+             "status": p.status, "date": str(p.created_at.date()) if p.created_at else ""}
+            for p in posts
+        ]
+    }
+
+
+@app.route("/editor/delete", methods=["POST"])
+def editor_delete():
+    """Delete a post by slug."""
+    if not _HAS_DB:
+        return {"error": "Database not available"}, 503
+    slug = (request.form.get("slug") or "").strip()
+    if not slug:
+        return {"error": "slug required"}, 400
+    post = Post.query.filter_by(slug=slug, is_post=True).first()
+    if not post:
+        return {"error": "post not found"}, 404
+    db.session.delete(post)
+    db.session.commit()
+    return {"ok": True}
+
+
 # ---------- RSS ----------
 @app.route("/rss.xml")
 def rss_feed():
