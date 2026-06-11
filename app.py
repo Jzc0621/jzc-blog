@@ -10,18 +10,25 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 from markdown.extensions.toc import TocExtension
 from pygments.formatters import HtmlFormatter
 
-from config import Config
-from extensions import db
-from models import Post, Comment, PageView
-
 app = Flask(__name__)
-app.config.from_object(Config)
-db.init_app(app)
 
 POSTS_DIR = Path(__file__).parent / "posts"
 NOTES_DIR = Path(__file__).parent / "notes"
 POSTS_DIR.mkdir(exist_ok=True)
 NOTES_DIR.mkdir(exist_ok=True)
+
+# Database imports wrapped so Vercel build doesn't fail if a driver is missing
+_HAS_DB = False
+try:
+    from config import Config
+    from extensions import db
+    from models import Post, Comment, PageView
+
+    app.config.from_object(Config)
+    db.init_app(app)
+    _HAS_DB = True
+except Exception:
+    Post = Comment = PageView = db = None
 
 # ---------- markdown 渲染 (with Pygments + TOC) ----------
 toc_ext = TocExtension(permalink=False)
@@ -353,7 +360,7 @@ _tables_created = False
 def _ensure_tables():
     """Create tables on first request if they don't exist."""
     global _tables_created
-    if not _tables_created:
+    if _HAS_DB and not _tables_created:
         db.create_all()
         _tables_created = True
 
