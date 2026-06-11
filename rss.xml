@@ -6,6 +6,20 @@
 		<description>技术、生活，和随手笔记</description>
 		<language>zh-CN</language>
 		<item>
+			<title>黑暗中总有一丝光明</title>
+			<link>https://jiazhichao.xyz/post/post-1d34cd31</link>
+			<guid isPermaLink="true">https://jiazhichao.xyz/post/post-1d34cd31</guid>
+			<description>Every cloud has a sliver lining.</description>
+			<pubDate>Thu, 11 Jun 2026 00:00:00 -0000</pubDate>
+		</item>
+		<item>
+			<title>FromPhone</title>
+			<link>https://jiazhichao.xyz/post/fromphone</link>
+			<guid isPermaLink="true">https://jiazhichao.xyz/post/fromphone</guid>
+			<description>First post from phone</description>
+			<pubDate>Thu, 11 Jun 2026 00:00:00 -0000</pubDate>
+		</item>
+		<item>
 			<title>基于 RA6M5 与 TinyML 的智能脉搏监测系统</title>
 			<link>https://jiazhichao.xyz/post/ra6m5-pulse-monitor</link>
 			<guid isPermaLink="true">https://jiazhichao.xyz/post/ra6m5-pulse-monitor</guid>

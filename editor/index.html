@@ -181,6 +181,14 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <a href="/" class="btn">取消</a>
       </div>
     </form>
+
+    
+    <div class="divider divider-teal" style="margin:24px 0;"></div>
+    <div class="section-title">文章管理</div>
+    <div id="postList" style="margin-top:12px;font-size:13px;">
+      <p class="text-muted">加载中...</p>
+    </div>
+    
   </div>
 
 </div>
@@ -205,10 +213,60 @@ function checkPwd() {
     if (hash === PASSWORD_HASH) {
       document.getElementById('loginGate').style.display = 'none';
       document.getElementById('editorForm').style.display = '';
+      loadPostList();
     } else {
       document.getElementById('pwdError').style.display = '';
     }
   });
+}
+
+var _postListLoaded = false;
+function loadPostList() {
+  if (_postListLoaded) return;
+  _postListLoaded = true;
+  fetch('/editor/list')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var container = document.getElementById('postList');
+      if (!d.posts || !d.posts.length) {
+        container.innerHTML = '<p class="text-muted">还没有文章</p>';
+        return;
+      }
+      container.innerHTML = d.posts.map(function(p) {
+        var badge = p.status === 'draft' ? ' <span style="font-size:10px;color:var(--text-disabled);">[草稿]</span>' : '';
+        return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-color);">' +
+          '<span><a href="/post/' + p.slug + '" style="font-weight:600;">' + escapeHtml(p.title) + '</a>' + badge +
+          ' <span style="font-size:11px;color:var(--text-disabled);">' + p.date + ' · #' + p.tag + '</span></span>' +
+          '<button class="btn btn-sm" onclick="deletePost(\'' + p.slug + '\', this)" style="color:var(--error);border-color:var(--error);">删除</button>' +
+          '</div>';
+      }).join('');
+    });
+}
+
+function deletePost(slug, btn) {
+  if (!confirm('确定要删除这篇文章吗？此操作不可撤销。')) return;
+  btn.disabled = true;
+  btn.textContent = '...';
+  fetch('/editor/delete', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'slug=' + encodeURIComponent(slug)
+  }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) {
+        btn.closest('div').remove();
+      } else {
+        alert('删除失败: ' + (d.error || 'unknown'));
+        btn.disabled = false;
+        btn.textContent = '删除';
+      }
+    });
+}
+
+function escapeHtml(text) {
+  var d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
 }
 </script>
 

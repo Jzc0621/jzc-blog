@@ -141,7 +141,7 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
       <span>2026-05-23</span>
       <span>1 分钟阅读</span>
       <span>368 字</span>
-      <span id="busuanzi_container_page_pv" style="display:none;">阅读 <span id="busuanzi_value_page_pv"></span> 次</span>
+      <span>阅读 <span id="viewCount">0</span> 次</span>
     </div>
 
     <div class="divider divider-brown" style="margin:0 0 20px;"></div>
@@ -198,6 +198,81 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
     <a href="/post/css-animal-crossing" class="btn btn-primary">用纯 CSS 复刻动物森友会 UI 风格 →</a>
   
 </div>
+
+<!-- Comment Section -->
+<div class="comment-section" style="max-width:960px;margin:0 auto;padding:0 20px;">
+  <div class="divider divider-teal"></div>
+  <div class="section-title">评论</div>
+
+  
+
+  <div id="commentList"></div>
+</div>
+
+<!-- Record view + Load comments -->
+<script>
+(function() {
+  var slug = "learning-notes-may";
+
+  // Record page view
+  fetch("/view/" + slug, { method: "POST" })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById("viewCount");
+      if (el) el.textContent = d.count;
+    });
+
+  // Load comments
+  function loadComments() {
+    fetch("/comment/" + slug)
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var container = document.getElementById("commentList");
+        if (!d.comments || !d.comments.length) {
+          container.innerHTML = '<p class="text-muted" style="font-size:13px;">还没有评论，来写第一条吧。</p>';
+          return;
+        }
+        container.innerHTML = d.comments.map(function(c) {
+          return '<div class="comment-item" style="margin-bottom:16px;padding:12px;background:var(--card-bg);border-radius:16px;">' +
+            '<div style="font-weight:700;font-size:13px;color:var(--accent);">' + escapeHtml(c.author_name) +
+            ' <span style="font-weight:400;font-size:11px;color:var(--text-disabled);">' + c.created_at + '</span></div>' +
+            '<div style="margin-top:6px;font-size:14px;white-space:pre-wrap;">' + escapeHtml(c.content) + '</div>' +
+            '</div>';
+        }).join("");
+      });
+  }
+
+  function escapeHtml(text) {
+    var d = document.createElement("div");
+    d.textContent = text;
+    return d.innerHTML;
+  }
+
+  loadComments();
+})();
+
+function submitComment(e) {
+  e.preventDefault();
+  var form = document.getElementById("commentForm");
+  var data = {
+    slug: "learning-notes-may",
+    author_name: form.author_name.value.trim(),
+    content: form.content.value.trim()
+  };
+  if (!data.author_name || !data.content) return;
+  fetch("/comment", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) {
+        form.reset();
+        location.reload();
+      }
+    });
+}
+</script>
 
 
 </main>

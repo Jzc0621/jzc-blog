@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://jiazhichao.xyz/</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-11</lastmod>
     <changefreq>daily</changefreq>
   </url>
   <url>
@@ -12,8 +12,18 @@
   </url>
   <url>
     <loc>https://jiazhichao.xyz/notes/</loc>
-    <lastmod>2026-05-31</lastmod>
+    <lastmod>2026-06-11</lastmod>
     <changefreq>weekly</changefreq>
+  </url>
+  <url>
+    <loc>https://jiazhichao.xyz/post/post-1d34cd31/</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
+  </url>
+  <url>
+    <loc>https://jiazhichao.xyz/post/fromphone/</loc>
+    <lastmod>2026-06-11</lastmod>
+    <changefreq>monthly</changefreq>
   </url>
   <url>
     <loc>https://jiazhichao.xyz/post/ra6m5-pulse-monitor/</loc>
