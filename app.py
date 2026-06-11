@@ -293,7 +293,7 @@ def search():
 
 
 # ---------- Comments ----------
-@app.route("/api/comment/<slug>", methods=["GET"])
+@app.route("/comment/<slug>", methods=["GET"])
 def get_comments(slug: str):
     """Get all comments for a post."""
     post = Post.query.filter_by(slug=slug, status="published").first()
@@ -312,7 +312,7 @@ def get_comments(slug: str):
     }
 
 
-@app.route("/api/comment", methods=["POST"])
+@app.route("/comment", methods=["POST"])
 def post_comment():
     """Submit a comment. Requires: slug, author_name, content."""
     data = request.get_json() or {}
@@ -336,7 +336,7 @@ def post_comment():
 
 
 # ---------- Page Views ----------
-@app.route("/api/view/<slug>", methods=["POST"])
+@app.route("/view/<slug>", methods=["POST"])
 def record_view(slug: str):
     """Record a page view for a post."""
     post = Post.query.filter_by(slug=slug, status="published").first()

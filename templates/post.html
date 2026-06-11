@@ -69,7 +69,7 @@
   var slug = "{{ post.slug }}";
 
   // Record page view
-  fetch("/api/view/" + slug, { method: "POST" })
+  fetch("/view/" + slug, { method: "POST" })
     .then(function(r) { return r.json(); })
     .then(function(d) {
       var el = document.getElementById("viewCount");
@@ -78,7 +78,7 @@
 
   // Load comments
   function loadComments() {
-    fetch("/api/comment/" + slug)
+    fetch("/comment/" + slug)
       .then(function(r) { return r.json(); })
       .then(function(d) {
         var container = document.getElementById("commentList");
@@ -114,7 +114,7 @@ function submitComment(e) {
     content: form.content.value.trim()
   };
   if (!data.author_name || !data.content) return;
-  fetch("/api/comment", {
+  fetch("/comment", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data)
