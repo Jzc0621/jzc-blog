@@ -332,6 +332,9 @@ def post_comment():
 @app.route("/api/view/<slug>", methods=["POST"])
 def record_view(slug: str):
     """Record a page view for a post."""
+    post = Post.query.filter_by(slug=slug, status="published").first()
+    if not post:
+        return {"error": "post not found"}, 404
     pv = PageView.query.filter_by(post_slug=slug).first()
     if pv:
         pv.count += 1
