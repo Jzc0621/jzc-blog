@@ -208,7 +208,6 @@ def editor_save():
         existing.content = content
         existing.excerpt = excerpt
         existing.tag = tag
-        existing.updated_at = datetime.utcnow()
     else:
         post = Post(
             slug=slug, title=title, content=content,
