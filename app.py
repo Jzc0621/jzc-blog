@@ -64,6 +64,8 @@ def _render_post(post: Post) -> dict:
 
 def get_posts(tag: str | None = None) -> list[dict]:
     """Get all published posts, optionally filtered by tag, sorted by date desc."""
+    if not _HAS_DB:
+        return []
     query = Post.query.filter_by(is_post=True, status="published").order_by(
         Post.created_at.desc()
     )
@@ -79,6 +81,8 @@ def get_posts(tag: str | None = None) -> list[dict]:
 
 def get_all_tags() -> list[str]:
     """Get unique tags from all published posts."""
+    if not _HAS_DB:
+        return []
     rows = Post.query.with_entities(Post.tag).filter_by(
         is_post=True, status="published"
     ).distinct().all()
@@ -111,6 +115,8 @@ def _add_internal_links(html: str, current_slug: str, all_posts: list[dict]) -> 
 
 def get_notes() -> list[dict]:
     """Get all published notes, sorted by date desc."""
+    if not _HAS_DB:
+        return []
     query = Post.query.filter_by(is_post=False, status="published").order_by(
         Post.created_at.desc()
     )
@@ -160,6 +166,8 @@ def home():
 
 @app.route("/post/<slug>")
 def post_detail(slug: str):
+    if not _HAS_DB:
+        return render_template("404.html"), 404
     post = Post.query.filter_by(slug=slug, is_post=True, status="published").first()
     if not post:
         return render_template("404.html"), 404
@@ -203,6 +211,8 @@ def editor_note():
 
 @app.route("/editor/save", methods=["POST"])
 def editor_save():
+    if not _HAS_DB:
+        return "Database not available", 503
     mode = request.form.get("mode", "post")
     title = request.form.get("title", "").strip()
     tag = request.form.get("tag", "未分类").strip()
@@ -306,6 +316,8 @@ def search():
 @app.route("/comment/<slug>", methods=["GET"])
 def get_comments(slug: str):
     """Get all comments for a post."""
+    if not _HAS_DB:
+        return {"comments": []}
     post = Post.query.filter_by(slug=slug, status="published").first()
     if not post:
         return {"comments": []}
@@ -325,6 +337,8 @@ def get_comments(slug: str):
 @app.route("/comment", methods=["POST"])
 def post_comment():
     """Submit a comment. Requires: slug, author_name, content."""
+    if not _HAS_DB:
+        return {"error": "database not available"}, 503
     data = request.get_json() or {}
     slug = (data.get("slug") or "").strip()
     author_name = (data.get("author_name") or "").strip()
@@ -349,6 +363,8 @@ def post_comment():
 @app.route("/view/<slug>", methods=["POST"])
 def record_view(slug: str):
     """Record a page view for a post."""
+    if not _HAS_DB:
+        return {"count": 0}
     post = Post.query.filter_by(slug=slug, status="published").first()
     if not post:
         return {"error": "post not found"}, 404
