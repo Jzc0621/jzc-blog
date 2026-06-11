@@ -11,7 +11,14 @@ from flask import Flask, render_template, request, redirect, url_for, send_from_
 from markdown.extensions.toc import TocExtension
 from pygments.formatters import HtmlFormatter
 
+from config import Config
+from extensions import db
+from models import Post, Comment, PageView
+
 app = Flask(__name__)
+app.config.from_object(Config)
+db.init_app(app)
+
 POSTS_DIR = Path(__file__).parent / "posts"
 NOTES_DIR = Path(__file__).parent / "notes"
 POSTS_DIR.mkdir(exist_ok=True)
@@ -25,29 +32,22 @@ md = markdown.Markdown(extensions=["fenced_code", "codehilite", "tables", toc_ex
 PYGMENTS_CSS = HtmlFormatter(style="monokai").get_style_defs(".codehilite")
 
 
-def _parse_file(path: Path) -> dict | None:
-    """Parse a markdown file with YAML frontmatter, return post dict."""
-    try:
-        post = frontmatter.load(path)
-    except Exception:
-        return None
-    slug = path.stem
+def _render_post(post: Post) -> dict:
+    """Render a Post model into the dict format templates expect."""
     html = md.convert(post.content)
     toc_html = getattr(md, "toc", "") or ""
-    # reset toc for next parse
     md.reset()
-    # Count Chinese chars + English words
     text = post.content
     chinese_chars = len(re.findall(r'[一-鿿]', text))
     english_words = len(re.findall(r'[a-zA-Z]+', text))
     word_count = chinese_chars + english_words
     read_time = max(1, math.ceil(word_count / 400))
     return {
-        "slug": slug,
-        "title": post.get("title", slug),
-        "date": post.get("date", ""),
-        "tag": post.get("tag", "未分类"),
-        "excerpt": post.get("excerpt", ""),
+        "slug": post.slug,
+        "title": post.title,
+        "date": str(post.created_at.date()) if post.created_at else "",
+        "tag": post.tag,
+        "excerpt": post.excerpt or "",
         "content": post.content,
         "html": html,
         "toc": toc_html,
@@ -57,29 +57,26 @@ def _parse_file(path: Path) -> dict | None:
 
 
 def get_posts(tag: str | None = None) -> list[dict]:
-    """Get all posts, optionally filtered by tag, sorted by date desc."""
-    items = []
-    for f in sorted(POSTS_DIR.glob("*.md"), reverse=True):
-        p = _parse_file(f)
-        if p:
-            items.append(p)
-    items.sort(key=lambda x: x["date"], reverse=True)
-
-    # Apply internal links (second pass)
-    for p in items:
-        p["html"] = _add_internal_links(p["html"], p["slug"], items)
-
+    """Get all published posts, optionally filtered by tag, sorted by date desc."""
+    query = Post.query.filter_by(is_post=True, status="published").order_by(
+        Post.created_at.desc()
+    )
     if tag:
-        items = [p for p in items if p["tag"] == tag]
-    return items
+        query = query.filter_by(tag=tag)
+    all_posts = [_render_post(p) for p in query.all()]
+
+    for p in all_posts:
+        p["html"] = _add_internal_links(p["html"], p["slug"], all_posts)
+
+    return all_posts
 
 
 def get_all_tags() -> list[str]:
-    """Get unique tags from all posts."""
-    tags = set()
-    for p in get_posts():
-        tags.add(p["tag"])
-    return sorted(tags)
+    """Get unique tags from all published posts."""
+    rows = Post.query.with_entities(Post.tag).filter_by(
+        is_post=True, status="published"
+    ).distinct().all()
+    return sorted(row[0] for row in rows if row[0])
 
 
 def _add_internal_links(html: str, current_slug: str, all_posts: list[dict]) -> str:
@@ -107,14 +104,11 @@ def _add_internal_links(html: str, current_slug: str, all_posts: list[dict]) -> 
 
 
 def get_notes() -> list[dict]:
-    """Get all quick notes, sorted by date desc."""
-    items = []
-    for f in sorted(NOTES_DIR.glob("*.md"), reverse=True):
-        p = _parse_file(f)
-        if p:
-            items.append(p)
-    items.sort(key=lambda x: x["date"], reverse=True)
-    return items
+    """Get all published notes, sorted by date desc."""
+    query = Post.query.filter_by(is_post=False, status="published").order_by(
+        Post.created_at.desc()
+    )
+    return [_render_post(p) for p in query.all()]
 
 
 # ---------- card color helper ----------
@@ -200,27 +194,30 @@ def editor_save():
     title = request.form.get("title", "").strip()
     tag = request.form.get("tag", "未分类").strip()
     content = request.form.get("content", "").strip()
-    excerpt = content[:120].replace("\n", " ") if content else ""
 
     if not title:
         return "Title is required", 400
 
     slug = re.sub(r"[^\w\-]", "", title.lower().replace(" ", "-"))
-    date_str = datetime.now().strftime("%Y-%m-%d")
+    excerpt = content[:120].replace("\n", " ") if content else ""
+    is_post = mode != "note"
 
-    frontmatter_text = f"""---
-title: {title}
-date: {date_str}
-tag: {tag}
-excerpt: {excerpt}
----
+    existing = Post.query.filter_by(slug=slug).first()
+    if existing:
+        existing.title = title
+        existing.content = content
+        existing.excerpt = excerpt
+        existing.tag = tag
+        existing.updated_at = datetime.utcnow()
+    else:
+        post = Post(
+            slug=slug, title=title, content=content,
+            excerpt=excerpt, tag=tag, is_post=is_post,
+        )
+        db.session.add(post)
 
-{content}
-"""
-    target_dir = POSTS_DIR if mode == "post" else NOTES_DIR
-    (target_dir / f"{slug}.md").write_text(frontmatter_text, encoding="utf-8")
-
-    return redirect(url_for("post_detail", slug=slug) if mode == "post" else url_for("notes_page"))
+    db.session.commit()
+    return redirect(url_for("post_detail", slug=slug) if is_post else url_for("notes_page"))
 
 
 # ---------- RSS ----------
@@ -281,6 +278,12 @@ def search():
                 "excerpt": p["excerpt"],
             })
     return {"results": results}
+
+
+@app.before_request
+def _ensure_tables():
+    """Create tables on first request if they don't exist."""
+    db.create_all()
 
 
 if __name__ == "__main__":
