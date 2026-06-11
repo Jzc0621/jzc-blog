@@ -153,8 +153,8 @@ def home():
 
 @app.route("/post/<slug>")
 def post_detail(slug: str):
-    path = POSTS_DIR / f"{slug}.md"
-    if not path.exists():
+    post = Post.query.filter_by(slug=slug, is_post=True, status="published").first()
+    if not post:
         return render_template("404.html"), 404
     posts = get_posts()
     p = next((x for x in posts if x["slug"] == slug), None)
@@ -163,7 +163,14 @@ def post_detail(slug: str):
     idx = posts.index(p)
     prev_post = posts[idx + 1] if idx + 1 < len(posts) else None
     next_post = posts[idx - 1] if idx > 0 else None
-    return render_template("post.html", post=p, prev_post=prev_post, next_post=next_post)
+
+    pv = PageView.query.filter_by(post_slug=slug).first()
+    view_count = pv.count if pv else 0
+
+    return render_template(
+        "post.html", post=p, prev_post=prev_post, next_post=next_post,
+        view_count=view_count,
+    )
 
 
 @app.route("/notes")
@@ -276,6 +283,64 @@ def search():
                 "excerpt": p["excerpt"],
             })
     return {"results": results}
+
+
+# ---------- Comments ----------
+@app.route("/api/comment/<slug>", methods=["GET"])
+def get_comments(slug: str):
+    """Get all comments for a post."""
+    post = Post.query.filter_by(slug=slug, status="published").first()
+    if not post:
+        return {"comments": []}
+    comments = post.comments.order_by(Comment.created_at.asc()).all()
+    return {
+        "comments": [
+            {
+                "author_name": c.author_name,
+                "content": c.content,
+                "created_at": c.created_at.strftime("%Y-%m-%d %H:%M"),
+            }
+            for c in comments
+        ]
+    }
+
+
+@app.route("/api/comment", methods=["POST"])
+def post_comment():
+    """Submit a comment. Requires: slug, author_name, content."""
+    data = request.get_json() or {}
+    slug = (data.get("slug") or "").strip()
+    author_name = (data.get("author_name") or "").strip()
+    content = (data.get("content") or "").strip()
+
+    if not slug or not author_name or not content:
+        return {"error": "slug, author_name, content are required"}, 400
+    if len(author_name) > 50 or len(content) > 2000:
+        return {"error": "name too long (max 50) or content too long (max 2000)"}, 400
+
+    post = Post.query.filter_by(slug=slug, status="published").first()
+    if not post:
+        return {"error": "post not found"}, 404
+
+    comment = Comment(post_id=post.id, author_name=author_name, content=content)
+    db.session.add(comment)
+    db.session.commit()
+    return {"ok": True}, 201
+
+
+# ---------- Page Views ----------
+@app.route("/api/view/<slug>", methods=["POST"])
+def record_view(slug: str):
+    """Record a page view for a post."""
+    pv = PageView.query.filter_by(post_slug=slug).first()
+    if pv:
+        pv.count += 1
+        pv.last_updated = datetime.now()
+    else:
+        pv = PageView(post_slug=slug, count=1)
+        db.session.add(pv)
+    db.session.commit()
+    return {"count": pv.count}
 
 
 _tables_created = False
