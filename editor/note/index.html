@@ -150,8 +150,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
   <!-- Editor form (hidden initially) -->
   <div id="editorForm" style="display:none;">
-    <form action="/editor/save" method="POST">
+    <div id="editBanner" style="display:none;background:var(--accent);color:#fff;padding:8px 12px;border-radius:12px;margin-bottom:16px;font-size:13px;font-weight:700;">
+      正在编辑: <span id="editBannerTitle"></span>
+      <button type="button" onclick="cancelEdit()" style="background:none;border:none;color:#fff;text-decoration:underline;cursor:pointer;margin-left:8px;">取消</button>
+    </div>
+    <form action="/editor/save" method="POST" id="editorFormInner">
       <input type="hidden" name="mode" value="note">
+      <input type="hidden" name="original_slug" id="originalSlug" value="">
 
       
       <div class="mb-16">
@@ -221,7 +226,10 @@ function loadPostList() {
         return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-color);">' +
           '<span><a href="/post/' + p.slug + '" style="font-weight:600;">' + escapeHtml(p.title) + '</a>' + badge +
           ' <span style="font-size:11px;color:var(--text-disabled);">' + p.date + ' · #' + p.tag + '</span></span>' +
+          '<span style="display:flex;gap:6px;">' +
+          '<button class="btn btn-sm" onclick="editPost(\'' + p.slug + '\')">编辑</button>' +
           '<button class="btn btn-sm" onclick="deletePost(\'' + p.slug + '\', this)" style="color:var(--error);border-color:var(--error);">删除</button>' +
+          '</span>' +
           '</div>';
       }).join('');
     });
@@ -245,6 +253,36 @@ function deletePost(slug, btn) {
         btn.textContent = '删除';
       }
     });
+}
+
+var _editingSlug = null;
+
+function editPost(slug) {
+  fetch('/editor/get/' + slug)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.error) { alert('加载失败: ' + d.error); return; }
+      var form = document.getElementById('editorFormInner');
+      form.querySelector('[name="title"]').value = d.title;
+      form.querySelector('[name="content"]').value = d.content;
+      form.querySelector('[name="tag"]').value = d.tag;
+      document.getElementById('originalSlug').value = d.slug;
+      document.getElementById('editBanner').style.display = '';
+      document.getElementById('editBannerTitle').textContent = d.title;
+      form.querySelector('button[type="submit"]').textContent = '更新文章';
+      _editingSlug = slug;
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+}
+
+function cancelEdit() {
+  var form = document.getElementById('editorFormInner');
+  form.querySelector('[name="title"]').value = '';
+  form.querySelector('[name="content"]').value = '';
+  document.getElementById('originalSlug').value = '';
+  document.getElementById('editBanner').style.display = 'none';
+  form.querySelector('button[type="submit"]').textContent = '发布文章';
+  _editingSlug = null;
 }
 
 function escapeHtml(text) {
