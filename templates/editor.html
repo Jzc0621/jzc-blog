@@ -4,7 +4,7 @@
 
 <div class="page-header">
   <h1>{% if mode == "note" %}写便签{% else %}写文章{% endif %}</h1>
-  <p class="subtitle">岛主专属</p>
+  <p class="subtitle">作者专属</p>
 </div>
 
 <div class="card" style="max-width:480px;margin:0 auto;">
@@ -12,10 +12,10 @@
   <!-- Password gate -->
   <div id="loginGate">
     <div style="text-align:center;font-size:40px;margin-bottom:16px;">🏝️</div>
-    <p style="text-align:center;color:var(--text-secondary);margin-bottom:20px;">请输入岛主密码</p>
+    <p style="text-align:center;color:var(--text-secondary);margin-bottom:20px;">请输入密码</p>
     <input class="input input-lg" id="pwdInput" type="password" placeholder="密码" onkeydown="if(event.key==='Enter')checkPwd()">
     <div class="flex-row gap-12" style="margin-top:12px;justify-content:center;">
-      <button class="btn btn-primary" onclick="checkPwd()">进入岛屿</button>
+      <button class="btn btn-primary" onclick="checkPwd()">进入后台</button>
       <a href="/" class="btn">返回</a>
     </div>
     <p id="pwdError" style="text-align:center;color:var(--error);font-size:12px;margin-top:10px;display:none;">密码不对哦</p>

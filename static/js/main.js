@@ -2,7 +2,7 @@
 // Dark mode toggle
 // ═══════════════════════════════════════════
 (function() {
-  var saved = localStorage.getItem('jzc-theme');
+  var saved = localStorage.getItem('drift-theme');
   if (saved === 'dark') document.body.classList.add('dark');
   updateToggleIcon();
 })();
@@ -13,7 +13,7 @@ function toggleMobileNav() {
 
 function toggleTheme() {
   document.body.classList.toggle('dark');
-  localStorage.setItem('jzc-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  localStorage.setItem('drift-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
   updateToggleIcon();
 }
 
@@ -311,8 +311,8 @@ function doSearch() {
 // Welcome Modal (first visit)
 // ═══════════════════════════════════════════
 (function() {
-  if (localStorage.getItem('jzc-welcome-seen')) return;
-  localStorage.setItem('jzc-welcome-seen', '1');
+  if (localStorage.getItem('drift-welcome-seen')) return;
+  localStorage.setItem('drift-welcome-seen', '1');
 
   var overlay = document.createElement('div');
   overlay.className = 'modal-overlay';
@@ -325,7 +325,7 @@ function doSearch() {
     '</div></div>';
   document.body.appendChild(overlay);
 
-  var msg = '这里是一个安静的小岛，写点技术笔记，记些生活碎片，偶尔有小动物来访。慢慢逛，不着急。';
+  var msg = '一个安静写东西的地方，写点技术笔记，记些生活碎片，偶尔有小动物来访。慢慢逛，不着急。';
   var el = document.getElementById('welcomeText');
   var i = 0;
   function type() {
