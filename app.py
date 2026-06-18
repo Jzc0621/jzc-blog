@@ -304,7 +304,7 @@ def rss_feed():
     site_url = request.url_root.rstrip("/")
     feed = Element("rss", version="2.0")
     channel = SubElement(feed, "channel")
-    SubElement(channel, "title").text = "JZC's Island"
+    SubElement(channel, "title").text = "DRIFT"
     SubElement(channel, "link").text = site_url
     SubElement(channel, "description").text = "技术、生活，和随手笔记"
     SubElement(channel, "language").text = "zh-CN"

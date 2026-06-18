@@ -3,17 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>{% block title %}JZC{% endblock %}</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏝️</text></svg>">
+  <title>{% block title %}DRIFT{% endblock %}</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2225%22 y=%2275%22 font-size=%2280%22 font-family=%22monospace%22 font-weight=%22700%22 fill=%22%2319c8b9%22>&gt;</text></svg>">
   <meta name="description" content="{% block meta_desc %}技术、生活，和随手笔记{% endblock %}">
-  <meta property="og:title" content="{% block og_title %}JZC 的岛屿{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}DRIFT{% endblock %}">
   <meta property="og:description" content="{% block og_desc %}技术、生活，和随手笔记{% endblock %}">
   <meta property="og:type" content="website">
   {% block canonical %}<link rel="canonical" href="{{ site_url }}{{ request.path }}">{% endblock %}
   <meta property="og:image" content="{{ site_url }}/static/images/og-default.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
-  <meta property="og:site_name" content="JZC's Island">
+  <meta property="og:site_name" content="DRIFT">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap" media="print" onload="this.media='all';this.onload=null">
@@ -21,15 +21,22 @@
   <script>var f=document.createElement('link');f.rel='stylesheet';f.href='https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap';document.head.appendChild(f);setTimeout(function(){if(!document.fonts||document.fonts.status!=='loaded')document.documentElement.classList.add('fonts-failed')},3000)</script>
   <script>var s=localStorage.getItem('jzc-theme');if(s==='dark')document.documentElement.className='dark';</script>
   <link rel="stylesheet" href="/static/css/animal.css">
-  <link rel="alternate" type="application/rss+xml" title="JZC's Island RSS" href="/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="DRIFT RSS" href="/rss.xml">
   <style>{{ pygments_css | safe }}</style>
 </head>
 <body>
 
+<!-- Loading Screen -->
+<div class="loading-screen" id="loadingScreen">
+  <div class="loading-screen-logo" style="font-family:'SF Mono','Fira Code',Consolas,monospace;font-size:32px;font-weight:600;letter-spacing:0.1em;background:none;width:auto;height:auto;animation:none;transform:none;">
+    <span style="color:rgba(255,255,255,0.5);">></span> DRIFT
+  </div>
+</div>
+
 <div class="progress-bar" id="progressBar"></div>
 
 <nav class="nav-bar">
-  <a href="/" class="nav-brand">JZC</a>
+  <a href="/" class="nav-brand">DRIFT</a>
   <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="菜单">☰</button>
   <div class="nav-links" id="navLinks">
     <a href="/">文章</a>
@@ -47,7 +54,7 @@
 </main>
 
 <footer>
-  <div class="footer-wave">JZC's Island · 建于 2026 · 慢下来，写点东西</div>
+  <div class="footer-wave">DRIFT · 建于 2026 · 慢下来，写点东西</div>
   <div class="footer">
     <a href="/rss.xml">RSS 订阅</a> · Animal Crossing inspired · Flask + Markdown
     <br>
@@ -67,7 +74,7 @@
 <div class="island-clock" id="islandClock">
   <div class="clock-date" id="clockDate"></div>
   <div class="clock-time" id="clockTime"></div>
-  <div class="clock-label">JZC 岛时间</div>
+  <div class="clock-label">DRIFT 时间</div>
 </div>
 
 <!-- Search overlay -->

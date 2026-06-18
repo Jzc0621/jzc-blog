@@ -1,5 +1,5 @@
 ---
-title: 欢迎来到 JZC 的岛屿
+title: 欢迎来到 DRIFT
 date: 2026-05-22
 tag: 生活
 excerpt: 第一篇博客，记录为什么要建这个博客，以及计划写些什么。

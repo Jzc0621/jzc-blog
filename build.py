@@ -151,7 +151,7 @@ def generate_og_image(dst: Path):
         font_sub = font_title
         font_small = font_title
 
-    title = "JZC 的岛屿"  # JZC 的岛屿
+    title = "DRIFT"  # DRIFT
     subtitle = "技术、生活，和随手笔记"  # 技术、生活，和随手笔记
 
     # Title on the accent strip
