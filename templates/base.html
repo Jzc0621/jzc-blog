@@ -35,17 +35,31 @@
 
 <div class="progress-bar" id="progressBar"></div>
 
-<nav class="nav-bar">
-  <a href="/" class="nav-brand">DRIFT</a>
-  <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="菜单">☰</button>
-  <div class="nav-links" id="navLinks">
-    <a href="/">文章</a>
-    <a href="/notes">便签墙</a>
-    <a href="/editor">写文章</a>
-    <a href="/about">关于</a>
-    <button class="theme-toggle" onclick="toggleTheme()" title="切换暗色模式">🌙</button>
-    <span class="nav-dice" onclick="randomPost()" title="随机一篇文章">🎲</span>
-    <span class="search-trigger" onclick="openSearch()" title="搜索">🔍</span>
+<nav class="nav-bar" id="navBar">
+  <div class="nav-left">
+    <a href="/" class="nav-brand">DRIFT</a>
+    <div class="nav-links" id="navLinks">
+      <a href="/" class="nav-link">文章</a>
+      <a href="/notes" class="nav-link">便签</a>
+      <a href="/editor" class="nav-link">写文章</a>
+      <a href="/about" class="nav-link">关于</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="search-box" id="searchBox">
+      <span class="search-box-icon">🔍</span>
+      <input class="search-box-input" id="searchInput" placeholder="搜索文章..." autocomplete="off">
+      <kbd class="search-box-kbd">⌘K</kbd>
+      <div class="search-dropdown" id="searchDropdown">
+        <div class="search-dropdown-results" id="searchResults"></div>
+        <div class="search-dropdown-footer">
+          <span>↑↓ 导航</span><span>↩ 打开</span><span>Esc 关闭</span>
+        </div>
+      </div>
+    </div>
+    <button class="nav-icon-btn" id="themeToggle" onclick="toggleTheme()" title="切换暗色模式" aria-label="切换暗色模式">🌙</button>
+    <button class="nav-icon-btn" id="diceBtn" onclick="randomPost()" title="随机一篇文章" aria-label="随机文章">🎲</button>
+    <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="菜单">☰</button>
   </div>
 </nav>
 
@@ -77,17 +91,6 @@
   <div class="clock-label">DRIFT 时间</div>
 </div>
 
-<!-- Search overlay -->
-<div class="search-overlay" id="searchOverlay">
-  <div class="search-modal">
-    <div class="flex-between mb-16">
-      <span class="section-title" style="margin:0;">搜索文章</span>
-      <button class="btn btn-sm" onclick="closeSearch()">× 关闭</button>
-    </div>
-    <input class="input input-lg" id="searchInput" placeholder="输入关键词..." autofocus oninput="doSearch()">
-    <div class="search-results" id="searchResults" style="margin-top:16px;"></div>
-  </div>
-</div>
 
 <script src="/static/js/main.js" defer></script>
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
