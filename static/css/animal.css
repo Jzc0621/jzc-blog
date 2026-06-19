@@ -219,8 +219,9 @@ h4 { font-size: 15px; }
 /* Hamburger (mobile) */
 .nav-hamburger {
   display: none;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
+  -webkit-tap-highlight-color: transparent;
   border: none;
   border-radius: 8px;
   background: transparent;
@@ -763,7 +764,6 @@ body.dark .select {
   --shadow-input: #1a1a2e;
 }
 
-body.dark .nav-bar { background: #252540; border-color: #4a4a6a; box-shadow: 0 4px 0 0 #1a1a2e; }
 body.dark .card { box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 body.dark .post-card { box-shadow: 0 4px 10px rgba(0,0,0,0.3); }
 body.dark .hero-banner {
@@ -1016,6 +1016,9 @@ body.dark .note-card { box-shadow: 0 3px 0 0 rgba(0,0,0,0.25); }
   text-align: center;
   font-size: 13px;
   color: #999;
+}
+body.dark .search-dropdown-empty {
+  color: #9090a8;
 }
 .search-dropdown-footer {
   display: flex;
@@ -1450,7 +1453,7 @@ body.dark .island-clock .clock-time { color: #c8d8c8; }
 /* ---------- Print ---------- */
 @media print {
   .nav-bar, .footer-wave, .footer, .back-to-top, .fortune-widget,
-  .island-clock, .search-overlay, .toc-sidebar, .progress-bar,
+  .island-clock, .toc-sidebar, .progress-bar,
   .hero-banner, .divider, .tag-filter, .notes-sidebar,
   .lightbox-overlay, .code-copy-btn, .code-lang-label,
   .code-line-numbers { display: none !important; }
@@ -1465,12 +1468,6 @@ body.dark .island-clock .clock-time { color: #c8d8c8; }
   .main-layout, .post-layout { flex-direction: column; }
   .notes-sidebar, .toc-sidebar { width: 100%; }
   .container { padding: 0 16px; }
-
-  /* Nav: compact row with wrapping */
-  .nav-bar { padding: 10px 16px; border-radius: 24px; gap: 6px; }
-  .nav-brand { font-size: 16px; }
-  .nav-links { gap: 10px; flex-wrap: wrap; justify-content: center; }
-  .nav-links a { font-size: 12px; }
 
   /* Hero: smaller padding + shrink pixel title */
   .hero-banner { padding: 36px 20px 28px; border-radius: 24px; margin-top: 4px; }
@@ -1541,12 +1538,6 @@ body.dark .island-clock .clock-time { color: #c8d8c8; }
   .hero-banner { padding: 28px 14px 20px; }
   .hero-content .subtitle { font-size: 12px; }
   .hero-decor { display: none; }
-
-  .nav-bar { padding: 8px 12px; }
-  .nav-brand { font-size: 15px; }
-  .nav-links { gap: 4px; }
-  .nav-links a { font-size: 11px; }
-  .theme-toggle { font-size: 10px; padding: 2px 6px; }
 
   .article-body { padding: 16px; border-radius: 16px; }
   .post-card { padding: 14px; }
@@ -1621,11 +1612,6 @@ body.dark .loading-screen {
   100% { width: 300px; height: 300px; opacity: 0; }
 }
 
-/* ---------- Header fade-in on load ---------- */
-.nav-bar {
-  opacity: 0;
-  animation: headerFadeIn 0.8s ease 0.6s forwards;
-}
 @keyframes headerFadeIn {
   from { opacity: 0; transform: translateY(-10px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -2182,11 +2168,6 @@ body.dark .hm-cta {
 }
 
 /* ---------- Nav/footer: keep capsule style in full-width layout ---------- */
-.nav-bar {
-  max-width: 960px;
-  margin-left: auto;
-  margin-right: auto;
-}
 .footer-wave {
   max-width: 960px;
   margin-left: auto;
