@@ -148,7 +148,7 @@ window.addEventListener('scroll', function() {
 // ═══════════════════════════════════════════
 var _postSlugs = [];
 function randomPost() {
-  var dice = document.querySelector('.nav-dice');
+  var dice = document.getElementById('diceBtn');
   if (dice) dice.classList.add('spinning');
   setTimeout(function() { if (dice) dice.classList.remove('spinning'); }, 600);
 
@@ -271,9 +271,9 @@ document.addEventListener('keydown', function(e) {
 
 // Close on click outside
 document.addEventListener('click', function(e) {
-  if (searchBox && !searchBox.contains(e.target)) {
-    closeSearch();
-  }
+  if (!searchBox || searchBox.contains(e.target)) return;
+  if (!searchDropdown.classList.contains('open')) return;
+  closeSearch();
 });
 
 // Focus opens dropdown
