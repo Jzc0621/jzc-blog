@@ -284,6 +284,9 @@ if (searchInput) {
     }
     searchDropdown.classList.add('open');
   });
+  searchInput.addEventListener('input', function() {
+    doSearch();
+  });
 }
 
 // Preload search index
