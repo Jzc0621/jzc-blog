@@ -18,7 +18,7 @@ function toggleTheme() {
 }
 
 function updateToggleIcon() {
-  var btn = document.querySelector('.theme-toggle');
+  var btn = document.getElementById('themeToggle');
   if (btn) btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
 }
 
@@ -234,24 +234,59 @@ function drawFortune() {
 }
 
 // ═══════════════════════════════════════════
-// Search
+// Search (dropdown style)
 // ═══════════════════════════════════════════
+var searchInput = document.getElementById('searchInput');
+var searchDropdown = document.getElementById('searchDropdown');
+var searchResults = document.getElementById('searchResults');
+var searchBox = document.getElementById('searchBox');
+var activeSearchIdx = -1;
+
 function openSearch() {
-  document.getElementById('searchOverlay').classList.add('open');
-  document.body.classList.add('search-open');
-  document.getElementById('searchInput').focus();
+  searchDropdown.classList.add('open');
+  searchInput.focus();
+  searchInput.select();
 }
+
 function closeSearch() {
-  document.getElementById('searchOverlay').classList.remove('open');
-  document.body.classList.remove('search-open');
-  document.getElementById('searchInput').value = '';
-  document.getElementById('searchResults').innerHTML = '';
+  searchDropdown.classList.remove('open');
+  searchInput.value = '';
+  searchResults.innerHTML = '';
+  activeSearchIdx = -1;
 }
+
+// Ctrl+K shortcut
 document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeSearch();
-  if (e.key === 'k' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); openSearch(); }
+  if (e.key === 'k' && (e.ctrlKey || e.metaKey)) {
+    e.preventDefault();
+    openSearch();
+  }
+  if (e.key === 'Escape') {
+    if (searchDropdown.classList.contains('open')) {
+      closeSearch();
+      searchInput.blur();
+    }
+  }
 });
 
+// Close on click outside
+document.addEventListener('click', function(e) {
+  if (searchBox && !searchBox.contains(e.target)) {
+    closeSearch();
+  }
+});
+
+// Focus opens dropdown
+if (searchInput) {
+  searchInput.addEventListener('focus', function() {
+    if (searchInput.value.trim()) {
+      doSearch();
+    }
+    searchDropdown.classList.add('open');
+  });
+}
+
+// Preload search index
 (function() {
   var xhr = new XMLHttpRequest();
   xhr.open('GET', '/search-index.json', true);
@@ -267,23 +302,23 @@ var searchTimer;
 function doSearch() {
   clearTimeout(searchTimer);
   searchTimer = setTimeout(function() {
-    var q = document.getElementById('searchInput').value.trim().toLowerCase();
-    var container = document.getElementById('searchResults');
-    if (!q) { container.innerHTML = ''; return; }
+    var q = searchInput.value.trim().toLowerCase();
+    activeSearchIdx = -1;
+    if (!q) { searchResults.innerHTML = ''; return; }
 
     if (window._searchIndex) {
       var results = window._searchIndex.filter(function(p) {
         return p.title.toLowerCase().indexOf(q) >= 0 || p.content.toLowerCase().indexOf(q) >= 0;
       });
       if (!results.length) {
-        container.innerHTML = '<p class="text-muted">没找到匹配的文章</p>';
+        searchResults.innerHTML = '<div class="search-dropdown-empty">没有找到相关文章<br><span style="font-size:11px;">试试其他关键词</span></div>';
         return;
       }
-      container.innerHTML = results.map(function(p) {
-        return '<a href="/post/' + p.slug + '" class="search-result-item">' +
-          '<span class="tag">#' + p.tag + '</span> ' +
-          '<strong>' + p.title + '</strong> ' +
-          '<span class="text-muted" style="font-size:11px;">' + p.date + '</span>' +
+      searchResults.innerHTML = results.map(function(p, i) {
+        return '<a href="/post/' + p.slug + '" class="search-result-item" data-idx="' + i + '">' +
+          '<span class="result-tag">#' + p.tag + '</span>' +
+          '<span class="result-title">' + p.title + '</span>' +
+          '<span class="result-date">' + p.date + '</span>' +
           '</a>';
       }).join('');
       return;
@@ -293,18 +328,46 @@ function doSearch() {
       .then(function(r) { return r.json(); })
       .then(function(data) {
         if (!data.results || !data.results.length) {
-          container.innerHTML = '<p class="text-muted">没找到匹配的文章</p>';
+          searchResults.innerHTML = '<div class="search-dropdown-empty">没有找到相关文章<br><span style="font-size:11px;">试试其他关键词</span></div>';
           return;
         }
-        container.innerHTML = data.results.map(function(p) {
-          return '<a href="/post/' + p.slug + '" class="search-result-item">' +
-            '<span class="tag">#' + p.tag + '</span> ' +
-            '<strong>' + p.title + '</strong> ' +
-            '<span class="text-muted" style="font-size:11px;">' + p.date + '</span>' +
+        searchResults.innerHTML = data.results.map(function(p, i) {
+          return '<a href="/post/' + p.slug + '" class="search-result-item" data-idx="' + i + '">' +
+            '<span class="result-tag">#' + p.tag + '</span>' +
+            '<span class="result-title">' + p.title + '</span>' +
+            '<span class="result-date">' + p.date + '</span>' +
             '</a>';
         }).join('');
       });
   }, 200);
+}
+
+// Keyboard navigation in dropdown
+document.addEventListener('keydown', function(e) {
+  if (!searchDropdown.classList.contains('open')) return;
+  var items = searchResults.querySelectorAll('.search-result-item');
+  if (!items.length) return;
+
+  if (e.key === 'ArrowDown') {
+    e.preventDefault();
+    activeSearchIdx = Math.min(activeSearchIdx + 1, items.length - 1);
+    updateSearchActive(items);
+  }
+  if (e.key === 'ArrowUp') {
+    e.preventDefault();
+    activeSearchIdx = Math.max(activeSearchIdx - 1, 0);
+    updateSearchActive(items);
+  }
+  if (e.key === 'Enter' && activeSearchIdx >= 0) {
+    e.preventDefault();
+    items[activeSearchIdx].click();
+  }
+});
+
+function updateSearchActive(items) {
+  items.forEach(function(item, i) {
+    item.classList.toggle('active', i === activeSearchIdx);
+  });
 }
 
 // ═══════════════════════════════════════════
@@ -875,6 +938,17 @@ document.addEventListener('DOMContentLoaded', function() {
   initReveal();
   observeReveal();
   initIconWall();
+
+  // Set active nav link based on current page
+  var path = window.location.pathname;
+  document.querySelectorAll('.nav-link').forEach(function(link) {
+    var href = link.getAttribute('href');
+    if (href === '/' && path === '/') {
+      link.classList.add('active');
+    } else if (href !== '/' && path.startsWith(href)) {
+      link.classList.add('active');
+    }
+  });
 });
 
 // Also run immediately for elements already in DOM

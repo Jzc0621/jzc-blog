@@ -1629,24 +1629,6 @@ body.dark .loading-screen {
 .clip-reveal-delay-2 { transition-delay: 0.25s; }
 .clip-reveal-delay-3 { transition-delay: 0.4s; }
 
-/* ---------- Link hover underline animation ---------- */
-.nav-links a {
-  position: relative;
-}
-.nav-links a::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: var(--accent);
-  transition: width 0.3s cubic-bezier(0.76, 0, 0.24, 1);
-}
-.nav-links a:hover::after {
-  width: 100%;
-}
-
 /* Footer links hover underline */
 .footer a {
   position: relative;
