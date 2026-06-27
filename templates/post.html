@@ -11,7 +11,7 @@
 <div class="post-layout mt-20">
   <article class="article-body">
     <div class="tag mb-12">#{{ post.tag }}</div>
-    <h1 class="clip-reveal" style="display:inline-block;">{{ post.title }}</h1>
+    <h1 style="display:inline-block;">{{ post.title }}</h1>
     <div class="post-meta mb-24" style="font-size:11px;color:var(--text-disabled);">
       <span>{{ post.date }}</span>
       <span>{{ post.read_time }} 分钟阅读</span>
@@ -87,7 +87,7 @@
           return;
         }
         container.innerHTML = d.comments.map(function(c) {
-          return '<div class="comment-item" style="margin-bottom:16px;padding:12px;background:var(--card-bg);border-radius:16px;">' +
+          return '<div class="comment-item" style="margin-bottom:16px;padding:12px;background:var(--bg-body);border-radius:var(--radius-card);border:1px solid var(--border-standard);">' +
             '<div style="font-weight:700;font-size:13px;color:var(--accent);">' + escapeHtml(c.author_name) +
             ' <span style="font-weight:400;font-size:11px;color:var(--text-disabled);">' + c.created_at + '</span></div>' +
             '<div style="margin-top:6px;font-size:14px;white-space:pre-wrap;">' + escapeHtml(c.content) + '</div>' +
