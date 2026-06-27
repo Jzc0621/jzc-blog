@@ -2,19 +2,12 @@
 {% block title %}DRIFT{% endblock %}
 {% block content %}
 
-<!-- Hero: interactive logo stage -->
+<!-- Hero: Spline 3D model -->
 <section class="hm-hero" id="heroStage">
-  <canvas class="hm-hero-canvas" id="heroCanvas"></canvas>
-  <div class="hm-hero-stage" id="heroStageInner">
-    <!-- Outer rings (respond slowly to cursor) -->
-    <div class="hm-logo-ring ring-outer" id="ringOuter"></div>
-    <div class="hm-logo-ring ring-mid" id="ringMid"></div>
-    <div class="hm-logo-ring ring-inner" id="ringInner"></div>
-    <!-- Logo -->
-    <div class="hm-hero-body" id="heroLogo">
-      <h1 class="hm-hero-title"><span class="hm-prompt">&gt; </span>DRIFT<span class="hm-hero-cursor"></span></h1>
-    </div>
-  </div>
+  <spline-viewer
+    url="https://prod.spline.design/b3T4jfkrqn7ZfEQ2/scene.splinecode"
+    class="hm-hero-spline">
+  </spline-viewer>
   <div class="hm-hero-footer">
     <span>写点技术笔记，记些生活碎片</span>
   </div>
