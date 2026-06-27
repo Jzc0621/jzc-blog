@@ -75,7 +75,7 @@
     </div>
     <div class="hm-notes-grid">
       {% for note in notes %}
-        <div class="hm-note-card stagger-reveal" style="background:var(--{{ color_for(note.tag) }});">
+        <div class="hm-note-card stagger-reveal">
           <p>{{ note.content[:120] }}</p>
           <span class="hm-note-date">{{ note.date }}</span>
         </div>

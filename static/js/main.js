@@ -476,11 +476,6 @@ function initReveal() {
       el.classList.add('stagger-reveal');
     }
   });
-  document.querySelectorAll('.section-title').forEach(function(el) {
-    if (!el.classList.contains('clip-reveal')) {
-      el.classList.add('clip-reveal');
-    }
-  });
   document.querySelectorAll('.note-card').forEach(function(el) {
     if (!el.classList.contains('stagger-reveal')) {
       el.classList.add('stagger-reveal');
@@ -499,7 +494,6 @@ var revealObserver = new IntersectionObserver(function(entries) {
       if (entry.target.classList.contains('stagger-reveal')) {
         var siblings = entry.target.parentNode.querySelectorAll('.stagger-reveal');
         var idx = Array.prototype.indexOf.call(siblings, entry.target);
-        entry.target.style.animationDelay = (idx * 0.08) + 's';
         entry.target.classList.add('revealed');
       }
       revealObserver.unobserve(entry.target);
