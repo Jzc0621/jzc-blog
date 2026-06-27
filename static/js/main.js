@@ -3,7 +3,10 @@
 // ═══════════════════════════════════════════
 (function() {
   var saved = localStorage.getItem('drift-theme');
-  if (saved === 'dark') document.body.classList.add('dark');
+  // Default to dark; only use light if explicitly saved as light
+  if (saved === 'light') {
+    document.body.classList.add('light');
+  }
   updateToggleIcon();
 })();
 
@@ -12,14 +15,19 @@ function toggleMobileNav() {
 }
 
 function toggleTheme() {
-  document.body.classList.toggle('dark');
-  localStorage.setItem('drift-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
+  if (document.body.classList.contains('light')) {
+    document.body.classList.remove('light');
+    localStorage.setItem('drift-theme', 'dark');
+  } else {
+    document.body.classList.add('light');
+    localStorage.setItem('drift-theme', 'light');
+  }
   updateToggleIcon();
 }
 
 function updateToggleIcon() {
   var btn = document.getElementById('themeToggle');
-  if (btn) btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
+  if (btn) btn.textContent = document.body.classList.contains('light') ? '☀️' : '◐';
 }
 
 // ═══════════════════════════════════════════
