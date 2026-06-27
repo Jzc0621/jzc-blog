@@ -115,49 +115,6 @@ window.addEventListener('scroll', function() {
   }
 });
 
-// ═══════════════════════════════════════════
-// Random post
-// ═══════════════════════════════════════════
-var _postSlugs = [];
-function randomPost() {
-  var dice = document.getElementById('diceBtn');
-  if (dice) dice.classList.add('spinning');
-  setTimeout(function() { if (dice) dice.classList.remove('spinning'); }, 600);
-
-  if (!_postSlugs.length) {
-    document.querySelectorAll('a[href*="/post/"]').forEach(function(a) {
-      var m = a.href.match(/\/post\/([^/]+)/);
-      if (m && _postSlugs.indexOf(m[1]) < 0) _postSlugs.push(m[1]);
-    });
-  }
-  if (_postSlugs.length) {
-    var slug = _postSlugs[Math.floor(Math.random() * _postSlugs.length)];
-    window.location.href = '/post/' + slug;
-    return;
-  }
-  fetch('/search-index.json').then(function(r) { return r.json(); }).then(function(data) {
-    if (data.length) {
-      var idx = Math.floor(Math.random() * data.length);
-      window.location.href = '/post/' + data[idx].slug;
-    }
-  });
-}
-
-// ═══════════════════════════════════════════
-// Island Clock
-// ═══════════════════════════════════════════
-function updateClock() {
-  var now = new Date();
-  var days = ['日', '一', '二', '三', '四', '五', '六'];
-  var dateEl = document.getElementById('clockDate');
-  var timeEl = document.getElementById('clockTime');
-  if (dateEl) dateEl.textContent = '星期' + days[now.getDay()];
-  if (timeEl) timeEl.textContent =
-    String(now.getHours()).padStart(2, '0') + ':' +
-    String(now.getMinutes()).padStart(2, '0');
-}
-updateClock();
-setInterval(updateClock, 30000);
 
 
 // ═══════════════════════════════════════════
