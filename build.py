@@ -118,30 +118,19 @@ def _find_chinese_font() -> str | None:
 def generate_og_image(dst: Path):
     """Generate a 1200x630 OG preview image for social sharing."""
     W, H = 1200, 630
-    img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+    img = Image.new("RGBA", (W, H), (13, 13, 13, 255))
     draw = ImageDraw.Draw(img)
 
-    # Background: layered rounded rectangles in Animal Crossing palette
-    # Outer margin
-    draw.rounded_rectangle([20, 20, W - 20, H - 20], radius=40, fill=(248, 248, 240, 255))
-    # Inner panel
-    draw.rounded_rectangle([50, 50, W - 50, H - 50], radius=32, fill=(247, 243, 223, 255))
-    # Accent strip at top
-    draw.rounded_rectangle([50, 50, W - 50, 120], radius=32, fill=(25, 200, 185, 255))
-    draw.rectangle([50, 88, W - 50, 120], fill=(25, 200, 185, 255))
-
-    # Decorative dots on accent strip
-    for x in range(80, W - 80, 80):
-        draw.ellipse([x, 70, x + 16, 86], fill=(255, 255, 255, 60))
-        draw.ellipse([x + 20, 78, x + 30, 88], fill=(255, 255, 255, 40))
+    # Accent line at top
+    draw.rectangle([0, 0, W, 4], fill=(163, 255, 77, 255))
 
     # Text
     font_path = _find_chinese_font()
     if font_path:
         try:
-            font_title = ImageFont.truetype(font_path, 72)
-            font_sub = ImageFont.truetype(font_path, 32)
-            font_small = ImageFont.truetype(font_path, 24)
+            font_title = ImageFont.truetype(font_path, 80)
+            font_sub = ImageFont.truetype(font_path, 28)
+            font_small = ImageFont.truetype(font_path, 20)
         except Exception:
             font_title = ImageFont.load_default()
             font_sub = font_title
@@ -151,40 +140,29 @@ def generate_og_image(dst: Path):
         font_sub = font_title
         font_small = font_title
 
-    title = "DRIFT"  # DRIFT
-    subtitle = "技术、生活，和随手笔记"  # 技术、生活，和随手笔记
+    title = "DRIFT"
+    subtitle = "技术、生活，和随手笔记"
 
-    # Title on the accent strip
+    # Title — centered, large, white
     bbox = draw.textbbox((0, 0), title, font=font_title)
     tw = bbox[2] - bbox[0]
-    draw.text(((W - tw) / 2, 55), title, font=font_title, fill=(255, 255, 255, 255))
+    draw.text(((W - tw) / 2, 180), title, font=font_title, fill=(255, 255, 255, 255))
 
-    # Subtitle below accent
+    # Accent underline below title
+    ul_y = 180 + (bbox[3] - bbox[1]) + 20
+    draw.rectangle([(W - 120) / 2, ul_y, (W + 120) / 2, ul_y + 3], fill=(163, 255, 77, 255))
+
+    # Subtitle
     bbox = draw.textbbox((0, 0), subtitle, font=font_sub)
     sw = bbox[2] - bbox[0]
-    draw.text(((W - sw) / 2, 150), subtitle, font=font_sub, fill=(114, 93, 66, 255))
-
-    # Decorative island elements
-    decorations = [
-        ("\U0001f33f", 160, 260),  # 🌿
-        ("\U0001f43e", 280, 240),  # 🐾
-        ("\U0001f332", 920, 250),  # 🌲
-        ("\U0001f3dd", 750, 270),  # 🏝
-        ("\U0001f340", 1000, 300), # 🍀
-        ("☀️", 500, 230), # ☀️
-    ]
-    for emoji, ex, ey in decorations:
-        try:
-            draw.text((ex, ey), emoji, font=font_sub, embedded_color=True)
-        except Exception:
-            draw.text((ex, ey), emoji, font=font_sub)
+    draw.text(((W - sw) / 2, ul_y + 40), subtitle, font=font_sub, fill=(136, 136, 136, 255))
 
     # Bottom info bar
-    draw.rounded_rectangle([100, H - 130, W - 100, H - 80], radius=16, fill=(138, 198, 106, 40))
-    footer_text = "jiazhichao.xyz  ·  Flask + Markdown  ·  Animal Crossing Style"
+    draw.rectangle([0, H - 56, W, H], fill=(26, 26, 26, 255))
+    footer_text = "jiazhichao.xyz  \xb7  Flask + Markdown  \xb7  暗黑极简"
     bbox = draw.textbbox((0, 0), footer_text, font=font_small)
     fw = bbox[2] - bbox[0]
-    draw.text(((W - fw) / 2, H - 125), footer_text, font=font_small, fill=(114, 93, 66, 180))
+    draw.text(((W - fw) / 2, H - 38), footer_text, font=font_small, fill=(102, 102, 102, 255))
 
     dst.parent.mkdir(parents=True, exist_ok=True)
     img = img.convert("RGB")
