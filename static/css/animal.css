@@ -28,7 +28,7 @@
   --accent-active: #8ce030;
 
   /* Focus / Status */
-  --focus-yellow: #a3ff4d;
+  --focus: #a3ff4d;
   --shadow-btn: none;
   --shadow-input: none;
   --success: #a3ff4d;
@@ -89,7 +89,7 @@ body {
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Light mode overrides (toggled by JS adding .dark class removed) */
+/* Light mode overrides (toggled by JS adding/removing .light class) */
 body.light {
   --bg-body: #f5f5f5;
   --bg-card: #ffffff;
