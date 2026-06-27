@@ -978,7 +978,7 @@ h4 { font-size: 15px; }
   position: relative;
   margin: 0 0 2px;
   overflow: hidden;
-  background: var(--bg-body);
+  background: radial-gradient(ellipse at center, #2a2a2a 0%, #0d0d0d 70%);
   height: 85vh;
   min-height: 500px;
 }
