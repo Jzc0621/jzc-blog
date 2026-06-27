@@ -1770,9 +1770,8 @@ body.dark .loading-screen {
   margin: 0 0 12px;
   overflow: hidden;
   background: #f0f0f0;
-  width: 100%;
-  aspect-ratio: 16 / 9;
-  max-height: 85vh;
+  height: 85vh;
+  min-height: 400px;
 }
 body.dark .hm-hero {
   background: #151520;
@@ -2010,8 +2009,7 @@ body.dark .hm-cta {
 /* ---------- Responsive ---------- */
 @media (max-width: 768px) {
   .hm-hero {
-    aspect-ratio: 16 / 9;
-    max-height: 60vh;
+    height: 60vh;
     border-radius: 1.6rem;
   }
   .hm-statement,
@@ -2050,8 +2048,7 @@ body.dark .hm-cta {
 
 @media (max-width: 480px) {
   .hm-hero {
-    aspect-ratio: 16 / 9;
-    max-height: 50vh;
+    height: 50vh;
   }
   .hm-notes-grid {
     grid-template-columns: 1fr;
