@@ -12,7 +12,7 @@
 <div style="max-width:800px;margin:0 auto;">
   {% if notes %}
     {% for note in notes %}
-      <div class="note-card" style="background:var(--{{ color_for(note.tag) }}); padding:20px;">
+      <div class="note-card" style="border-left: 3px solid var(--accent);">
         <div style="white-space:pre-wrap;">{{ note.content }}</div>
         <div class="note-date" style="margin-top:10px;">{{ note.date }}</div>
       </div>

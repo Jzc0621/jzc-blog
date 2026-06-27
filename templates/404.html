@@ -1,24 +1,21 @@
 {% extends "base.html" %}
-{% block title %}迷路了 — DRIFT{% endblock %}
+{% block title %}404 — DRIFT{% endblock %}
 {% block content %}
 
 <div class="page-header" style="padding-top:60px;">
-  <div style="font-size:72px;margin-bottom:16px;">🗺️</div>
-  <h1>404 · 迷路了</h1>
-  <p class="subtitle">这个页面不存在，也许被风吹走了，也许被小动物搬走了</p>
+  <h1>404</h1>
+  <p class="subtitle">页面不存在</p>
 </div>
 
 <div class="divider divider-teal"></div>
 
 <div class="card" style="max-width:500px;margin:0 auto;text-align:center;">
-  <p style="margin-bottom:16px;">试试这些地方：</p>
+  <p style="margin-bottom:16px;color:var(--text-secondary);">这个地址没有对应内容，可能已被移除或从未存在。</p>
   <div class="flex-row gap-12" style="justify-content:center;flex-wrap:wrap;">
     <a href="/" class="btn btn-primary">回到首页</a>
-    <a href="/notes" class="btn">便签墙</a>
+    <a href="/notes" class="btn">便签</a>
     <a href="/about" class="btn">关于</a>
   </div>
 </div>
-
-<div style="text-align:center;margin-top:40px;font-size:40px;opacity:0.3;">🦊 🦉 🐿️</div>
 
 {% endblock %}
