@@ -89,42 +89,6 @@ var SmoothScroll = (function() {
   return { init: init };
 })();
 
-// ═══════════════════════════════════════════
-// Loading Screen
-// ═══════════════════════════════════════════
-(function() {
-  var screen = document.getElementById('loadingScreen');
-  if (!screen) return;
-
-  // Create expanding rings
-  for (var i = 1; i <= 3; i++) {
-    var ring = document.createElement('div');
-    ring.className = 'loading-screen-rings';
-    ring.style.animationDelay = (i * 0.15) + 's';
-    screen.appendChild(ring);
-  }
-
-  // Hide after animations complete
-  var minDuration = 1800;
-  var startTime = Date.now();
-
-  function hide() {
-    var elapsed = Date.now() - startTime;
-    var remaining = Math.max(0, minDuration - elapsed);
-
-    setTimeout(function() {
-      screen.classList.add('hidden');
-      // Remove from DOM after transition
-      setTimeout(function() {
-        if (screen.parentNode) screen.parentNode.removeChild(screen);
-      }, 700);
-    }, remaining);
-  }
-
-  window.addEventListener('load', hide);
-  // Fallback: hide after 3s even if load event hasn't fired
-  setTimeout(hide, 3000);
-})();
 
 // ═══════════════════════════════════════════
 // Back to top + reading progress
@@ -195,51 +159,6 @@ function updateClock() {
 updateClock();
 setInterval(updateClock, 30000);
 
-// ═══════════════════════════════════════════
-// Daily Fortune
-// ═══════════════════════════════════════════
-var fortunes = [
-  { icon: '🍀', text: '今天适合重构代码，删掉的比写的多才是进步' },
-  { icon: '☕', text: '咖啡要趁热喝，bug 要趁早修' },
-  { icon: '🌟', text: '今天可能会遇到一个让你豁然开朗的答案' },
-  { icon: '🌸', text: '好心情是最好的 debug 工具' },
-  { icon: '🐢', text: '慢就是快，今天不要 rush' },
-  { icon: '🎣', text: '像钓鱼一样对待灵感：耐心等待，它会上钩的' },
-  { icon: '🌈', text: '今天写的代码明天可能删掉，但那是有意义的' },
-  { icon: '🦉', text: '深夜写代码容易出 bug，早点休息吧' },
-  { icon: '🌿', text: '偶尔休息一下不是偷懒，是给自己的缓存清理' },
-  { icon: '🦊', text: '聪明的狐狸说：console.log 是最好的朋友' },
-  { icon: '🍂', text: '秋风吹走了 bug，春天又长出新 feature' },
-  { icon: '⭐', text: '今天的你会解决一个难了三天的问题' },
-  { icon: '🎵', text: '戴上耳机，好音乐让代码自己写出来' },
-  { icon: '🐚', text: '小贝壳说：模块化是通往幸福的路' },
-  { icon: '🪐', text: '抬头看看远方，bug 没有那么重要' },
-];
-
-function drawFortune() {
-  var btn = document.getElementById('fortuneBtn');
-  if (btn) btn.classList.add('shaking');
-  setTimeout(function() { if (btn) btn.classList.remove('shaking'); }, 500);
-
-  var old = document.querySelector('.fortune-popup');
-  if (old) { old.remove(); return; }
-
-  var today = new Date().toISOString().slice(0, 10);
-  var seed = 0;
-  for (var i = 0; i < today.length; i++) seed += today.charCodeAt(i);
-  var f = fortunes[seed % fortunes.length];
-
-  var popup = document.createElement('div');
-  popup.className = 'fortune-popup';
-  popup.innerHTML =
-    '<div class="fortune-icon">' + f.icon + '</div>' +
-    '<div class="fortune-text">' + f.text + '</div>' +
-    '<div class="fortune-date">' + today + '</div>' +
-    '<div style="margin-top:8px;font-size:10px;color:var(--text-disabled);">点击摇签筒关闭 · 每日一签</div>';
-  document.body.appendChild(popup);
-
-  setTimeout(function() { if (popup.parentNode) popup.remove(); }, 10000);
-}
 
 // ═══════════════════════════════════════════
 // Search (dropdown style)
@@ -467,12 +386,11 @@ function spawnVisitor() {
 setTimeout(spawnVisitor, 10000 + Math.random() * 20000);
 
 // ═══════════════════════════════════════════
-// Enhanced Scroll Reveal (clip-path + stagger)
+// Enhanced Scroll Reveal (stagger)
 // ═══════════════════════════════════════════
 function initReveal() {
-  // Add reveal classes to elements
   document.querySelectorAll('.post-card').forEach(function(el, i) {
-    if (!el.classList.contains('reveal') && !el.classList.contains('stagger-reveal')) {
+    if (!el.classList.contains('stagger-reveal')) {
       el.classList.add('stagger-reveal');
     }
   });
@@ -486,10 +404,6 @@ function initReveal() {
 var revealObserver = new IntersectionObserver(function(entries) {
   entries.forEach(function(entry) {
     if (entry.isIntersecting) {
-      // Clip-path reveal
-      if (entry.target.classList.contains('clip-reveal')) {
-        entry.target.classList.add('revealed');
-      }
       // Stagger reveal with delay based on index
       if (entry.target.classList.contains('stagger-reveal')) {
         var siblings = entry.target.parentNode.querySelectorAll('.stagger-reveal');
@@ -502,7 +416,7 @@ var revealObserver = new IntersectionObserver(function(entries) {
 }, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
 
 function observeReveal() {
-  document.querySelectorAll('.clip-reveal, .stagger-reveal').forEach(function(el) {
+  document.querySelectorAll('.stagger-reveal').forEach(function(el) {
     revealObserver.observe(el);
   });
 }
@@ -591,18 +505,6 @@ function initLightbox() {
 }
 
 // ═══════════════════════════════════════════
-// Icon Wall Auto-scroll (duplicate for seamless loop)
-// ═══════════════════════════════════════════
-function initIconWall() {
-  var tracks = document.querySelectorAll('.icon-wall-track');
-  tracks.forEach(function(track) {
-    // Clone items for seamless loop
-    var items = track.innerHTML;
-    track.innerHTML = items + items;
-  });
-}
-
-// ═══════════════════════════════════════════
 // Init all on DOM ready
 // ═══════════════════════════════════════════
 document.addEventListener('DOMContentLoaded', function() {
@@ -611,7 +513,6 @@ document.addEventListener('DOMContentLoaded', function() {
   initLightbox();
   initReveal();
   observeReveal();
-  initIconWall();
 
   // Set active nav link based on current page
   var path = window.location.pathname;
@@ -630,4 +531,3 @@ enhanceCodeBlocks();
 initLightbox();
 initReveal();
 observeReveal();
-initIconWall();
