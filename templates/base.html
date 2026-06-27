@@ -16,9 +16,9 @@
   <meta property="og:site_name" content="DRIFT">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap" media="print" onload="this.media='all';this.onload=null">
-  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap"></noscript>
-  <script>var f=document.createElement('link');f.rel='stylesheet';f.href='https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap';document.head.appendChild(f);setTimeout(function(){if(!document.fonts||document.fonts.status!=='loaded')document.documentElement.classList.add('fonts-failed')},3000)</script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all';this.onload=null">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+  <script>var f=document.createElement('link');f.rel='stylesheet';f.href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';document.head.appendChild(f);</script>
   <script>var s=localStorage.getItem('drift-theme');if(s==='dark')document.documentElement.className='dark';</script>
   <link rel="stylesheet" href="/static/css/animal.css">
   <link rel="alternate" type="application/rss+xml" title="DRIFT RSS" href="/rss.xml">
@@ -26,13 +26,6 @@
   <style>{{ pygments_css | safe }}</style>
 </head>
 <body>
-
-<!-- Loading Screen -->
-<div class="loading-screen" id="loadingScreen">
-  <div class="loading-screen-logo" style="font-family:'SF Mono','Fira Code',Consolas,monospace;font-size:32px;font-weight:600;letter-spacing:0.1em;background:none;width:auto;height:auto;animation:none;transform:none;">
-    <span style="color:rgba(255,255,255,0.5);">></span> DRIFT
-  </div>
-</div>
 
 <div class="progress-bar" id="progressBar"></div>
 
@@ -50,7 +43,6 @@
     <div class="search-box" id="searchBox">
       <span class="search-box-icon">🔍</span>
       <input class="search-box-input" id="searchInput" placeholder="搜索文章..." autocomplete="off">
-      <kbd class="search-box-kbd">⌘K</kbd>
       <div class="search-dropdown" id="searchDropdown">
         <div class="search-dropdown-results" id="searchResults"></div>
         <div class="search-dropdown-footer">
@@ -59,7 +51,6 @@
       </div>
     </div>
     <button class="nav-icon-btn" id="themeToggle" onclick="toggleTheme()" title="切换暗色模式" aria-label="切换暗色模式">🌙</button>
-    <button class="nav-icon-btn" id="diceBtn" onclick="randomPost()" title="随机一篇文章" aria-label="随机文章">🎲</button>
     <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="菜单">☰</button>
   </div>
 </nav>
@@ -79,19 +70,6 @@
 </footer>
 
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
-
-<!-- Fortune Widget -->
-<div class="fortune-widget">
-  <button class="fortune-btn" id="fortuneBtn" onclick="drawFortune()" title="每日运势签">🎋</button>
-</div>
-
-<!-- Island Clock -->
-<div class="island-clock" id="islandClock">
-  <div class="clock-date" id="clockDate"></div>
-  <div class="clock-time" id="clockTime"></div>
-  <div class="clock-label">DRIFT 时间</div>
-</div>
-
 
 <script src="/static/js/main.js" defer></script>
 <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
