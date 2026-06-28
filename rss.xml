@@ -1,63 +1,58 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0">
 	<channel>
-		<title>JZC's Island</title>
+		<title>DRIFT</title>
 		<link>http://localhost</link>
 		<description>技术、生活，和随手笔记</description>
 		<language>zh-CN</language>
 		<item>
-			<title>用纯 CSS 复刻动物森友会 UI 风格</title>
-			<link>http://localhost/post/css-animal-crossing</link>
-			<description>从一个 React 组件库的设计规范翻译成纯 CSS，记录设计 Token 迁移过程。</description>
-			<pubDate>2026-05-25</pubDate>
+			<title>圆_AGA</title>
+			<link>https://jiazhichao.xyz/post/圆_aga</link>
+			<guid isPermaLink="true">https://jiazhichao.xyz/post/圆_aga</guid>
+			<description>圆规为什么能画圆，因为脚在走心不变</description>
+			<pubDate>Sat, 27 Jun 2026 00:00:00 -0000</pubDate>
 		</item>
 		<item>
-			<title>五月的学习笔记碎片</title>
-			<link>http://localhost/post/learning-notes-may</link>
-			<description>零零散散学到的东西，不成篇但值得记下来。</description>
-			<pubDate>2026-05-23</pubDate>
+			<title>Robot</title>
+			<link>https://jiazhichao.xyz/post/robot</link>
+			<guid isPermaLink="true">https://jiazhichao.xyz/post/robot</guid>
+			<description>网站主页的机器人太帅了</description>
+			<pubDate>Sat, 27 Jun 2026 00:00:00 -0000</pubDate>
+		</item>
+		<item>
+			<title>贾志超好厉害</title>
+			<link>https://jiazhichao.xyz/post/post-a41454bc</link>
+			<guid isPermaLink="true">https://jiazhichao.xyz/post/post-a41454bc</guid>
+			<description>真NB</description>
+			<pubDate>Thu, 18 Jun 2026 00:00:00 -0000</pubDate>
+		</item>
+		<item>
+			<title>盐师第一深情</title>
+			<link>https://jiazhichao.xyz/post/post-059ff738</link>
+			<guid isPermaLink="true">https://jiazhichao.xyz/post/post-059ff738</guid>
+			<description>马静涛到此一游</description>
+			<pubDate>Thu, 18 Jun 2026 00:00:00 -0000</pubDate>
+		</item>
+		<item>
+			<title>黑暗中总有一丝光明</title>
+			<link>https://jiazhichao.xyz/post/post-1d34cd31</link>
+			<guid isPermaLink="true">https://jiazhichao.xyz/post/post-1d34cd31</guid>
+			<description>Every cloud has a sliver lining.</description>
+			<pubDate>Thu, 11 Jun 2026 00:00:00 -0000</pubDate>
+		</item>
+		<item>
+			<title>基于 RA6M5 与 TinyML 的智能脉搏监测系统</title>
+			<link>https://jiazhichao.xyz/post/ra6m5-pulse-monitor</link>
+			<guid isPermaLink="true">https://jiazhichao.xyz/post/ra6m5-pulse-monitor</guid>
+			<description>以瑞萨 RA6M5 为核心，PPG 传感器采集脉搏波，在 MCU 端运行 1D-CNN 进行心律分类，TFT + PC 双屏可视化。</description>
+			<pubDate>Sun, 31 May 2026 00:00:00 -0000</pubDate>
 		</item>
 		<item>
 			<title>jzc</title>
-			<link>http://localhost/post/jzc</link>
+			<link>https://jiazhichao.xyz/post/jzc</link>
+			<guid isPermaLink="true">https://jiazhichao.xyz/post/jzc</guid>
 			<description>嗨，这是我的第一篇博客</description>
-			<pubDate>2026-05-22</pubDate>
-		</item>
-		<item>
-			<title>欢迎来到 JZC 的岛屿</title>
-			<link>http://localhost/post/hello-world</link>
-			<description>第一篇博客，记录为什么要建这个博客，以及计划写些什么。</description>
-			<pubDate>2026-05-22</pubDate>
-		</item>
-		<item>
-			<title>Python 异步编程入门：从回调到 async/await</title>
-			<link>http://localhost/post/python-async-intro</link>
-			<description>用厨房做早餐的场景解释协程、事件循环和 Future 的关系。</description>
-			<pubDate>2026-05-20</pubDate>
-		</item>
-		<item>
-			<title>从零搭建一个零数据库博客</title>
-			<link>http://localhost/post/flask-blog-building</link>
-			<description>不用 WordPress、不用数据库，用 Flask + Markdown 搭一个完全属于自己的博客。</description>
-			<pubDate>2026-05-18</pubDate>
-		</item>
-		<item>
-			<title>5 个我每天都在用的 Git 技巧</title>
-			<link>http://localhost/post/git-tips-2026</link>
-			<description>不是 rebase 教程，是真正每天都会敲的命令。</description>
-			<pubDate>2026-05-12</pubDate>
-		</item>
-		<item>
-			<title>深夜编程的仪式感</title>
-			<link>http://localhost/post/night-coding-routine</link>
-			<description>深夜写代码有一套固定的流程，像泡茶一样。</description>
-			<pubDate>2026-05-08</pubDate>
-		</item>
-		<item>
-			<title>城市边缘的萤火虫</title>
-			<link>http://localhost/post/nature-walk-0426</link>
-			<description>没想到离小区三公里的湿地公园，晚上八点后全是萤火虫。</description>
-			<pubDate>2026-04-26</pubDate>
+			<pubDate>Fri, 22 May 2026 00:00:00 -0000</pubDate>
 		</item>
 	</channel>
 </rss>

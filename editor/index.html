@@ -3,17 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>编辑 — JZC</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏝️</text></svg>">
-  <meta property="og:title" content="JZC 的岛屿">
+  <title>编辑 — DRIFT</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2225%22 y=%2275%22 font-size=%2280%22 font-family=%22monospace%22 font-weight=%22700%22 fill=%22%23a3ff4d%22>&gt;</text></svg>">
+  <meta name="description" content="技术、生活，和随手笔记">
+  <meta property="og:title" content="DRIFT">
   <meta property="og:description" content="技术、生活，和随手笔记">
   <meta property="og:type" content="website">
-  <meta property="og:site_name" content="JZC's Island">
-  <meta name="twitter:card" content="summary">
+  <link rel="canonical" href="https://jiazhichao.xyz/editor">
+  <meta property="og:image" content="https://jiazhichao.xyz/static/images/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="DRIFT">
+  <meta name="twitter:card" content="summary_large_image">
   <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Noto+Sans+SC:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;500;700&family=Press+Start+2P&display=swap" media="print" onload="this.media='all';this.onload=null">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all';this.onload=null">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+  <script>var f=document.createElement('link');f.rel='stylesheet';f.href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';document.head.appendChild(f);</script>
   <link rel="stylesheet" href="/static/css/animal.css">
-  <link rel="alternate" type="application/rss+xml" title="JZC's Island RSS" href="/rss.xml">
+  <link rel="alternate" type="application/rss+xml" title="DRIFT RSS" href="/rss.xml">
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
   <style>pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
 span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -104,16 +112,29 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <div class="progress-bar" id="progressBar"></div>
 
-<nav class="nav-bar">
-  <a href="/" class="nav-brand">JZC</a>
-  <div class="nav-links">
-    <a href="/">文章</a>
-    <a href="/notes">便签墙</a>
-    <a href="/editor">写文章</a>
-    <a href="/about">关于</a>
-    <button class="theme-toggle" onclick="toggleTheme()" title="切换暗色模式">🌙</button>
-    <span class="nav-dice" onclick="randomPost()" title="随机一篇文章">🎲</span>
-    <span class="search-trigger" onclick="openSearch()" title="搜索">🔍</span>
+<nav class="nav-bar" id="navBar">
+  <div class="nav-left">
+    <a href="/" class="nav-brand">DRIFT</a>
+    <div class="nav-links" id="navLinks">
+      <a href="/" class="nav-link">文章</a>
+      <a href="/notes" class="nav-link">便签</a>
+      <a href="/editor" class="nav-link">写文章</a>
+      <a href="/about" class="nav-link">关于</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="search-box" id="searchBox">
+      <span class="search-box-icon">🔍</span>
+      <input class="search-box-input" id="searchInput" placeholder="搜索文章..." autocomplete="off">
+      <div class="search-dropdown" id="searchDropdown">
+        <div class="search-dropdown-results" id="searchResults"></div>
+        <div class="search-dropdown-footer">
+          <span>↑↓ 导航</span><span>↩ 打开</span><span>Esc 关闭</span>
+        </div>
+      </div>
+    </div>
+    <button class="nav-icon-btn" id="themeToggle" onclick="toggleTheme()" title="切换暗色模式" aria-label="切换暗色模式">🌙</button>
+    <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="菜单">☰</button>
   </div>
 </nav>
 
@@ -122,18 +143,18 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
 <div class="page-header">
   <h1>写文章</h1>
-  <p class="subtitle">岛主专属</p>
+  <p class="subtitle">作者专属</p>
 </div>
 
 <div class="card" style="max-width:480px;margin:0 auto;">
 
   <!-- Password gate -->
   <div id="loginGate">
-    <div style="text-align:center;font-size:40px;margin-bottom:16px;">🏝️</div>
-    <p style="text-align:center;color:var(--text-secondary);margin-bottom:20px;">请输入岛主密码</p>
+    <div style="text-align:center;font-size:40px;margin-bottom:16px;">DRIFT 后台</div>
+    <p style="text-align:center;color:var(--text-secondary);margin-bottom:20px;">请输入密码</p>
     <input class="input input-lg" id="pwdInput" type="password" placeholder="密码" onkeydown="if(event.key==='Enter')checkPwd()">
     <div class="flex-row gap-12" style="margin-top:12px;justify-content:center;">
-      <button class="btn btn-primary" onclick="checkPwd()">进入岛屿</button>
+      <button class="btn btn-primary" onclick="checkPwd()">进入后台</button>
       <a href="/" class="btn">返回</a>
     </div>
     <p id="pwdError" style="text-align:center;color:var(--error);font-size:12px;margin-top:10px;display:none;">密码不对哦</p>
@@ -141,8 +162,13 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
 
   <!-- Editor form (hidden initially) -->
   <div id="editorForm" style="display:none;">
-    <form action="/editor/save" method="POST">
+    <div id="editBanner" style="display:none;background:var(--accent);color:#fff;padding:8px 12px;border-radius:12px;margin-bottom:16px;font-size:13px;font-weight:700;">
+      正在编辑: <span id="editBannerTitle"></span>
+      <button type="button" onclick="cancelEdit()" style="background:none;border:none;color:#fff;text-decoration:underline;cursor:pointer;margin-left:8px;">取消</button>
+    </div>
+    <form action="/editor/save" method="POST" id="editorFormInner">
       <input type="hidden" name="mode" value="post">
+      <input type="hidden" name="original_slug" id="originalSlug" value="">
 
       
       <div class="mb-16">
@@ -172,23 +198,125 @@ span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 
         <a href="/" class="btn">取消</a>
       </div>
     </form>
+
+    
+    <div class="divider divider-teal" style="margin:24px 0;"></div>
+    <div class="section-title">文章管理</div>
+    <div id="postList" style="margin-top:12px;font-size:13px;">
+      <p class="text-muted">加载中...</p>
+    </div>
+    
   </div>
 
 </div>
 
 <script>
-// Password check - edit PASSWORD_HASH to change password
-// To generate: btoa('yourpassword')
-var PASSWORD_HASH = 'anpjMjAyNDEwMDd6aA==';
+// SHA-256 password verification
+// To change password, generate a new hash:
+//   python -c "import hashlib; print(hashlib.sha256('newpassword'.encode()).hexdigest())"
+var PASSWORD_HASH = '0e7a5ad21c4ff6640d10f20362381f026788b60c4c15b3186457c7c122d804aa';
+
+function sha256(message) {
+  var msgBuffer = new TextEncoder().encode(message);
+  return crypto.subtle.digest('SHA-256', msgBuffer).then(function(hashBuffer) {
+    var hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map(function(b) { return b.toString(16).padStart(2, '0'); }).join('');
+  });
+}
 
 function checkPwd() {
   var input = document.getElementById('pwdInput').value;
-  if (btoa(input) === PASSWORD_HASH) {
-    document.getElementById('loginGate').style.display = 'none';
-    document.getElementById('editorForm').style.display = '';
-  } else {
-    document.getElementById('pwdError').style.display = '';
-  }
+  sha256(input).then(function(hash) {
+    if (hash === PASSWORD_HASH) {
+      document.getElementById('loginGate').style.display = 'none';
+      document.getElementById('editorForm').style.display = '';
+      loadPostList();
+    } else {
+      document.getElementById('pwdError').style.display = '';
+    }
+  });
+}
+
+var _postListLoaded = false;
+function loadPostList() {
+  if (_postListLoaded) return;
+  _postListLoaded = true;
+  fetch('/editor/list')
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var container = document.getElementById('postList');
+      if (!d.posts || !d.posts.length) {
+        container.innerHTML = '<p class="text-muted">还没有文章</p>';
+        return;
+      }
+      container.innerHTML = d.posts.map(function(p) {
+        var badge = p.status === 'draft' ? ' <span style="font-size:10px;color:var(--text-disabled);">[草稿]</span>' : '';
+        return '<div style="display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border-color);">' +
+          '<span><a href="/post/' + p.slug + '" style="font-weight:600;">' + escapeHtml(p.title) + '</a>' + badge +
+          ' <span style="font-size:11px;color:var(--text-disabled);">' + p.date + ' · #' + p.tag + '</span></span>' +
+          '<span style="display:flex;gap:6px;">' +
+          '<button class="btn btn-sm" onclick="editPost(\'' + p.slug + '\')">编辑</button>' +
+          '<button class="btn btn-sm" onclick="deletePost(\'' + p.slug + '\', this)" style="color:var(--error);border-color:var(--error);">删除</button>' +
+          '</span>' +
+          '</div>';
+      }).join('');
+    });
+}
+
+function deletePost(slug, btn) {
+  if (!confirm('确定要删除这篇文章吗？此操作不可撤销。')) return;
+  btn.disabled = true;
+  btn.textContent = '...';
+  fetch('/editor/delete', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: 'slug=' + encodeURIComponent(slug)
+  }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) {
+        btn.closest('div').remove();
+      } else {
+        alert('删除失败: ' + (d.error || 'unknown'));
+        btn.disabled = false;
+        btn.textContent = '删除';
+      }
+    });
+}
+
+var _editingSlug = null;
+
+function editPost(slug) {
+  fetch('/editor/get/' + slug)
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.error) { alert('加载失败: ' + d.error); return; }
+      var form = document.getElementById('editorFormInner');
+      form.querySelector('[name="title"]').value = d.title;
+      form.querySelector('[name="content"]').value = d.content;
+      form.querySelector('[name="tag"]').value = d.tag;
+      document.getElementById('originalSlug').value = d.slug;
+      document.getElementById('editBanner').style.display = '';
+      document.getElementById('editBannerTitle').textContent = d.title;
+      form.querySelector('button[type="submit"]').textContent = '更新文章';
+      _editingSlug = slug;
+      window.scrollTo({top: 0, behavior: 'smooth'});
+    });
+}
+
+function cancelEdit() {
+  var form = document.getElementById('editorFormInner');
+  form.querySelector('[name="title"]').value = '';
+  form.querySelector('[name="content"]').value = '';
+  document.getElementById('originalSlug').value = '';
+  document.getElementById('editBanner').style.display = 'none';
+  form.querySelector('button[type="submit"]').textContent = '发布文章';
+  _editingSlug = null;
+}
+
+function escapeHtml(text) {
+  var d = document.createElement('div');
+  d.textContent = text;
+  return d.innerHTML;
 }
 </script>
 
@@ -196,392 +324,19 @@ function checkPwd() {
 </main>
 
 <footer>
-  <div class="footer-wave">JZC's Island · 建于 2026 · 慢下来，写点东西</div>
+  <div class="footer-wave">DRIFT · 建于 2026 · 慢下来，写点东西</div>
   <div class="footer">
-    <a href="/rss.xml">RSS 订阅</a> · Animal Crossing inspired · Flask + Markdown
+    <a href="/rss.xml">RSS 订阅</a> · 暗黑极简 · Flask + Markdown
+    <br>
+    <span id="busuanzi_container_site_pv" style="display:none;">总访问 <span id="busuanzi_value_site_pv"></span> 次 · </span>
+    <span id="busuanzi_container_site_uv" style="display:none;">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
   </div>
 </footer>
 
 <button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
 
-<!-- Fortune Widget -->
-<div class="fortune-widget">
-  <button class="fortune-btn" id="fortuneBtn" onclick="drawFortune()" title="每日运势签">🎋</button>
-</div>
-
-<!-- Island Clock -->
-<div class="island-clock" id="islandClock">
-  <div class="clock-date" id="clockDate"></div>
-  <div class="clock-time" id="clockTime"></div>
-  <div class="clock-label">JZC 岛时间</div>
-</div>
-
-<!-- Search overlay -->
-<div class="search-overlay" id="searchOverlay">
-  <div class="search-modal">
-    <div class="flex-between mb-16">
-      <span class="section-title" style="margin:0;">搜索文章</span>
-      <button class="btn btn-sm" onclick="closeSearch()">× 关闭</button>
-    </div>
-    <input class="input input-lg" id="searchInput" placeholder="输入关键词..." autofocus oninput="doSearch()">
-    <div class="search-results" id="searchResults" style="margin-top:16px;"></div>
-  </div>
-</div>
-
-<script>
-// ═══════════════════════════════════════════
-// Dark mode toggle
-// ═══════════════════════════════════════════
-(function() {
-  const saved = localStorage.getItem('jzc-theme');
-  if (saved === 'dark') document.body.classList.add('dark');
-  updateToggleIcon();
-})();
-
-function toggleTheme() {
-  document.body.classList.toggle('dark');
-  localStorage.setItem('jzc-theme', document.body.classList.contains('dark') ? 'dark' : 'light');
-  updateToggleIcon();
-}
-
-function updateToggleIcon() {
-  const btn = document.querySelector('.theme-toggle');
-  if (btn) btn.textContent = document.body.classList.contains('dark') ? '☀️' : '🌙';
-}
-
-// ═══════════════════════════════════════════
-// Back to top
-// ═══════════════════════════════════════════
-window.addEventListener('scroll', function() {
-  var btn = document.getElementById('backToTop');
-  if (btn) btn.classList.toggle('visible', window.scrollY > 400);
-
-  // Reading progress bar
-  var bar = document.getElementById('progressBar');
-  if (bar) {
-    var scrollTop = document.documentElement.scrollTop || document.body.scrollTop;
-    var scrollHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-    var pct = scrollHeight > 0 ? (scrollTop / scrollHeight) * 100 : 0;
-    bar.style.width = pct + '%';
-  }
-});
-
-// ═══════════════════════════════════════════
-// Random post
-// ═══════════════════════════════════════════
-var _postSlugs = [];
-function randomPost() {
-  var dice = document.querySelector('.nav-dice');
-  if (dice) dice.classList.add('spinning');
-  setTimeout(function() { if (dice) dice.classList.remove('spinning'); }, 600);
-
-  // Collect slugs from links on the page
-  if (!_postSlugs.length) {
-    document.querySelectorAll('a[href*="/post/"]').forEach(function(a) {
-      var m = a.href.match(/\/post\/([^/]+)/);
-      if (m && _postSlugs.indexOf(m[1]) < 0) _postSlugs.push(m[1]);
-    });
-  }
-  // Fallback: fetch from static list
-  if (_postSlugs.length) {
-    var slug = _postSlugs[Math.floor(Math.random() * _postSlugs.length)];
-    window.location.href = '/post/' + slug;
-    return;
-  }
-  fetch('/search-index.json').then(r => r.json()).then(function(data) {
-    if (data.length) {
-      var idx = Math.floor(Math.random() * data.length);
-      window.location.href = '/post/' + data[idx].slug;
-    }
-  });
-}
-
-// ═══════════════════════════════════════════
-// Island Clock
-// ═══════════════════════════════════════════
-function updateClock() {
-  var now = new Date();
-  var days = ['日', '一', '二', '三', '四', '五', '六'];
-  document.getElementById('clockDate').textContent = '星期' + days[now.getDay()];
-  document.getElementById('clockTime').textContent =
-    String(now.getHours()).padStart(2, '0') + ':' +
-    String(now.getMinutes()).padStart(2, '0');
-}
-updateClock();
-setInterval(updateClock, 30000);
-
-// ═══════════════════════════════════════════
-// Daily Fortune
-// ═══════════════════════════════════════════
-var fortunes = [
-  { icon: '🍀', text: '今天适合重构代码，删掉的比写的多才是进步' },
-  { icon: '☕', text: '咖啡要趁热喝，bug 要趁早修' },
-  { icon: '🌟', text: '今天可能会遇到一个让你豁然开朗的答案' },
-  { icon: '🌸', text: '好心情是最好的 debug 工具' },
-  { icon: '🐢', text: '慢就是快，今天不要 rush' },
-  { icon: '🎣', text: '像钓鱼一样对待灵感：耐心等待，它会上钩的' },
-  { icon: '🌈', text: '今天写的代码明天可能删掉，但那是有意义的' },
-  { icon: '🦉', text: '深夜写代码容易出 bug，早点休息吧' },
-  { icon: '🌿', text: '偶尔休息一下不是偷懒，是给自己的缓存清理' },
-  { icon: '🦊', text: '聪明的狐狸说：console.log 是最好的朋友' },
-  { icon: '🍂', text: '秋风吹走了 bug，春天又长出新 feature' },
-  { icon: '⭐', text: '今天的你会解决一个难了三天的问题' },
-  { icon: '🎵', text: '戴上耳机，好音乐让代码自己写出来' },
-  { icon: '🐚', text: '小贝壳说：模块化是通往幸福的路' },
-  { icon: '🪐', text: '抬头看看远方，bug 没有那么重要' },
-];
-
-function drawFortune() {
-  var btn = document.getElementById('fortuneBtn');
-  if (btn) btn.classList.add('shaking');
-  setTimeout(function() { if (btn) btn.classList.remove('shaking'); }, 500);
-
-  // Remove any existing popup
-  var old = document.querySelector('.fortune-popup');
-  if (old) { old.remove(); return; }
-
-  // Get today's seed
-  var today = new Date().toISOString().slice(0, 10);
-  var seed = 0;
-  for (var i = 0; i < today.length; i++) seed += today.charCodeAt(i);
-  var f = fortunes[seed % fortunes.length];
-
-  var popup = document.createElement('div');
-  popup.className = 'fortune-popup';
-  popup.innerHTML =
-    '<div class="fortune-icon">' + f.icon + '</div>' +
-    '<div class="fortune-text">' + f.text + '</div>' +
-    '<div class="fortune-date">' + today + '</div>' +
-    '<div style="margin-top:8px;font-size:10px;color:var(--text-disabled);">点击摇签筒关闭 · 每日一签</div>';
-  document.body.appendChild(popup);
-
-  // Auto-close after 10 seconds
-  setTimeout(function() { if (popup.parentNode) popup.remove(); }, 10000);
-}
-
-// ═══════════════════════════════════════════
-// Search
-// ═══════════════════════════════════════════
-function openSearch() {
-  document.getElementById('searchOverlay').classList.add('open');
-  document.getElementById('searchInput').focus();
-}
-function closeSearch() {
-  document.getElementById('searchOverlay').classList.remove('open');
-  document.getElementById('searchInput').value = '';
-  document.getElementById('searchResults').innerHTML = '';
-}
-document.addEventListener('keydown', function(e) {
-  if (e.key === 'Escape') closeSearch();
-  if (e.key === 'k' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); openSearch(); }
-});
-
-// Load search index on page load (static fallback)
-(function() {
-  var xhr = new XMLHttpRequest();
-  xhr.open('GET', '/search-index.json', true);
-  xhr.onload = function() {
-    if (xhr.status === 200) {
-      try { window._searchIndex = JSON.parse(xhr.responseText); } catch(e) {}
-    }
-  };
-  xhr.send();
-})();
-
-var searchTimer;
-function doSearch() {
-  clearTimeout(searchTimer);
-  searchTimer = setTimeout(function() {
-    var q = document.getElementById('searchInput').value.trim().toLowerCase();
-    var container = document.getElementById('searchResults');
-    if (!q) { container.innerHTML = ''; return; }
-
-    if (window._searchIndex) {
-      var results = window._searchIndex.filter(function(p) {
-        return p.title.toLowerCase().indexOf(q) >= 0 || p.content.toLowerCase().indexOf(q) >= 0;
-      });
-      if (!results.length) {
-        container.innerHTML = '<p class="text-muted">没找到匹配的文章</p>';
-        return;
-      }
-      container.innerHTML = results.map(function(p) {
-        return '<a href="/post/' + p.slug + '" class="search-result-item">' +
-          '<span class="tag">#' + p.tag + '</span> ' +
-          '<strong>' + p.title + '</strong> ' +
-          '<span class="text-muted" style="font-size:11px;">' + p.date + '</span>' +
-          '</a>';
-      }).join('');
-      return;
-    }
-
-    fetch('/search?q=' + encodeURIComponent(q))
-      .then(function(r) { return r.json(); })
-      .then(function(data) {
-        if (!data.results || !data.results.length) {
-          container.innerHTML = '<p class="text-muted">没找到匹配的文章</p>';
-          return;
-        }
-        container.innerHTML = data.results.map(function(p) {
-          return '<a href="/post/' + p.slug + '" class="search-result-item">' +
-            '<span class="tag">#' + p.tag + '</span> ' +
-            '<strong>' + p.title + '</strong> ' +
-            '<span class="text-muted" style="font-size:11px;">' + p.date + '</span>' +
-            '</a>';
-        }).join('');
-      });
-  }, 200);
-}
-
-// ═══════════════════════════════════════════
-// 1. Welcome Modal (first visit)
-// ═══════════════════════════════════════════
-(function() {
-  if (localStorage.getItem('jzc-welcome-seen')) return;
-  localStorage.setItem('jzc-welcome-seen', '1');
-
-  var overlay = document.createElement('div');
-  overlay.className = 'modal-overlay';
-  overlay.innerHTML = '<div class="modal-box">' +
-    '<div class="modal-icon">🏝️</div>' +
-    '<h3>欢迎来到 JZC 的岛屿！</h3>' +
-    '<p id="welcomeText"></p>' +
-    '<div style="margin-top:20px;">' +
-    '<button class="btn btn-primary" onclick="this.closest(\'.modal-overlay\').remove()">开始探索</button>' +
-    '</div></div>';
-  document.body.appendChild(overlay);
-
-  // Typewriter effect
-  var msg = '这里是一个安静的小岛，写点技术笔记，记些生活碎片，偶尔有小动物来访。慢慢逛，不着急。';
-  var el = document.getElementById('welcomeText');
-  var i = 0;
-  function type() {
-    if (i < msg.length) { el.textContent += msg[i]; i++; setTimeout(type, 50 + Math.random() * 30); }
-  }
-  type();
-
-  overlay.addEventListener('click', function(e) { if (e.target === overlay) overlay.remove(); });
-})();
-
-// ═══════════════════════════════════════════
-// 2. Click Leaf Effect
-// ═══════════════════════════════════════════
-var leaves = ['🌿', '🍃', '🌱', '🍀', '✨', '🌸', '🍂', '🌾'];
-document.addEventListener('click', function(e) {
-  var leaf = document.createElement('span');
-  leaf.className = 'click-leaf';
-  leaf.textContent = leaves[Math.floor(Math.random() * leaves.length)];
-  leaf.style.left = e.clientX + 'px';
-  leaf.style.top = e.clientY + 'px';
-  leaf.style.setProperty('--dx', (Math.random() * 80 - 40) + 'px');
-  leaf.style.setProperty('--dy', -(Math.random() * 60 + 40) + 'px');
-  leaf.style.setProperty('--rot', (Math.random() * 180 - 90) + 'deg');
-  document.body.appendChild(leaf);
-  setTimeout(function() { leaf.remove(); }, 1000);
-});
-
-// ═══════════════════════════════════════════
-// 3. Random Visitor
-// ═══════════════════════════════════════════
-var visitors = ['🦊', '🐿️', '🦉', '🐰', '🦌', '🐻', '🐸', '🦔'];
-var speeches = [
-  '今天天气不错呢！', '有好文章吗？', '咖啡真香~', '路过看看...',
-  '代码写得不错！', '喵？不对，我是狐狸', '这地方真舒服', '加油写博客！'
-];
-
-function spawnVisitor() {
-  var side = Math.random() > 0.5 ? 'left' : 'right';
-  var v = document.createElement('div');
-  v.className = 'visitor';
-  v.textContent = visitors[Math.floor(Math.random() * visitors.length)];
-  v.style[side] = Math.random() * 100 + 20 + 'px';
-  v.style.bottom = '-60px';
-  document.body.appendChild(v);
-
-  // Click to talk
-  v.addEventListener('click', function(e) {
-    e.stopPropagation();
-    var bubble = document.createElement('div');
-    bubble.className = 'visitor-speech';
-    bubble.textContent = speeches[Math.floor(Math.random() * speeches.length)];
-    bubble.style.left = Math.min(e.clientX - 60, window.innerWidth - 160) + 'px';
-    bubble.style.top = (e.clientY - 50) + 'px';
-    document.body.appendChild(bubble);
-    setTimeout(function() { bubble.remove(); }, 2500);
-  });
-
-  // Leave after a while
-  setTimeout(function() {
-    v.classList.add('visitor-leaving');
-    setTimeout(function() { v.remove(); }, 500);
-  }, 8000 + Math.random() * 8000);
-
-  // Schedule next visitor
-  setTimeout(spawnVisitor, 15000 + Math.random() * 30000);
-}
-
-setTimeout(spawnVisitor, 10000 + Math.random() * 20000);
-
-// ═══════════════════════════════════════════
-// 4. Scroll Reveal
-// ═══════════════════════════════════════════
-function initReveal() {
-  document.querySelectorAll('.post-card, .note-card, .card').forEach(function(el) {
-    if (!el.classList.contains('reveal')) el.classList.add('reveal');
-  });
-}
-
-var revealObserver = new IntersectionObserver(function(entries) {
-  entries.forEach(function(entry) {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-    }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -30px 0px' });
-
-function observeReveal() {
-  document.querySelectorAll('.reveal').forEach(function(el) {
-    revealObserver.observe(el);
-  });
-}
-
-// ═══════════════════════════════════════════
-// Code copy buttons
-// ═══════════════════════════════════════════
-function addCopyButtons() {
-  document.querySelectorAll('.codehilite, .code-block, pre').forEach(function(block) {
-    if (block.querySelector('.code-copy-btn')) return;
-    if (block.closest('.code-block-wrap')) return;
-    var wrap = document.createElement('div');
-    wrap.className = 'code-block-wrap';
-    block.parentNode.insertBefore(wrap, block);
-    wrap.appendChild(block);
-    var btn = document.createElement('button');
-    btn.className = 'code-copy-btn';
-    btn.textContent = '复制';
-    btn.onclick = function() {
-      var code = block.textContent;
-      navigator.clipboard.writeText(code).then(function() {
-        btn.textContent = '已复制!';
-        btn.classList.add('copied');
-        setTimeout(function() { btn.textContent = '复制'; btn.classList.remove('copied'); }, 2000);
-      });
-    };
-    wrap.appendChild(btn);
-  });
-}
-document.addEventListener('DOMContentLoaded', addCopyButtons);
-addCopyButtons();
-
-// Init reveal on load and after any DOM changes
-document.addEventListener('DOMContentLoaded', function() {
-  initReveal();
-  observeReveal();
-});
-// Also run immediately for server-rendered content
-initReveal();
-observeReveal();
-</script>
+<script src="/static/js/main.js" defer></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
 
 </body>
 </html>

@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>基于 RA6M5 与 TinyML 的智能脉搏监测系统 — DRIFT</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text x=%2225%22 y=%2275%22 font-size=%2280%22 font-family=%22monospace%22 font-weight=%22700%22 fill=%22%23a3ff4d%22>&gt;</text></svg>">
+  <meta name="description" content="技术、生活，和随手笔记">
+  <meta property="og:title" content="基于 RA6M5 与 TinyML 的智能脉搏监测系统">
+  <meta property="og:description" content="以瑞萨 RA6M5 为核心，PPG 传感器采集脉搏波，在 MCU 端运行 1D-CNN 进行心律分类，TFT + PC 双屏可视化。">
+  <meta property="og:type" content="website">
+  <link rel="canonical" href="https://jiazhichao.xyz/post/ra6m5-pulse-monitor">
+  <meta property="og:image" content="https://jiazhichao.xyz/static/images/og-default.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="DRIFT">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" media="print" onload="this.media='all';this.onload=null">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"></noscript>
+  <script>var f=document.createElement('link');f.rel='stylesheet';f.href='https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap';document.head.appendChild(f);</script>
+  <link rel="stylesheet" href="/static/css/animal.css">
+  <link rel="alternate" type="application/rss+xml" title="DRIFT RSS" href="/rss.xml">
+  <script type="module" src="https://unpkg.com/@splinetool/viewer@latest/build/spline-viewer.js"></script>
+  <style>pre { line-height: 125%; }
+td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+span.linenos { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
+td.linenos .special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+span.linenos.special { color: #000000; background-color: #ffffc0; padding-left: 5px; padding-right: 5px; }
+.codehilite .hll { background-color: #49483e }
+.codehilite { background: #272822; color: #F8F8F2 }
+.codehilite .c { color: #959077 } /* Comment */
+.codehilite .err { color: #ED007E; background-color: #1E0010 } /* Error */
+.codehilite .esc { color: #F8F8F2 } /* Escape */
+.codehilite .g { color: #F8F8F2 } /* Generic */
+.codehilite .k { color: #66D9EF } /* Keyword */
+.codehilite .l { color: #AE81FF } /* Literal */
+.codehilite .n { color: #F8F8F2 } /* Name */
+.codehilite .o { color: #FF4689 } /* Operator */
+.codehilite .x { color: #F8F8F2 } /* Other */
+.codehilite .p { color: #F8F8F2 } /* Punctuation */
+.codehilite .ch { color: #959077 } /* Comment.Hashbang */
+.codehilite .cm { color: #959077 } /* Comment.Multiline */
+.codehilite .cp { color: #959077 } /* Comment.Preproc */
+.codehilite .cpf { color: #959077 } /* Comment.PreprocFile */
+.codehilite .c1 { color: #959077 } /* Comment.Single */
+.codehilite .cs { color: #959077 } /* Comment.Special */
+.codehilite .gd { color: #FF4689 } /* Generic.Deleted */
+.codehilite .ge { color: #F8F8F2; font-style: italic } /* Generic.Emph */
+.codehilite .ges { color: #F8F8F2; font-weight: bold; font-style: italic } /* Generic.EmphStrong */
+.codehilite .gr { color: #F8F8F2 } /* Generic.Error */
+.codehilite .gh { color: #F8F8F2 } /* Generic.Heading */
+.codehilite .gi { color: #A6E22E } /* Generic.Inserted */
+.codehilite .go { color: #66D9EF } /* Generic.Output */
+.codehilite .gp { color: #FF4689; font-weight: bold } /* Generic.Prompt */
+.codehilite .gs { color: #F8F8F2; font-weight: bold } /* Generic.Strong */
+.codehilite .gu { color: #959077 } /* Generic.Subheading */
+.codehilite .gt { color: #F8F8F2 } /* Generic.Traceback */
+.codehilite .kc { color: #66D9EF } /* Keyword.Constant */
+.codehilite .kd { color: #66D9EF } /* Keyword.Declaration */
+.codehilite .kn { color: #FF4689 } /* Keyword.Namespace */
+.codehilite .kp { color: #66D9EF } /* Keyword.Pseudo */
+.codehilite .kr { color: #66D9EF } /* Keyword.Reserved */
+.codehilite .kt { color: #66D9EF } /* Keyword.Type */
+.codehilite .ld { color: #E6DB74 } /* Literal.Date */
+.codehilite .m { color: #AE81FF } /* Literal.Number */
+.codehilite .s { color: #E6DB74 } /* Literal.String */
+.codehilite .na { color: #A6E22E } /* Name.Attribute */
+.codehilite .nb { color: #F8F8F2 } /* Name.Builtin */
+.codehilite .nc { color: #A6E22E } /* Name.Class */
+.codehilite .no { color: #66D9EF } /* Name.Constant */
+.codehilite .nd { color: #A6E22E } /* Name.Decorator */
+.codehilite .ni { color: #F8F8F2 } /* Name.Entity */
+.codehilite .ne { color: #A6E22E } /* Name.Exception */
+.codehilite .nf { color: #A6E22E } /* Name.Function */
+.codehilite .nl { color: #F8F8F2 } /* Name.Label */
+.codehilite .nn { color: #F8F8F2 } /* Name.Namespace */
+.codehilite .nx { color: #A6E22E } /* Name.Other */
+.codehilite .py { color: #F8F8F2 } /* Name.Property */
+.codehilite .nt { color: #FF4689 } /* Name.Tag */
+.codehilite .nv { color: #F8F8F2 } /* Name.Variable */
+.codehilite .ow { color: #FF4689 } /* Operator.Word */
+.codehilite .pm { color: #F8F8F2 } /* Punctuation.Marker */
+.codehilite .w { color: #F8F8F2 } /* Text.Whitespace */
+.codehilite .mb { color: #AE81FF } /* Literal.Number.Bin */
+.codehilite .mf { color: #AE81FF } /* Literal.Number.Float */
+.codehilite .mh { color: #AE81FF } /* Literal.Number.Hex */
+.codehilite .mi { color: #AE81FF } /* Literal.Number.Integer */
+.codehilite .mo { color: #AE81FF } /* Literal.Number.Oct */
+.codehilite .sa { color: #E6DB74 } /* Literal.String.Affix */
+.codehilite .sb { color: #E6DB74 } /* Literal.String.Backtick */
+.codehilite .sc { color: #E6DB74 } /* Literal.String.Char */
+.codehilite .dl { color: #E6DB74 } /* Literal.String.Delimiter */
+.codehilite .sd { color: #E6DB74 } /* Literal.String.Doc */
+.codehilite .s2 { color: #E6DB74 } /* Literal.String.Double */
+.codehilite .se { color: #AE81FF } /* Literal.String.Escape */
+.codehilite .sh { color: #E6DB74 } /* Literal.String.Heredoc */
+.codehilite .si { color: #E6DB74 } /* Literal.String.Interpol */
+.codehilite .sx { color: #E6DB74 } /* Literal.String.Other */
+.codehilite .sr { color: #E6DB74 } /* Literal.String.Regex */
+.codehilite .s1 { color: #E6DB74 } /* Literal.String.Single */
+.codehilite .ss { color: #E6DB74 } /* Literal.String.Symbol */
+.codehilite .bp { color: #F8F8F2 } /* Name.Builtin.Pseudo */
+.codehilite .fm { color: #A6E22E } /* Name.Function.Magic */
+.codehilite .vc { color: #F8F8F2 } /* Name.Variable.Class */
+.codehilite .vg { color: #F8F8F2 } /* Name.Variable.Global */
+.codehilite .vi { color: #F8F8F2 } /* Name.Variable.Instance */
+.codehilite .vm { color: #F8F8F2 } /* Name.Variable.Magic */
+.codehilite .il { color: #AE81FF } /* Literal.Number.Integer.Long */</style>
+</head>
+<body>
+
+<div class="progress-bar" id="progressBar"></div>
+
+<nav class="nav-bar" id="navBar">
+  <div class="nav-left">
+    <a href="/" class="nav-brand">DRIFT</a>
+    <div class="nav-links" id="navLinks">
+      <a href="/" class="nav-link">文章</a>
+      <a href="/notes" class="nav-link">便签</a>
+      <a href="/editor" class="nav-link">写文章</a>
+      <a href="/about" class="nav-link">关于</a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <div class="search-box" id="searchBox">
+      <span class="search-box-icon">🔍</span>
+      <input class="search-box-input" id="searchInput" placeholder="搜索文章..." autocomplete="off">
+      <div class="search-dropdown" id="searchDropdown">
+        <div class="search-dropdown-results" id="searchResults"></div>
+        <div class="search-dropdown-footer">
+          <span>↑↓ 导航</span><span>↩ 打开</span><span>Esc 关闭</span>
+        </div>
+      </div>
+    </div>
+    <button class="nav-icon-btn" id="themeToggle" onclick="toggleTheme()" title="切换暗色模式" aria-label="切换暗色模式">🌙</button>
+    <button class="nav-hamburger" onclick="toggleMobileNav()" aria-label="菜单">☰</button>
+  </div>
+</nav>
+
+<main class="container">
+
+
+<div class="mt-20">
+  <a href="/" class="btn btn-sm">← 返回</a>
+</div>
+
+<div class="post-layout mt-20">
+  <article class="article-body">
+    <div class="tag mb-12">#嵌入式</div>
+    <h1 style="display:inline-block;">基于 RA6M5 与 TinyML 的智能脉搏监测系统</h1>
+    <div class="post-meta mb-24" style="font-size:11px;color:var(--text-disabled);">
+      <span>2026-05-31</span>
+      <span>4 分钟阅读</span>
+      <span>1329 字</span>
+      <span>阅读 <span id="viewCount">7</span> 次</span>
+    </div>
+
+    <div class="divider divider-brown" style="margin:0 0 20px;"></div>
+
+    <p>本项目以瑞萨 RA6M5 (R7FA6M5BH3CFC, Cortex-M33 @200MHz) 为核心，设计了一套<strong>边缘 AI 脉搏监测系统</strong>。系统通过 PPG 光电传感器实时采集脉搏波形，在 MCU 端运行 1D-CNN 神经网络对心律状态进行实时分类，结果在 TFT 屏幕和 PC 看板同步展示。</p>
+<p><strong>关键词</strong>：RA6M5、TinyML、1D-CNN、PPG 脉搏波、HRV 心率变异性、边缘推理</p>
+<hr />
+<h2 id="_1">系统架构</h2>
+<div class="codehilite"><pre><span></span><code><span class="err">┌─────────────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">                    </span><span class="err">硬件层</span><span class="w">                                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">HKG</span><span class="o">-</span><span class="mh">07</span><span class="n">B</span><span class="w"> </span><span class="n">PPG</span><span class="w"> </span><span class="err">传感器</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">ADC</span><span class="w"> </span><span class="p">(</span><span class="n">P001</span><span class="p">,</span><span class="w"> </span><span class="mh">12</span><span class="kt">bit</span><span class="p">,</span><span class="w"> </span><span class="mh">200</span><span class="n">Hz</span><span class="p">)</span><span class="w">       </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">ST7796S</span><span class="w"> </span><span class="n">TFT</span><span class="w"> </span><span class="p">(</span><span class="mh">320</span><span class="err">×</span><span class="mh">480</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">SPI</span><span class="w"> </span><span class="p">(</span><span class="n">GPIO</span><span class="w"> </span><span class="kt">bit</span><span class="o">-</span><span class="n">bang</span><span class="p">)</span><span class="w">         </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">USB</span><span class="o">-</span><span class="n">TTL</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">UART</span><span class="w"> </span><span class="p">(</span><span class="n">P512</span><span class="p">,</span><span class="w"> </span><span class="mh">115200</span><span class="p">)</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="n">PC</span><span class="w"> </span><span class="err">看板</span><span class="w">            </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────────────┘</span>
+<span class="w">                          </span><span class="err">↓</span>
+<span class="err">┌─────────────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">                    </span><span class="err">软件层</span><span class="w">                                </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">数据采集</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">数字滤波</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="err">峰值检测</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">BPM</span><span class="o">/</span><span class="n">IBI</span><span class="w"> </span><span class="err">计算</span><span class="w">           </span><span class="err">│</span>
+<span class="err">│</span><span class="w">       </span><span class="err">│</span><span class="w">                                                 </span><span class="err">│</span>
+<span class="err">│</span><span class="w">       </span><span class="err">└──→</span><span class="w"> </span><span class="mh">1</span><span class="n">D</span><span class="o">-</span><span class="n">CNN</span><span class="w"> </span><span class="err">推理</span><span class="w"> </span><span class="p">(</span><span class="mh">128</span><span class="err">点波形</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="mh">4</span><span class="err">分类</span><span class="p">)</span><span class="w">              </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                  </span><span class="err">│</span><span class="w">                                      </span><span class="err">│</span>
+<span class="err">│</span><span class="w">                  </span><span class="err">└──→</span><span class="w"> </span><span class="n">TFT</span><span class="w"> </span><span class="err">显示</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">UART</span><span class="w"> </span><span class="err">输出</span><span class="w">               </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────────────┘</span>
+<span class="w">                          </span><span class="err">↓</span>
+<span class="err">┌─────────────────────────────────────────────────────────┐</span>
+<span class="err">│</span><span class="w">                    </span><span class="n">AI</span><span class="w"> </span><span class="err">模型</span><span class="w">                               </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">输入</span><span class="o">:</span><span class="w"> </span><span class="mh">128</span><span class="err">点原始</span><span class="n">ADC波形</span><span class="w">                                  </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="n">Conv1D</span><span class="p">(</span><span class="mh">16</span><span class="p">,</span><span class="n">K5</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">MaxPool</span><span class="p">(</span><span class="mh">4</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Conv1D</span><span class="p">(</span><span class="mh">8</span><span class="p">,</span><span class="n">K3</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">MaxPool</span><span class="p">(</span><span class="mh">4</span><span class="p">)</span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">→</span><span class="w"> </span><span class="n">Flatten</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Dense</span><span class="p">(</span><span class="mh">16</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Dense</span><span class="p">(</span><span class="mh">4</span><span class="p">)</span><span class="w"> </span><span class="err">→</span><span class="w"> </span><span class="n">Softmax</span><span class="w">             </span><span class="err">│</span>
+<span class="err">│</span><span class="w">  </span><span class="err">输出</span><span class="o">:</span><span class="w"> </span><span class="n">Normal</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Elevated</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Irregular</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">Low</span><span class="w"> </span><span class="n">Signal</span><span class="w">        </span><span class="err">│</span>
+<span class="err">└─────────────────────────────────────────────────────────┘</span>
+</code></pre></div>
+
+<h2 id="_2">硬件设计</h2>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>型号/参数</th>
+<th>接口</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>主控</td>
+<td>R7FA6M5BH3CFC (Cortex-M33, 200MHz)</td>
+<td>—</td>
+</tr>
+<tr>
+<td>PPG 传感器</td>
+<td>HKG-07B 反射式光电</td>
+<td>ADC P001</td>
+</tr>
+<tr>
+<td>TFT 屏幕</td>
+<td>4.0" ST7796S 320×480 SPI</td>
+<td>P203 MOSI, P204 SCK</td>
+</tr>
+<tr>
+<td>串口输出</td>
+<td>SCI4 UART 115200bps</td>
+<td>P512 TX</td>
+</tr>
+<tr>
+<td>开发环境</td>
+<td>e2 studio + FSP 6.4.0 + GCC ARM 13.2</td>
+<td>—</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_3">引脚分配</h3>
+<table>
+<thead>
+<tr>
+<th>引脚</th>
+<th>功能</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>P001</td>
+<td>ADC AN01</td>
+<td>PPG 传感器模拟输入</td>
+</tr>
+<tr>
+<td>P111</td>
+<td>GPIO 输出</td>
+<td>TFT RESET</td>
+</tr>
+<tr>
+<td>P203</td>
+<td>GPIO 输出</td>
+<td>TFT MOSI (软件 SPI)</td>
+</tr>
+<tr>
+<td>P204</td>
+<td>GPIO 输出</td>
+<td>TFT SCK (软件 SPI)</td>
+</tr>
+<tr>
+<td>P301</td>
+<td>GPIO 输出</td>
+<td>TFT CS</td>
+</tr>
+<tr>
+<td>P302</td>
+<td>GPIO 输出</td>
+<td>TFT DC (数据/命令)</td>
+</tr>
+<tr>
+<td>P303</td>
+<td>GPIO 输出</td>
+<td>TFT LED 背光</td>
+</tr>
+<tr>
+<td>P512</td>
+<td>SCI4 TXD</td>
+<td>UART 数据输出</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_4">软件设计</h2>
+<h3 id="_5">信号处理流水线</h3>
+<div class="codehilite"><pre><span></span><code>原始 ADC (200Hz, 12bit)
+    │
+    ▼ 5点移动平均滤波
+去噪信号
+    │
+    ▼ 动态阈值跟踪 (自适应 max/min)
+包络信号
+    │
+    ▼ 上升沿阈值穿越检测
+峰值检测 → IBI 计算
+    │
+    ├──→ BPM (中值滤波平滑)
+    ├──→ 趋势记录 (5分钟, 1Hz)
+    └──→ UART 导出 (HR + IBI + WAVE)
+</code></pre></div>
+
+<h3 id="hrv">心率变异性 (HRV) 特征</h3>
+<p>从 32 拍滑动窗口提取：</p>
+<table>
+<thead>
+<tr>
+<th>特征</th>
+<th>含义</th>
+<th>用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Mean HR</td>
+<td>平均心率</td>
+<td>基础指标</td>
+</tr>
+<tr>
+<td>SDNN</td>
+<td>IBI 标准差</td>
+<td>总 HRV 水平</td>
+</tr>
+<tr>
+<td>RMSSD</td>
+<td>连续差均方根</td>
+<td>副交感神经活性</td>
+</tr>
+<tr>
+<td>pNN50</td>
+<td>&gt;50ms 差值比例</td>
+<td>短程 HRV</td>
+</tr>
+<tr>
+<td>IBI Range</td>
+<td>最大最小区间差</td>
+<td>心律稳定性</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tft-ui">TFT UI 布局</h3>
+<div class="codehilite"><pre><span></span><code>┌──────────────────────────┐
+│   Pulse Wave Monitor     │  标题栏 (蓝底)
+├──────────────────────────┤
+│                          │
+│   ▁▂▃▄▅▆▇█▇▆▅▄▃▂▁      │  实时波形 (190px)
+│                          │
+├──────────────────────────┤
+│   72 BPM    Normal       │  心率 + 状态 (100px)
+│   IBI: 833ms             │
+│   AI Normal 85%          │  AI 分类结果
+├──────────────────────────┤
+│   ▂▃▅▆█▆▅▃▂▃▅▆█▆▅▃     │  5分钟趋势 (78px)
+├──────────────────────────┤
+│   Sensor: HKG-07B | ...  │  状态栏 (58px)
+└──────────────────────────┘
+</code></pre></div>
+
+<h2 id="tinyml">TinyML 模型</h2>
+<h3 id="ai">为什么用 AI？</h3>
+<p>传统 PPG 算法只能给出 BPM 数值，无法判断心律模式。<strong>1D-CNN 从原始波形中学习特征</strong>，能区分：</p>
+<ul>
+<li><strong>正常心律 (Normal)</strong>：规则间隔、典型 PPG 形态</li>
+<li><strong>心率偏高 (Elevated)</strong>：间隔缩短、幅度降低</li>
+<li><strong>心律不齐 (Irregular)</strong>：间隔不规则、波形变形</li>
+<li><strong>信号弱 (Low Signal)</strong>：噪声主导、无可识别脉搏</li>
+</ul>
+<p>这四类问题<strong>无法用 if-else 规则穷举</strong>，因为波形形态受个体差异、传感器位置、环境光等因素影响极大。</p>
+<h3 id="mcu">为什么在 MCU 上跑？</h3>
+<table>
+<thead>
+<tr>
+<th>对比维度</th>
+<th style="text-align: center;">MCU 边缘推理</th>
+<th style="text-align: center;">云端/PC 推理</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>延迟</td>
+<td style="text-align: center;">&lt; 5ms</td>
+<td style="text-align: center;">&gt; 100ms (网络)</td>
+</tr>
+<tr>
+<td>隐私</td>
+<td style="text-align: center;">数据不出设备</td>
+<td style="text-align: center;">上传到服务器</td>
+</tr>
+<tr>
+<td>离线可用</td>
+<td style="text-align: center;">✓</td>
+<td style="text-align: center;">✗</td>
+</tr>
+<tr>
+<td>功耗</td>
+<td style="text-align: center;">mW 级</td>
+<td style="text-align: center;">W 级</td>
+</tr>
+<tr>
+<td>成本</td>
+<td style="text-align: center;">无额外成本</td>
+<td style="text-align: center;">需要联网模块</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_6">模型规格</h3>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>架构</td>
+<td>1D-CNN (Conv×2 + Dense×2)</td>
+</tr>
+<tr>
+<td>输入</td>
+<td>128 点原始 ADC 波形</td>
+</tr>
+<tr>
+<td>输出</td>
+<td>4 分类 + 置信度</td>
+</tr>
+<tr>
+<td>参数量</td>
+<td>~1,500 个 float (6 KB)</td>
+</tr>
+<tr>
+<td>推理时间</td>
+<td>&lt; 5ms (RA6M5 @200MHz)</td>
+</tr>
+<tr>
+<td>推理频率</td>
+<td>1 Hz</td>
+</tr>
+<tr>
+<td>训练框架</td>
+<td>TensorFlow/Keras → C 语言部署</td>
+</tr>
+</tbody>
+</table>
+<h3 id="_7">模型部署流程</h3>
+<div class="codehilite"><pre><span></span><code><span class="mf">1.</span><span class="w"> </span><span class="n">采集数据</span><span class="w">              </span><span class="mf">2.</span><span class="w"> </span><span class="n">训练</span><span class="w">              </span><span class="mf">3.</span><span class="w"> </span><span class="n">部署</span>
+<span class="err">┌──────────┐</span><span class="w">     </span><span class="err">┌──────────────┐</span><span class="w">     </span><span class="err">┌──────────────┐</span>
+<span class="err">│</span><span class="w"> </span><span class="n">串口采集</span><span class="w">  </span><span class="err">│</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="err">│</span><span class="w"> </span><span class="n">Python</span><span class="w"> </span><span class="n">训练</span><span class="w">   </span><span class="err">│</span><span class="w"> </span><span class="err">──→</span><span class="w"> </span><span class="err">│</span><span class="w"> </span><span class="n">C</span><span class="w"> </span><span class="n">数组替换</span><span class="w">    </span><span class="err">│</span>
+<span class="err">│</span><span class="w"> </span><span class="mf">4</span><span class="n">类</span><span class="w"> </span><span class="n">PPG</span><span class="w">  </span><span class="err">│</span><span class="w">     </span><span class="err">│</span><span class="w"> </span><span class="n">train_model</span><span class="w">  </span><span class="err">│</span><span class="w">     </span><span class="err">│</span><span class="w"> </span><span class="n">ai_model</span><span class="mf">.</span><span class="n">c</span><span class="w">   </span><span class="err">│</span>
+<span class="err">│</span><span class="w"> </span><span class="n">波形数据</span><span class="w">  </span><span class="err">│</span><span class="w">     </span><span class="err">│</span><span class="w"> </span><span class="mf">.</span><span class="n">py</span><span class="w">          </span><span class="err">│</span><span class="w">     </span><span class="err">│</span><span class="w"> </span><span class="n">重新编译烧录</span><span class="w">  </span><span class="err">│</span>
+<span class="err">└──────────┘</span><span class="w">     </span><span class="err">└──────────────┘</span><span class="w">     </span><span class="err">└──────────────┘</span>
+</code></pre></div>
+
+<h2 id="_8">技术指标</h2>
+<table>
+<thead>
+<tr>
+<th>指标</th>
+<th>数值</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>MCU 主频</td>
+<td>200 MHz (Cortex-M33)</td>
+</tr>
+<tr>
+<td>ADC 采样率</td>
+<td>200 Hz, 12-bit</td>
+</tr>
+<tr>
+<td>心率检测范围</td>
+<td>40-200 BPM</td>
+</tr>
+<tr>
+<td>IBI 检测范围</td>
+<td>300-1500 ms</td>
+</tr>
+<tr>
+<td>波形缓冲区</td>
+<td>256 点 (1.28 秒)</td>
+</tr>
+<tr>
+<td>趋势记录</td>
+<td>300 点 (5 分钟)</td>
+</tr>
+<tr>
+<td>软件 SPI 速率</td>
+<td>~2 MHz</td>
+</tr>
+<tr>
+<td>全屏刷新</td>
+<td>~300 ms</td>
+</tr>
+<tr>
+<td>AI 推理</td>
+<td>&lt; 5 ms / 次</td>
+</tr>
+<tr>
+<td>UART 输出</td>
+<td>115200 bps, 1 Hz</td>
+</tr>
+</tbody>
+</table>
+<h2 id="_9">创新点</h2>
+<ol>
+<li><strong>MCU 端 AI 推理</strong>：在 Cortex-M33 上部署 1D-CNN，直接从原始波形学习分类，而非传统人工特征提取</li>
+<li><strong>纯 C 实现神经网络</strong>：无外部依赖（无 TensorFlow Lite Micro 运行时），Conv1D/MaxPool/Dense/Softmax 全部手写，模型可完全替换</li>
+<li><strong>双屏同步展示</strong>：TFT 本地显示 + PC 端实时看板，适合答辩和演示</li>
+<li><strong>完整信号处理链</strong>：从模拟采集、数字滤波、峰值检测、HRV 分析到 AI 分类的全链路闭环</li>
+</ol>
+<h2 id="_10">文件结构</h2>
+<div class="codehilite"><pre><span></span><code><span class="n">JZC/</span>
+<span class="n">├── src/</span>
+<span class="n">│   ├── hal_entry.c          # 主程序</span>
+<span class="n">│   ├── tft_driver.h/c       # ST7796S TFT 驱动 (软件 SPI)</span>
+<span class="n">│   ├── pulse_sensor.h/c     # 脉搏传感器驱动 + 信号处理</span>
+<span class="n">│   ├── ai_model.h/c         # 1D-CNN 模型 (纯 C)</span>
+<span class="n">│   └── ai_features.h/c      # HRV 特征提取 (备用)</span>
+<span class="n">├── ra_gen/                  # FSP 生成代码</span>
+<span class="n">├── ra_cfg/                  # FSP 配置头文件</span>
+<span class="n">├── configuration.xml        # FSP 工程配置</span>
+<span class="n">├── dashboard.py             # PC 端实时可视化看板</span>
+<span class="n">├── train_model.py           # AI 模型训练脚本</span>
+<span class="n">├── AI_使用说明.md           # AI 模块详细使用说明</span>
+<span class="n">└── 项目介绍.md              # 本文档</span>
+</code></pre></div>
+
+<h2 id="_11">快速开始</h2>
+<h3 id="1">1. 编译烧录</h3>
+<p>e2 studio 打开 JZC 工程 → Build Project → 串口烧录</p>
+<h3 id="2-pc">2. PC 看板</h3>
+<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>pyserial<span class="w"> </span>matplotlib<span class="w"> </span>numpy
+python<span class="w"> </span>dashboard.py<span class="w"> </span>COM4
+</code></pre></div>
+
+<h3 id="3-ai">3. 训练 AI 模型（可选）</h3>
+<div class="codehilite"><pre><span></span><code>pip<span class="w"> </span>install<span class="w"> </span>tensorflow<span class="w"> </span>numpy
+python<span class="w"> </span>train_model.py
+<span class="c1"># 复制输出的 C 数组到 ai_model.c → 重新编译烧录</span>
+</code></pre></div>
+
+<h2 id="_12">演示建议</h2>
+<ol>
+<li><strong>正常静息</strong>：展示稳定的脉搏波形 + "AI Normal 90%+" 分类</li>
+<li><strong>运动后</strong>：BPM 上升 + AI 自动切换为 "Elevated"</li>
+<li><strong>传感器位移</strong>：波形变形 + AI 识别为 "Low Signal"（证明模型不是胡乱输出）</li>
+<li><strong>PC 看板</strong>：投屏展示实时波形 + AI 分类概率柱状图，评委不用凑近看小屏</li>
+</ol>
+  </article>
+
+  
+  <aside class="toc-sidebar">
+    <div class="toc-sticky">
+      <div class="section-title">目录</div>
+      <div class="toc-content"><div class="toc">
+<ul>
+<li><a href="#_1">系统架构</a></li>
+<li><a href="#_2">硬件设计</a><ul>
+<li><a href="#_3">引脚分配</a></li>
+</ul>
+</li>
+<li><a href="#_4">软件设计</a><ul>
+<li><a href="#_5">信号处理流水线</a></li>
+<li><a href="#hrv">心率变异性 (HRV) 特征</a></li>
+<li><a href="#tft-ui">TFT UI 布局</a></li>
+</ul>
+</li>
+<li><a href="#tinyml">TinyML 模型</a><ul>
+<li><a href="#ai">为什么用 AI？</a></li>
+<li><a href="#mcu">为什么在 MCU 上跑？</a></li>
+<li><a href="#_6">模型规格</a></li>
+<li><a href="#_7">模型部署流程</a></li>
+</ul>
+</li>
+<li><a href="#_8">技术指标</a></li>
+<li><a href="#_9">创新点</a></li>
+<li><a href="#_10">文件结构</a></li>
+<li><a href="#_11">快速开始</a><ul>
+<li><a href="#1">1. 编译烧录</a></li>
+<li><a href="#2-pc">2. PC 看板</a></li>
+<li><a href="#3-ai">3. 训练 AI 模型（可选）</a></li>
+</ul>
+</li>
+<li><a href="#_12">演示建议</a></li>
+</ul>
+</div>
+</div>
+    </div>
+  </aside>
+  
+</div>
+
+<div class="flex-between mt-32 mb-24" style="max-width:960px;margin-left:auto;margin-right:auto;">
+  
+    <a href="/post/jzc" class="btn">← jzc</a>
+  
+  
+    <a href="/post/post-1d34cd31" class="btn btn-primary">黑暗中总有一丝光明 →</a>
+  
+</div>
+
+<!-- Comment Section -->
+<div class="comment-section" style="max-width:960px;margin:0 auto;padding:0 20px;">
+  <div class="divider divider-teal"></div>
+  <div class="section-title">评论</div>
+
+  
+
+  <div id="commentList"></div>
+</div>
+
+<!-- Record view + Load comments -->
+<script>
+(function() {
+  var slug = "ra6m5-pulse-monitor";
+
+  // Record page view
+  fetch("/view/" + slug, { method: "POST" })
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      var el = document.getElementById("viewCount");
+      if (el) el.textContent = d.count;
+    });
+
+  // Load comments
+  function loadComments() {
+    fetch("/comment/" + slug)
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        var container = document.getElementById("commentList");
+        if (!d.comments || !d.comments.length) {
+          container.innerHTML = '<p class="text-muted" style="font-size:13px;">还没有评论，来写第一条吧。</p>';
+          return;
+        }
+        container.innerHTML = d.comments.map(function(c) {
+          return '<div class="comment-item" style="margin-bottom:16px;padding:12px;background:var(--bg-body);border-radius:var(--radius-card);border:1px solid var(--border-standard);">' +
+            '<div style="font-weight:700;font-size:13px;color:var(--accent);">' + escapeHtml(c.author_name) +
+            ' <span style="font-weight:400;font-size:11px;color:var(--text-disabled);">' + c.created_at + '</span></div>' +
+            '<div style="margin-top:6px;font-size:14px;white-space:pre-wrap;">' + escapeHtml(c.content) + '</div>' +
+            '</div>';
+        }).join("");
+      });
+  }
+
+  function escapeHtml(text) {
+    var d = document.createElement("div");
+    d.textContent = text;
+    return d.innerHTML;
+  }
+
+  loadComments();
+})();
+
+function submitComment(e) {
+  e.preventDefault();
+  var form = document.getElementById("commentForm");
+  var data = {
+    slug: "ra6m5-pulse-monitor",
+    author_name: form.author_name.value.trim(),
+    content: form.content.value.trim()
+  };
+  if (!data.author_name || !data.content) return;
+  fetch("/comment", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  }).then(function(r) { return r.json(); })
+    .then(function(d) {
+      if (d.ok) {
+        form.reset();
+        location.reload();
+      }
+    });
+}
+</script>
+
+
+</main>
+
+<footer>
+  <div class="footer-wave">DRIFT · 建于 2026 · 慢下来，写点东西</div>
+  <div class="footer">
+    <a href="/rss.xml">RSS 订阅</a> · 暗黑极简 · Flask + Markdown
+    <br>
+    <span id="busuanzi_container_site_pv" style="display:none;">总访问 <span id="busuanzi_value_site_pv"></span> 次 · </span>
+    <span id="busuanzi_container_site_uv" style="display:none;">访客 <span id="busuanzi_value_site_uv"></span> 人</span>
+  </div>
+</footer>
+
+<button class="back-to-top" id="backToTop" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部">↑</button>
+
+<script src="/static/js/main.js" defer></script>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+</body>
+</html>
