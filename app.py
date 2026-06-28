@@ -222,8 +222,9 @@ def editor_save():
         return "Title is required", 400
 
     slug = re.sub(r"[^\w\-]", "", title.lower().replace(" ", "-"))
-    # If slug is empty or all non-ASCII, generate a hash-based slug
-    if not slug or not any(c.isascii() and c.isalpha() for c in slug):
+    # Vercel can't handle non-ASCII characters in URL paths, so generate
+    # a hash-based slug whenever the slug contains any non-ASCII character
+    if not slug or not slug.isascii():
         import hashlib
         slug = "post-" + hashlib.md5(title.encode()).hexdigest()[:8]
     excerpt = content[:120].replace("\n", " ") if content else ""
